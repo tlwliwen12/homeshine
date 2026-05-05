@@ -14,6 +14,11 @@
     <input type="email" name="email" placeholder="Email"><br><br>
     <input type="password" name="password" placeholder="Password"><br><br>
 
+    <select name="role">
+    <option value="customer">Customer</option>
+    <option value="cleaner">Cleaner</option>
+    </select>
+
     <button type="submit">Register</button>
 </form>
 
