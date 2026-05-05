@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -24,13 +25,16 @@ class AuthController extends Controller
         ]);
 
         // Save to database
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => $request->role,
         ]);
 
-        return "Registration Successful!";
+        Auth::login($user);
+        $user->sendEmailVerificationNotification();
+
+        return "Registration Successful! Please verify your email.";
     }
 }
