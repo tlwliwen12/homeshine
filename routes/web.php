@@ -5,3 +5,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return "Hello HOMESHINE";
 });
+
+use App\Http\Controllers\AuthController;
+
+Route::get('/register', [AuthController::class, 'showRegister']);
+Route::post('/register', [AuthController::class, 'register']);
