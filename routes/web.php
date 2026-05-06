@@ -46,3 +46,5 @@ Route::get('/customer/dashboard', function () {
 Route::get('/cleaner/dashboard', function () {
     return "Cleaner Dashboard";
 })->middleware('auth', 'verified');
+
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth');
