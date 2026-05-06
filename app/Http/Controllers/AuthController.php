@@ -85,4 +85,14 @@ public function login(Request $request)
         'email' => 'Invalid email or password.',
     ]);
 }
+
+public function logout(Request $request)
+{
+    Auth::logout(); // log out user
+
+    $request->session()->invalidate(); // destroy session
+    $request->session()->regenerateToken(); // prevent CSRF issues
+
+    return redirect('/'); // go back to homepage
+}
 }
