@@ -21,7 +21,11 @@ Route::get('/email/verify', function () {
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
 
-    return "Email verified successfully!";
+    if ($request->user()->role == 'customer') {
+        return redirect('/customer/dashboard')->with('success', 'Email verified successfully!');
+    }
+
+    return redirect('/cleaner/dashboard')->with('success', 'Email verified successfully!');
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
 // Resend verification email (optional)
@@ -35,16 +39,12 @@ Route::post('/email/verification-notification', function (Request $request) {
 Route::get('/login', [AuthController::class, 'showLogin']);
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard')->middleware('auth');
-
 Route::get('/customer/dashboard', function () {
-    return "Customer Dashboard";
+    return view('customer.dashboard');
 })->middleware('auth', 'verified');
 
 Route::get('/cleaner/dashboard', function () {
-    return "Cleaner Dashboard";
+    return view('cleaner.dashboard');
 })->middleware('auth', 'verified');
 
 Route::post('/logout', function () {
