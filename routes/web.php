@@ -41,8 +41,8 @@ Route::get('/dashboard', function () {
 
 Route::get('/customer/dashboard', function () {
     return "Customer Dashboard";
-})->middleware('auth');
+})->middleware('auth', 'verified');
 
 Route::get('/cleaner/dashboard', function () {
     return "Cleaner Dashboard";
-})->middleware('auth');
+})->middleware('auth', 'verified');
