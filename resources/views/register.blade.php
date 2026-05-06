@@ -20,32 +20,21 @@
     </div>
     @endif
 
-    <input type="text" name="name" placeholder="Name" value="{{ old('name') }}">
-    @error('name')
-        <div style="color:red;">{{ $message }}</div>
-    @enderror
-    <br><br>
+    <input type="text" name="name" placeholder="Name" value="{{ old('name') }}"><br><br>
 
-    <input type="email" name="email" placeholder="Email" value="{{ old('email') }}">
-     @error('email')
-        <div style="color:red;">{{ $message }}</div>
-    @enderror
-    <br><br>
-    <input type="password" name="password" placeholder="Password">
-     @error('password')
-        <div style="color:red;">{{ $message }}</div>
-    @enderror
-    <br><br>
+    <input type="email" name="email" placeholder="Email" value="{{ old('email') }}"><br><br>
+
+    <input type="password" name="password" placeholder="Password"><br><br>
+    <small>
+        Password must be 8–10 characters, include:
+        uppercase, lowercase, number, and symbol.
+    </small>
 
     <select name="role">
     <option value="">Select Role</option>
         <option value="customer" {{ old('role') == 'customer' ? 'selected' : '' }}>Customer</option>
         <option value="cleaner" {{ old('role') == 'cleaner' ? 'selected' : '' }}>Cleaner</option>
-    </select>
-     @error('role')
-        <div style="color:red;">{{ $message }}</div>
-    @enderror
-    <br><br>
+    </select><br><br>
 
     <button type="submit">Register</button>
 </form>

@@ -20,7 +20,15 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required|max:255',
             'email' => 'required|email|unique:users',
-            'password' => 'required|min:6',
+            'password' => [
+                'required',
+                'min:8',
+                'max:10',
+                'regex:/[a-z]/',
+                'regex:/[A-Z]/',
+                'regex:/[0-9]/',
+                'regex:/[\W_]/',
+            ],
             'role' => 'required|in:customer,cleaner'
         ], [
             'name.required' => 'Name is required.',
@@ -28,7 +36,9 @@ class AuthController extends Controller
             'email.email' => 'Invalid email format.',
             'email.unique' => 'This email is already registered.',
             'password.required' => 'Password is required.',
-            'password.min' => 'Password must be at least 6 characters.',
+            'password.min' => 'Password must be at least 8 characters.',
+            'password.max' => 'Password cannot exceed 10 characters.',
+            'password.regex' => 'Password must include uppercase, lowercase, number, and symbol.',
             'role.required' => 'Please select a role.'
             ]);
 
@@ -57,39 +67,37 @@ class AuthController extends Controller
         return view('login');
     }
 
-public function login(Request $request)
-{
-    // Validate
-    $request->validate([
-        'email' => 'required|email',
-        'password' => 'required'
-    ]);
+    public function login(Request $request)
+    {
+        // Validate
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
 
-    // Attempt login
-    if (Auth::attempt($request->only('email', 'password'))) {
+        // Attempt login
+        if (Auth::attempt($request->only('email', 'password'))) {
+            $request->session()->regenerate();
 
-        $request->session()->regenerate();
+            // Check role
+            if (Auth::user()->role == 'customer') {
+                return redirect('/customer/dashboard');
+                }
 
-        // Check role
-        if (Auth::user()->role == 'customer') {
-            return redirect('/customer/dashboard');
+            return redirect('/cleaner/dashboard');
         }
 
-        return redirect('/cleaner/dashboard');
+        return back()->withErrors([
+            'email' => 'Invalid email or password.',
+        ]);
     }
 
-    return back()->withErrors([
-        'email' => 'Invalid email or password.',
-    ]);
-}
+    public function logout(Request $request)
+    {
+        Auth::logout(); // log out user
 
-public function logout(Request $request)
-{
-    Auth::logout(); // log out user
-
-    $request->session()->invalidate(); // destroy session
-    $request->session()->regenerateToken(); // prevent CSRF issues
-
-    return redirect('/'); // go back to homepage
-}
+        $request->session()->invalidate(); // destroy session
+        $request->session()->regenerateToken(); // prevent CSRF issues
+        return redirect('/'); // go back to homepage
+    }
 }
