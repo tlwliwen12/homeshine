@@ -3,12 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
+use App\Http\Controllers\AuthController;
 
 Route::get('/', function () {
     return "Hello HOMESHINE";
 });
-
-use App\Http\Controllers\AuthController;
 
 Route::get('/register', [AuthController::class, 'showRegister']);
 Route::post('/register', [AuthController::class, 'register']);
@@ -30,3 +29,20 @@ Route::post('/email/verification-notification', function (Request $request) {
 
     return "Verification email resent!";
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
+// Login
+Route::get('/login', [AuthController::class, 'showLogin']);
+Route::post('/login', [AuthController::class, 'login']);
+
+// Dashboard (temporary)
+Route::get('/dashboard', function () {
+    return "Dashboard";
+})->middleware('auth');
+
+Route::get('/customer/dashboard', function () {
+    return "Customer Dashboard";
+})->middleware('auth');
+
+Route::get('/cleaner/dashboard', function () {
+    return "Cleaner Dashboard";
+})->middleware('auth');

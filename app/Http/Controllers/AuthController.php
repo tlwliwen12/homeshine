@@ -45,4 +45,37 @@ class AuthController extends Controller
 
         return "Registration Successful! Please verify your email.";
     }
+
+    public function showLogin()
+{
+    return view('login');
+}
+
+public function login(Request $request)
+{
+    // Validate
+    $request->validate([
+        'email' => 'required|email',
+        'password' => 'required'
+    ]);
+
+    // Attempt login
+    if (Auth::attempt($request->only('email', 'password'))) {
+
+        $request->session()->regenerate();
+
+        // Check role
+        if (Auth::user()->role == 'customer') {
+            return redirect('/customer/dashboard');
+        } elseif (Auth::user()->role == 'cleaner') {
+            return redirect('/cleaner/dashboard');
+        }
+
+        return redirect('/dashboard');
+    }
+
+    return back()->withErrors([
+        'email' => 'Invalid email or password.',
+    ]);
+}
 }
