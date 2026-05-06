@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AuthController;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     return view('home');
@@ -34,10 +35,9 @@ Route::post('/email/verification-notification', function (Request $request) {
 Route::get('/login', [AuthController::class, 'showLogin']);
 Route::post('/login', [AuthController::class, 'login']);
 
-// Dashboard (temporary)
 Route::get('/dashboard', function () {
-    return "Dashboard";
-})->middleware('auth');
+    return view('dashboard');
+})->name('dashboard')->middleware('auth');
 
 Route::get('/customer/dashboard', function () {
     return "Customer Dashboard";
@@ -47,4 +47,7 @@ Route::get('/cleaner/dashboard', function () {
     return "Cleaner Dashboard";
 })->middleware('auth', 'verified');
 
-Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth');
+Route::post('/logout', function () {
+    Auth::logout();
+    return redirect('/');
+})->name('logout');

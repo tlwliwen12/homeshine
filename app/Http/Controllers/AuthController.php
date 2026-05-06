@@ -45,18 +45,17 @@ class AuthController extends Controller
         $user->sendEmailVerificationNotification();
 
         if ($user->role == 'customer') {
-            return redirect('/customer/dashboard');
-        } elseif ($user->role == 'cleaner') {
-            return redirect('/cleaner/dashboard');
+            return redirect('/customer/dashboard')
+            ->with('verify', 'Please verify your email before continuing.');
         }
 
-        return redirect('/');
+        return redirect('/cleaner/dashboard')
+        ->with('verify', 'Please verify your email before continuing.');
     }
 
-    public function showLogin()
-{
-    return view('login');
-}
+    public function showLogin(){
+        return view('login');
+    }
 
 public function login(Request $request)
 {
@@ -74,11 +73,9 @@ public function login(Request $request)
         // Check role
         if (Auth::user()->role == 'customer') {
             return redirect('/customer/dashboard');
-        } elseif (Auth::user()->role == 'cleaner') {
-            return redirect('/cleaner/dashboard');
         }
 
-        return redirect('/dashboard');
+        return redirect('/cleaner/dashboard');
     }
 
     return back()->withErrors([
