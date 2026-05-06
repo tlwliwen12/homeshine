@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\AuthController;
 
 Route::get('/', function () {
-    return "Hello HOMESHINE";
+    return view('home');
 });
 
 Route::get('/register', [AuthController::class, 'showRegister']);
