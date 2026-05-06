@@ -41,9 +41,16 @@ class AuthController extends Controller
         ]);
 
         Auth::login($user);
+
         $user->sendEmailVerificationNotification();
 
-        return "Registration Successful! Please verify your email.";
+        if ($user->role == 'customer') {
+            return redirect('/customer/dashboard');
+        } elseif ($user->role == 'cleaner') {
+            return redirect('/cleaner/dashboard');
+        }
+
+        return redirect('/');
     }
 
     public function showLogin()
