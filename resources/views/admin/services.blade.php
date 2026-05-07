@@ -15,6 +15,15 @@
         <h3>{{ $service->name }}</h3>
         <p>{{ $service->description }}</p>
         <p>RM {{ $service->price }}</p>
+
+        <a href="/admin/services/{{ $service->id }}/edit">
+            <button>Edit</button>
+        </a>
+
+        <a href="/admin/services/{{ $service->id }}/delete"
+            onclick="return confirm('Are you sure?')">
+            <button style="color:red;">Delete</button>
+        </a>
     </div>
 @endforeach
 

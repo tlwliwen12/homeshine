@@ -104,6 +104,51 @@ Route::post('/admin/services', function (Request $request) {
 
 })->middleware('auth');
 
+Route::get('/admin/services/{id}/edit', function ($id) {
+
+    if (Auth::user()->role != 'admin') {
+        abort(403);
+    }
+
+    $service = Service::findOrFail($id);
+
+    return view('admin.edit_service', compact('service'));
+
+})->middleware('auth');
+
+Route::post('/admin/services/{id}/update', function (Request $request, $id) {
+
+    if (Auth::user()->role != 'admin') {
+        abort(403);
+    }
+
+    $request->validate([
+        'name' => 'required',
+        'description' => 'required',
+        'price' => 'required|numeric'
+    ]);
+
+    $service = Service::findOrFail($id);
+
+    $service->update($request->all());
+
+    return redirect('/admin/services')->with('success', 'Service updated successfully!');
+
+})->middleware('auth');
+
+Route::get('/admin/services/{id}/delete', function ($id) {
+
+    if (Auth::user()->role != 'admin') {
+        abort(403);
+    }
+
+    $service = Service::findOrFail($id);
+    $service->delete();
+
+    return redirect('/admin/services')->with('success', 'Service deleted successfully!');
+
+})->middleware('auth');
+
 Route::post('/logout', function () {
     Auth::logout();
     return redirect('/');
