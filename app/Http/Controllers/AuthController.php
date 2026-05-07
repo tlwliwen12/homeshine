@@ -54,12 +54,7 @@ class AuthController extends Controller
 
         $user->sendEmailVerificationNotification();
 
-        if ($user->role == 'customer') {
-            return redirect('/customer/dashboard')
-            ->with('verify', 'Please verify your email before continuing.');
-        }
-
-        return redirect('/cleaner/dashboard')
+        return redirect('/email/verify')
         ->with('verify', 'Please verify your email before continuing.');
     }
 

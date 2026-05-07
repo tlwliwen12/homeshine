@@ -14,8 +14,8 @@ Route::get('/register', [AuthController::class, 'showRegister']);
 Route::post('/register', [AuthController::class, 'register']);
 
 Route::get('/email/verify', function () {
-    return "Please check your email to verify your account.";
-})->name('verification.notice');
+    return view('verify-email');
+})->middleware('auth')->name('verification.notice');
 
 // Handle verification link
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
@@ -28,11 +28,13 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
     return redirect('/cleaner/dashboard')->with('success', 'Email verified successfully!');
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
-// Resend verification email (optional)
+// Resend verification email
 Route::post('/email/verification-notification', function (Request $request) {
+
     $request->user()->sendEmailVerificationNotification();
 
-    return "Verification email resent!";
+    return back()->with('message', 'Verification email resent successfully!');
+
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
 // Login
