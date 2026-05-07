@@ -77,9 +77,13 @@ class AuthController extends Controller
             // Check role
             if (Auth::user()->role == 'customer') {
                 return redirect('/customer/dashboard');
-                }
+            }
 
-            return redirect('/cleaner/dashboard');
+            if (Auth::user()->role == 'cleaner') {
+                return redirect('/cleaner/dashboard');
+            }
+
+            return redirect('/admin/dashboard');
         }
 
         return back()->withErrors([

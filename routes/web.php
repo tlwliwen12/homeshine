@@ -50,6 +50,16 @@ Route::get('/cleaner/dashboard', function () {
     return view('cleaner.dashboard');
 })->middleware('auth', 'verified');
 
+Route::get('/admin/dashboard', function () {
+
+    if (Auth::user()->role != 'admin') {
+        abort(403);
+    }
+
+    return view('admin.dashboard');
+
+})->middleware('auth');
+
 Route::get('/admin/services', function () {
     if (Auth::user()->role != 'admin') {
     abort(403);
