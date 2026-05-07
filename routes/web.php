@@ -8,6 +8,22 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Service;
 
 Route::get('/', function () {
+
+    if (Auth::check()) {
+
+        if (Auth::user()->role == 'customer') {
+            return redirect('/customer/dashboard');
+        }
+
+        if (Auth::user()->role == 'cleaner') {
+            return redirect('/cleaner/dashboard');
+        }
+
+        if (Auth::user()->role == 'admin') {
+            return redirect('/admin/dashboard');
+        }
+    }
+
     return view('home');
 });
 

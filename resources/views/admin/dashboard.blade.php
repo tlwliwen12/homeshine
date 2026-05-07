@@ -1,12 +1,11 @@
+@extends('admin.layout')
+
+@section('content')
+
 <h1>Admin Dashboard</h1>
 
 <p>Welcome, {{ Auth::user()->name }}</p>
 
-<hr>
+<p>Use the menu above to manage the system.</p>
 
-<a href="/admin/services">Manage Services</a>
-
-<form method="POST" action="{{ route('logout') }}">
-    @csrf
-    <button type="submit">Logout</button>
-</form>
+@endsection
