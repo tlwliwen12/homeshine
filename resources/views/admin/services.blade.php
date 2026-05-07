@@ -16,6 +16,10 @@
         <p>{{ $service->description }}</p>
         <p>RM {{ $service->price }}</p>
 
+        @if($service->image)
+        <img src="{{ asset('images/services/' . $service->image) }}" width="120">
+        @endif
+
         <a href="/admin/services/{{ $service->id }}/edit">
             <button>Edit</button>
         </a>

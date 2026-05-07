@@ -4,7 +4,7 @@
 
 <h1>Add New Service</h1>
 
-<form method="POST" action="/admin/services">
+<form method="POST" action="/admin/services" enctype="multipart/form-data">
     @csrf
 
     <label>Name:</label><br>
@@ -15,6 +15,9 @@
 
     <label>Price:</label><br>
     <input type="number" name="price"><br><br>
+
+    <label>Service Image:</label><br>
+    <input type="file" name="image"><br><br>
 
     <button type="submit">Save</button>
 </form>

@@ -95,10 +95,23 @@ Route::post('/admin/services', function (Request $request) {
     $request->validate([
         'name' => 'required',
         'description' => 'required',
-        'price' => 'required|numeric'
+        'price' => 'required|numeric',
+        'image' => 'nullable|image|mimes:jpg,png,jpeg'
     ]);
 
-    Service::create($request->all());
+    $imageName = null;
+
+    if ($request->hasFile('image')) {
+        $imageName = time().'.'.$request->image->extension();
+        $request->image->move(public_path('images/services'), $imageName);
+    }
+
+    Service::create([
+        'name' => $request->name,
+        'description' => $request->description,
+        'price' => $request->price,
+        'image' => $imageName
+    ]);
 
     return redirect('/admin/services')->with('success', 'Service added successfully!');
 
@@ -118,19 +131,21 @@ Route::get('/admin/services/{id}/edit', function ($id) {
 
 Route::post('/admin/services/{id}/update', function (Request $request, $id) {
 
-    if (Auth::user()->role != 'admin') {
-        abort(403);
-    }
-
-    $request->validate([
-        'name' => 'required',
-        'description' => 'required',
-        'price' => 'required|numeric'
-    ]);
-
     $service = Service::findOrFail($id);
 
-    $service->update($request->all());
+    $imageName = $service->image;
+
+    if ($request->hasFile('image')) {
+        $imageName = time().'.'.$request->image->extension();
+        $request->image->move(public_path('images/services'), $imageName);
+    }
+
+    $service->update([
+        'name' => $request->name,
+        'description' => $request->description,
+        'price' => $request->price,
+        'image' => $imageName
+    ]);
 
     return redirect('/admin/services')->with('success', 'Service updated successfully!');
 
