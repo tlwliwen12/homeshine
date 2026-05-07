@@ -5,6 +5,7 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Service;
 
 Route::get('/', function () {
     return view('home');
@@ -48,6 +49,34 @@ Route::get('/customer/dashboard', function () {
 Route::get('/cleaner/dashboard', function () {
     return view('cleaner.dashboard');
 })->middleware('auth', 'verified');
+
+Route::get('/admin/services', function () {
+    if (Auth::user()->role != 'admin') {
+    abort(403);
+}
+
+    $services = Service::all();
+    return view('admin.services', compact('services'));
+
+})->middleware('auth');
+
+Route::get('/admin/services/create', function () {
+    return view('admin.create_service');
+})->middleware('auth');
+
+Route::post('/admin/services', function (Request $request) {
+
+    $request->validate([
+        'name' => 'required',
+        'description' => 'required',
+        'price' => 'required|numeric'
+    ]);
+
+    Service::create($request->all());
+
+    return redirect('/admin/services')->with('success', 'Service added successfully!');
+
+})->middleware('auth');
 
 Route::post('/logout', function () {
     Auth::logout();

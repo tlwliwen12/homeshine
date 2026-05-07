@@ -29,7 +29,7 @@ class AuthController extends Controller
                 'regex:/[0-9]/',
                 'regex:/[\W_]/',
             ],
-            'role' => 'required|in:customer,cleaner'
+            'role' => 'required|in:customer,cleaner,admin'
         ], [
             'name.required' => 'Name is required.',
             'email.required' => 'Email is required.',
