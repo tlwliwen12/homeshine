@@ -87,10 +87,18 @@ Route::get('/admin/services', function () {
 })->middleware('auth');
 
 Route::get('/admin/services/create', function () {
+    if (!Auth::check() || Auth::user()->role != 'admin') {
+        abort(403);
+    }
+
     return view('admin.create_service');
 })->middleware('auth');
 
 Route::post('/admin/services', function (Request $request) {
+
+if (Auth::user()->role != 'admin') {
+        abort(403);
+    }
 
     $request->validate([
         'name' => 'required',
@@ -102,8 +110,14 @@ Route::post('/admin/services', function (Request $request) {
     $imageName = null;
 
     if ($request->hasFile('image')) {
+        $path = public_path('images/services');
+
+        if (!file_exists($path)) {
+            mkdir($path, 0777, true);
+        }
+
         $imageName = time().'.'.$request->image->extension();
-        $request->image->move(public_path('images/services'), $imageName);
+        $request->image->move($path, $imageName);
     }
 
     Service::create([
@@ -130,14 +144,34 @@ Route::get('/admin/services/{id}/edit', function ($id) {
 })->middleware('auth');
 
 Route::post('/admin/services/{id}/update', function (Request $request, $id) {
+    if (!Auth::check() || Auth::user()->role != 'admin') {
+        abort(403);
+    }
+
+    $request->validate([
+        'name' => 'required',
+        'description' => 'required',
+        'price' => 'required|numeric',
+        'image' => 'nullable|image|mimes:jpg,png,jpeg'
+    ]);
 
     $service = Service::findOrFail($id);
 
     $imageName = $service->image;
 
     if ($request->hasFile('image')) {
+        if ($service->image && file_exists(public_path('images/services/'.$service->image))) {
+            unlink(public_path('images/services/'.$service->image));
+        }
+
+        $path = public_path('images/services');
+
+        if (!file_exists($path)) {
+            mkdir($path, 0777, true);
+        }
+
         $imageName = time().'.'.$request->image->extension();
-        $request->image->move(public_path('images/services'), $imageName);
+        $request->image->move($path, $imageName);
     }
 
     $service->update([
@@ -151,7 +185,7 @@ Route::post('/admin/services/{id}/update', function (Request $request, $id) {
 
 })->middleware('auth');
 
-Route::get('/admin/services/{id}/delete', function ($id) {
+Route::post('/admin/services/{id}/delete', function ($id) {
 
     if (Auth::user()->role != 'admin') {
         abort(403);

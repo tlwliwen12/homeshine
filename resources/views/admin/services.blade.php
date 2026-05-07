@@ -24,10 +24,13 @@
             <button>Edit</button>
         </a>
 
-        <a href="/admin/services/{{ $service->id }}/delete"
-            onclick="return confirm('Are you sure?')">
-            <button style="color:red;">Delete</button>
-        </a>
+        <form method="POST" action="/admin/services/{{ $service->id }}/delete"
+              style="display:inline;">
+            @csrf
+            <button style="color:red;" onclick="return confirm('Are you sure?')">
+                Delete
+            </button>
+        </form>
     </div>
 @endforeach
 
