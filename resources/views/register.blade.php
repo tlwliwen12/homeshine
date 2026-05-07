@@ -24,11 +24,11 @@
 
     <input type="email" name="email" placeholder="Email" value="{{ old('email') }}"><br><br>
 
-    <input type="password" name="password" placeholder="Password"><br><br>
+    <input type="password" name="password" placeholder="Password"><br>
     <small>
         Password must be 8–10 characters, include:
         uppercase, lowercase, number, and symbol.
-    </small>
+    </small><br><br>
 
     <select name="role">
     <option value="">Select Role</option>
