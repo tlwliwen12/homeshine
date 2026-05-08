@@ -102,9 +102,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/customer/bookings', [BookingController::class, 'index']);
 });
 
-Route::get('/customer/services', function () {
+Route::get('/customer/services', function (Request $request) {
 
-    $services = Service::all();
+    $query = Service::query();
+
+    // filter category
+    if ($request->category) {
+        $query->where('category', $request->category);
+    }
+
+    $services = $query->get();
 
     return view('customer.services', compact('services'));
 

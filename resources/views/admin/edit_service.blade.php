@@ -10,6 +10,34 @@
     <label>Name:</label><br>
     <input type="text" name="name" value="{{ $service->name }}"><br><br>
 
+    <label>Category:</label><br>
+
+    <select name="category">
+
+        <option value="House Cleaning"
+            {{ $service->category == 'House Cleaning' ? 'selected' : '' }}>
+            House Cleaning
+        </option>
+
+        <option value="Office Cleaning"
+            {{ $service->category == 'Office Cleaning' ? 'selected' : '' }}>
+            Office Cleaning
+        </option>
+
+        <option value="Deep Cleaning"
+            {{ $service->category == 'Deep Cleaning' ? 'selected' : '' }}>
+            Deep Cleaning
+        </option>
+
+        <option value="Sofa Cleaning"
+            {{ $service->category == 'Sofa Cleaning' ? 'selected' : '' }}>
+            Sofa Cleaning
+        </option>
+
+    </select>
+
+    <br><br>
+
     <label>Description:</label><br>
     <textarea name="description">{{ $service->description }}</textarea><br><br>
 

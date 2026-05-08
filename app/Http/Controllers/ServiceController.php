@@ -30,6 +30,7 @@ class ServiceController extends Controller
 
         $request->validate([
             'name' => 'required',
+            'category' => 'required',
             'description' => 'required',
             'price' => 'required|numeric',
             'image' => 'nullable|image|mimes:jpg,png,jpeg'
@@ -52,6 +53,7 @@ class ServiceController extends Controller
 
         Service::create([
             'name' => $request->name,
+            'category' => $request->category,
             'description' => $request->description,
             'price' => $request->price,
             'image' => $imageName
@@ -76,6 +78,7 @@ class ServiceController extends Controller
 
         $request->validate([
             'name' => 'required',
+            'category' => 'required',
             'description' => 'required',
             'price' => 'required|numeric',
             'image' => 'nullable|image|mimes:jpg,png,jpeg'
@@ -108,6 +111,7 @@ class ServiceController extends Controller
 
         $service->update([
             'name' => $request->name,
+            'category' => $request->category,
             'description' => $request->description,
             'price' => $request->price,
             'image' => $imageName

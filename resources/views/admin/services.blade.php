@@ -13,6 +13,7 @@
 @foreach ($services as $service)
     <div style="border:1px solid black; padding:10px; margin-bottom:10px;">
         <h3>{{ $service->name }}</h3>
+        <p>Category: {{ $service->category }}</p>
         <p>{{ $service->description }}</p>
         <p>RM {{ $service->price }}</p>
 

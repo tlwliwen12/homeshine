@@ -10,6 +10,16 @@
     <label>Name:</label><br>
     <input type="text" name="name"><br><br>
 
+    <label>Category:</label><br>
+    <select name="category">
+        <option value="House Cleaning">House Cleaning</option>
+        <option value="Office Cleaning">Office Cleaning</option>
+        <option value="Deep Cleaning">Deep Cleaning</option>
+        <option value="Sofa Cleaning">Sofa Cleaning</option>
+    </select>
+
+    <br><br>
+
     <label>Description:</label><br>
     <textarea name="description"></textarea><br><br>
 
