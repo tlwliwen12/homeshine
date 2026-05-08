@@ -5,8 +5,9 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Service;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\BookingController;
+use App\Models\Service;
 
 Route::get('/', function () {
 
@@ -91,6 +92,23 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/admin/services/{id}/delete', [ServiceController::class, 'destroy']);
 });
+
+Route::middleware(['auth', 'verified'])->group(function () {
+
+    Route::get('/book-service/{id}', [BookingController::class, 'create']);
+
+    Route::post('/book-service/{id}', [BookingController::class, 'store']);
+
+    Route::get('/customer/bookings', [BookingController::class, 'index']);
+});
+
+Route::get('/customer/services', function () {
+
+    $services = Service::all();
+
+    return view('customer.services', compact('services'));
+
+})->middleware(['auth', 'verified']);
 
 Route::post('/logout', function () {
     Auth::logout();
