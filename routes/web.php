@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Service;
+use App\Http\Controllers\ServiceController;
 
 Route::get('/', function () {
 
@@ -76,127 +77,20 @@ Route::get('/admin/dashboard', function () {
 
 })->middleware('auth');
 
-Route::get('/admin/services', function () {
-    if (Auth::user()->role != 'admin') {
-    abort(403);
-}
+Route::middleware('auth')->group(function () {
 
-    $services = Service::all();
-    return view('admin.services', compact('services'));
+    Route::get('/admin/services', [ServiceController::class, 'index']);
 
-})->middleware('auth');
+    Route::get('/admin/services/create', [ServiceController::class, 'create']);
 
-Route::get('/admin/services/create', function () {
-    if (!Auth::check() || Auth::user()->role != 'admin') {
-        abort(403);
-    }
+    Route::post('/admin/services', [ServiceController::class, 'store']);
 
-    return view('admin.create_service');
-})->middleware('auth');
+    Route::get('/admin/services/{id}/edit', [ServiceController::class, 'edit']);
 
-Route::post('/admin/services', function (Request $request) {
+    Route::post('/admin/services/{id}/update', [ServiceController::class, 'update']);
 
-if (Auth::user()->role != 'admin') {
-        abort(403);
-    }
-
-    $request->validate([
-        'name' => 'required',
-        'description' => 'required',
-        'price' => 'required|numeric',
-        'image' => 'nullable|image|mimes:jpg,png,jpeg'
-    ]);
-
-    $imageName = null;
-
-    if ($request->hasFile('image')) {
-        $path = public_path('images/services');
-
-        if (!file_exists($path)) {
-            mkdir($path, 0777, true);
-        }
-
-        $imageName = time().'.'.$request->image->extension();
-        $request->image->move($path, $imageName);
-    }
-
-    Service::create([
-        'name' => $request->name,
-        'description' => $request->description,
-        'price' => $request->price,
-        'image' => $imageName
-    ]);
-
-    return redirect('/admin/services')->with('success', 'Service added successfully!');
-
-})->middleware('auth');
-
-Route::get('/admin/services/{id}/edit', function ($id) {
-
-    if (Auth::user()->role != 'admin') {
-        abort(403);
-    }
-
-    $service = Service::findOrFail($id);
-
-    return view('admin.edit_service', compact('service'));
-
-})->middleware('auth');
-
-Route::post('/admin/services/{id}/update', function (Request $request, $id) {
-    if (!Auth::check() || Auth::user()->role != 'admin') {
-        abort(403);
-    }
-
-    $request->validate([
-        'name' => 'required',
-        'description' => 'required',
-        'price' => 'required|numeric',
-        'image' => 'nullable|image|mimes:jpg,png,jpeg'
-    ]);
-
-    $service = Service::findOrFail($id);
-
-    $imageName = $service->image;
-
-    if ($request->hasFile('image')) {
-        if ($service->image && file_exists(public_path('images/services/'.$service->image))) {
-            unlink(public_path('images/services/'.$service->image));
-        }
-
-        $path = public_path('images/services');
-
-        if (!file_exists($path)) {
-            mkdir($path, 0777, true);
-        }
-
-        $imageName = time().'.'.$request->image->extension();
-        $request->image->move($path, $imageName);
-    }
-
-    $service->update([
-        'name' => $request->name,
-        'description' => $request->description,
-        'price' => $request->price,
-        'image' => $imageName
-    ]);
-
-    return redirect('/admin/services')->with('success', 'Service updated successfully!');
-
-})->middleware('auth');
-
-Route::post('/admin/services/{id}/delete', function ($id) {
-
-    if (Auth::user()->role != 'admin') {
-        abort(403);
-    }
-
-    $service = Service::findOrFail($id);
-    $service->delete();
-
-    return redirect('/admin/services')->with('success', 'Service deleted successfully!');
-
-})->middleware('auth');
+    Route::post('/admin/services/{id}/delete', [ServiceController::class, 'destroy']);
+});
 
 Route::post('/logout', function () {
     Auth::logout();
