@@ -19,6 +19,9 @@
     <label>Booking Date:</label><br>
     <input type="date" name="booking_date"><br><br>
 
+    <label>Booking Time:</label><br>
+    <input type="time" name="booking_time"><br><br>
+
     <label>Address:</label><br>
     <input type="text" name="address"><br><br>
 

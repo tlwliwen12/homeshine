@@ -20,6 +20,7 @@ class BookingController extends Controller
     {
         $request->validate([
             'booking_date' => 'required|date',
+            'booking_time' => 'required',
             'address' => 'required',
             'notes' => 'nullable'
         ]);
@@ -28,6 +29,7 @@ class BookingController extends Controller
             'user_id' => Auth::id(),
             'service_id' => $serviceId,
             'booking_date' => $request->booking_date,
+            'booking_time' => $request->booking_time,
             'address' => $request->address,
             'notes' => $request->notes,
             'status' => 'Pending'

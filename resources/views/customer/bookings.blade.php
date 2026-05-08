@@ -18,6 +18,8 @@
 
         <p>Date: {{ $booking->booking_date }}</p>
 
+        <p>Time: {{ $booking->booking_time }}</p>
+
         <p>Address: {{ $booking->address }}</p>
 
         <p>Status: {{ $booking->status }}</p>

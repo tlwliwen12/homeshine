@@ -10,6 +10,7 @@ class Booking extends Model
         'user_id',
         'service_id',
         'booking_date',
+        'booking_time',
         'address',
         'notes',
         'status'
