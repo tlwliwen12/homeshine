@@ -20,7 +20,7 @@
 
     <br><br>
 
-    <label>Description:</label><br>
+    <label>Detailed Service Description:</label>
     <textarea name="description"></textarea><br><br>
 
     <label>Price:</label><br>

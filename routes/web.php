@@ -117,6 +117,9 @@ Route::get('/customer/services', function (Request $request) {
 
 })->middleware(['auth', 'verified']);
 
+Route::get('/services/{id}', [ServiceController::class, 'show'])
+    ->middleware(['auth', 'verified']);
+
 Route::post('/logout', function () {
     Auth::logout();
     return redirect('/');

@@ -41,12 +41,10 @@
 
         <p>Category: {{ $service->category }}</p>
 
-        <p>{{ $service->description }}</p>
-
         <p><strong>RM {{ $service->price }}</strong></p>
 
-        <a href="/book-service/{{ $service->id }}">
-            <button>Book Now</button>
+        <a href="/services/{{ $service->id }}">
+            <button>View Details</button>
         </a>
 
     </div>

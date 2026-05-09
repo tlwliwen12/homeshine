@@ -25,6 +25,10 @@
             <button>Edit</button>
         </a>
 
+        <a href="/services/{{ $service->id }}">
+            <button>View Details</button>
+        </a>
+
         <form method="POST" action="/admin/services/{{ $service->id }}/delete"
               style="display:inline;">
             @csrf

@@ -17,6 +17,13 @@ class ServiceController extends Controller
         return view('admin.services', compact('services'));
     }
 
+    public function show($id)
+    {
+        $service = Service::findOrFail($id);
+
+        return view('services.show', compact('service'));
+    }
+
     public function create()
     {
         $this->adminCheck();
