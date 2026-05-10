@@ -20,6 +20,26 @@
 
 @endif
 
+<h2>Filter By Date</h2>
+
+<form method="GET" action="/customer/bookings">
+
+    <input type="date"
+       name="booking_date"
+       value="{{ request('booking_date') }}">
+
+    <button type="submit">
+        Filter
+    </button>
+
+    <a href="/customer/bookings">
+        <button type="button">Reset</button>
+    </a>
+
+</form>
+
+<br>
+
 @foreach($bookings as $booking)
 
     <div style="border:1px solid black; padding:10px; margin-bottom:10px;">

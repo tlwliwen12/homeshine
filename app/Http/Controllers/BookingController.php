@@ -54,11 +54,16 @@ class BookingController extends Controller
             );
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $bookings = Booking::where('user_id', Auth::id())
-            ->latest()
-            ->get();
+        $query = Booking::where('user_id', Auth::id());
+
+        // Filter by booking date
+        if ($request->booking_date) {
+            $query->where('booking_date', $request->booking_date);
+        }
+
+        $bookings = $query->latest()->get();
 
         return view('customer.bookings', compact('bookings'));
     }
