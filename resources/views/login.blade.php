@@ -16,9 +16,21 @@
         </div>
     @endif
 
-    <input type="email" name="email" placeholder="Email" value="{{ old('email') }}"><br><br>
+    <input type="email" name="email" placeholder="Email" value="{{ old('email') }}">
+    @error('email')
+        <div style="color:red;">
+            {{ $message }}
+        </div>
+    @enderror
+    <br><br>
 
-    <input type="password" name="password" placeholder="Password"><br><br>
+    <input type="password" name="password" placeholder="Password">
+    @error('password')
+        <div style="color:red;">
+            {{ $message }}
+        </div>
+    @enderror
+    <br><br>
 
     <button type="submit">Login</button>
 </form>

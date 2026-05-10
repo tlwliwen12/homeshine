@@ -43,8 +43,28 @@ class AuthController extends Controller
     {
         // Validate
         $request->validate([
-            'email' => 'required|email',
-            'password' => 'required'
+            'email' => [
+                'required',
+                'email',
+                'max:255'
+            ],
+
+           'password' => [
+                'required',
+                'min:8',
+                'max:10'
+            ]
+
+        ], [
+
+            'email.required' => 'Email is required.',
+            'email.email' => 'Please enter a valid email.',
+            'email.max' => 'Email is too long.',
+
+            'password.required' => 'Password is required.',
+            'password.min' => 'Password must be at least 8 characters.',
+            'password.max' => 'Password cannot exceed 10 characters.'
+
         ]);
 
         // Attempt login
