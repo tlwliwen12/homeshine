@@ -23,7 +23,13 @@
     <input type="time" name="booking_time"><br><br>
 
     <label>Address:</label><br>
-    <input type="text" name="address"><br><br>
+    <input type="text" name="address">
+    @error('address')
+        <div style="color:red;">
+            {{ $message }}
+        </div>
+    @enderror
+    <br><br>
 
     <label>Notes:</label><br>
     <textarea name="notes"></textarea><br><br>

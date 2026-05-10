@@ -21,8 +21,21 @@ class BookingController extends Controller
         $request->validate([
             'booking_date' => 'required|date',
             'booking_time' => 'required',
-            'address' => 'required',
+            'address' => [
+                'required',
+                'min:10',
+                'max:255',
+                'regex:/^[A-Za-z0-9\s,\-\/#]+$/'
+            ],
             'notes' => 'nullable'
+        ],[
+            'address.required' => 'Address is required.',
+
+            'address.min' => 'Address must be at least 10 characters.',
+
+            'address.max' => 'Address is too long.',
+
+            'address.regex' => 'Address contains invalid characters.'
         ]);
 
         Booking::create([
