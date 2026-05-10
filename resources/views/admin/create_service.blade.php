@@ -20,11 +20,16 @@
 
     <br><br>
 
-    <label>Detailed Service Description:</label>
+    <label>Detailed Service Description:</label><br>
     <textarea name="description"></textarea><br><br>
 
     <label>Price:</label><br>
     <input type="number" name="price"><br><br>
+
+    <label>Service Duration:</label><br>
+    <input type="text" name="duration"
+       placeholder="Example: 2 Hours">
+    <br><br>
 
     <label>Service Image:</label><br>
     <input type="file" name="image"><br><br>

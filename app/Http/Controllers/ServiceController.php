@@ -40,6 +40,7 @@ class ServiceController extends Controller
             'category' => 'required',
             'description' => 'required',
             'price' => 'required|numeric',
+            'duration' => 'required',
             'image' => 'nullable|image|mimes:jpg,png,jpeg'
         ]);
 
@@ -63,6 +64,7 @@ class ServiceController extends Controller
             'category' => $request->category,
             'description' => $request->description,
             'price' => $request->price,
+            'duration' => $request->duration,
             'image' => $imageName
         ]);
 
@@ -88,6 +90,7 @@ class ServiceController extends Controller
             'category' => 'required',
             'description' => 'required',
             'price' => 'required|numeric',
+            'duration' => 'required',
             'image' => 'nullable|image|mimes:jpg,png,jpeg'
         ]);
 
@@ -121,6 +124,7 @@ class ServiceController extends Controller
             'category' => $request->category,
             'description' => $request->description,
             'price' => $request->price,
+            'duration' => $request->duration,
             'image' => $imageName
         ]);
 

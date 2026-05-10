@@ -20,6 +20,8 @@
 
     <p><strong>Price:</strong> RM {{ $service->price }}</p>
 
+    <p><strong>Duration:</strong> {{ $service->duration }}</p>
+
     <hr>
 
     <h3>About This Service</h3>

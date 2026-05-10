@@ -38,11 +38,17 @@
 
     <br><br>
 
-    <label>Detailed Service Description:</label>
+    <label>Detailed Service Description:</label><br>
     <textarea name="description">{{ $service->description }}</textarea><br><br>
 
     <label>Price:</label><br>
     <input type="number" name="price" value="{{ $service->price }}"><br><br>
+
+    <label>Service Duration:</label><br>
+    <input type="text"
+       name="duration"
+       value="{{ $service->duration }}">
+    <br><br>
 
     <label>Change Image:</label><br>
     <input type="file" name="image"><br><br>
