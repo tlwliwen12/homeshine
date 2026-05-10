@@ -5,9 +5,19 @@
 <h1>My Bookings</h1>
 
 @if(session('success'))
-    <div style="color:green;">
+
+    <div style="
+        background-color:#d4edda;
+        color:#155724;
+        padding:15px;
+        margin-bottom:20px;
+        border-radius:5px;
+    ">
+
         {{ session('success') }}
+
     </div>
+
 @endif
 
 @foreach($bookings as $booking)

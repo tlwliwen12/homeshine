@@ -49,7 +49,9 @@ class BookingController extends Controller
         ]);
 
         return redirect('/customer/bookings')
-            ->with('success', 'Booking created successfully!');
+            ->with('success',
+                'Your booking has been confirmed successfully!'
+            );
     }
 
     public function index()
