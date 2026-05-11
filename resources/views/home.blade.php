@@ -17,6 +17,13 @@
         body{
             font-family: 'Poppins', sans-serif;
             background-color: #F8FAFC;
+            color: #1F2937;
+        }
+
+        /* Navbar */
+        .navbar{
+            background: white;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.04);
         }
 
         .navbar-brand{
@@ -25,49 +32,106 @@
             color: #2563EB !important;
         }
 
+        .nav-link{
+            color: #1F2937 !important;
+            font-weight: 500;
+            margin-left: 10px;
+            transition: 0.3s;
+        }
+
+        .nav-link:hover{
+            color: #2563EB !important;
+        }
+
+        /* Hero Section */
         .hero-section{
             min-height: 90vh;
             display: flex;
             align-items: center;
+            background: linear-gradient(to right, #F8FAFC, #EFF6FF);
         }
 
         .hero-title{
-            font-size: 55px;
+            font-size: 58px;
             font-weight: 700;
-            color: #1F2937;
             line-height: 1.2;
+            color: #1F2937;
         }
 
         .hero-text{
-            color: #6B7280;
             font-size: 18px;
+            line-height: 1.8;
+            color: #6B7280;
         }
 
-        .feature-card{
-            border: none;
-            border-radius: 20px;
-            transition: 0.3s;
-        }
-
-        .feature-card:hover{
-            transform: translateY(-5px);
-        }
-
-        .feature-icon{
-            font-size: 50px;
+        .badge-custom{
+            background: rgba(16,185,129,0.12);
+            color: #10B981;
+            padding: 10px 18px;
+            border-radius: 50px;
+            display: inline-block;
+            font-weight: 500;
         }
 
         .min-vh-custom{
             min-height: 80vh;
         }
 
+        /* Buttons */
+        .btn-primary{
+            background-color: #2563EB;
+            border: none;
+        }
+
+        .btn-primary:hover{
+            background-color: #1D4ED8;
+        }
+
+        .btn-outline-primary{
+            border-color: #2563EB;
+            color: #2563EB;
+        }
+
+        .btn-outline-primary:hover{
+            background-color: #2563EB;
+            border-color: #2563EB;
+        }
+
+        /* Feature Section */
+        .section-title{
+            font-size: 40px;
+            font-weight: 700;
+            color: #1F2937;
+        }
+
+        .feature-card{
+            border: none;
+            border-radius: 24px;
+            background: white;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+            transition: 0.3s;
+        }
+
+        .feature-card:hover{
+            transform: translateY(-8px);
+        }
+
+        .feature-icon{
+            font-size: 55px;
+        }
+
+        footer{
+            background: white;
+        }
+
     </style>
+
 </head>
 
 <body>
 
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg bg-white shadow-sm py-3">
+<nav class="navbar navbar-expand-lg py-3">
 
     <div class="container">
 
@@ -76,7 +140,9 @@
         </a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+
             <span class="navbar-toggler-icon"></span>
+
         </button>
 
         <div class="collapse navbar-collapse" id="navbarNav">
@@ -102,15 +168,25 @@
                 @guest
 
                     <li class="nav-item ms-2">
-                        <a href="/login" class="btn btn-outline-primary rounded-pill px-4">
+
+                        <a href="/login"
+                           class="btn btn-outline-primary rounded-pill px-4">
+
                             Login
+
                         </a>
+
                     </li>
 
                     <li class="nav-item ms-2">
-                        <a href="/register" class="btn btn-primary rounded-pill px-4">
+
+                        <a href="/register"
+                           class="btn btn-primary rounded-pill px-4">
+
                             Register
+
                         </a>
+
                     </li>
 
                 @endguest
@@ -118,36 +194,56 @@
                 @auth
 
                     <li class="nav-item ms-3">
+
                         <span class="fw-semibold">
                             Hi, {{ auth()->user()->name }}
                         </span>
+
                     </li>
 
                     @if(auth()->user()->role == 'customer')
 
                         <li class="nav-item ms-3">
-                            <a href="/customer/dashboard" class="btn btn-primary rounded-pill px-4">
+
+                            <a href="/customer/dashboard"
+                               class="btn btn-primary rounded-pill px-4">
+
                                 Dashboard
+
                             </a>
+
                         </li>
 
                     @elseif(auth()->user()->role == 'cleaner')
 
                         <li class="nav-item ms-3">
-                            <a href="/cleaner/dashboard" class="btn btn-primary rounded-pill px-4">
+
+                            <a href="/cleaner/dashboard"
+                               class="btn btn-primary rounded-pill px-4">
+
                                 Dashboard
+
                             </a>
+
                         </li>
 
                     @endif
 
                     <li class="nav-item ms-2">
+
                         <form method="POST" action="/logout">
+
                             @csrf
-                            <button type="submit" class="btn btn-danger rounded-pill px-4">
+
+                            <button type="submit"
+                                    class="btn btn-danger rounded-pill px-4">
+
                                 Logout
+
                             </button>
+
                         </form>
+
                     </li>
 
                 @endauth
@@ -170,26 +266,35 @@
             <!-- Left Content -->
             <div class="col-lg-6">
 
-                <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill mb-3">
+                <div class="badge-custom mb-3">
                     Trusted Cleaning Service
-                </span>
+                </div>
 
                 <h1 class="hero-title mb-4">
                     Professional Cleaning Services For Your Home
                 </h1>
 
                 <p class="hero-text mb-4">
-                    HomeShine helps you book professional and trusted cleaning services quickly and easily.
+
+                    HomeShine helps you book trusted and professional
+                    cleaning services quickly and easily.
+
                 </p>
 
                 @guest
 
-                    <a href="/register" class="btn btn-primary btn-lg rounded-pill px-4 me-2">
+                    <a href="/register"
+                       class="btn btn-primary btn-lg rounded-pill px-4 me-2">
+
                         Get Started
+
                     </a>
 
-                    <a href="/login" class="btn btn-outline-primary btn-lg rounded-pill px-4">
+                    <a href="/login"
+                       class="btn btn-outline-primary btn-lg rounded-pill px-4">
+
                         Login
+
                     </a>
 
                 @endguest
@@ -198,14 +303,20 @@
 
                     @if(auth()->user()->role == 'customer')
 
-                        <a href="/customer/dashboard" class="btn btn-primary btn-lg rounded-pill px-4">
-                            Go to Dashboard
+                        <a href="/customer/dashboard"
+                           class="btn btn-primary btn-lg rounded-pill px-4">
+
+                            Go To Dashboard
+
                         </a>
 
                     @elseif(auth()->user()->role == 'cleaner')
 
-                        <a href="/cleaner/dashboard" class="btn btn-primary btn-lg rounded-pill px-4">
-                            Go to Dashboard
+                        <a href="/cleaner/dashboard"
+                           class="btn btn-primary btn-lg rounded-pill px-4">
+
+                            Go To Dashboard
+
                         </a>
 
                     @endif
@@ -219,7 +330,7 @@
 
                 <img src="{{ asset('images/cleaning.png') }}"
                      class="img-fluid"
-                     style="max-width: 500px;"
+                     style="max-width: 520px;"
                      alt="Cleaning Service">
 
             </div>
@@ -237,7 +348,7 @@
 
         <div class="text-center mb-5">
 
-            <h2 class="fw-bold">
+            <h2 class="section-title mb-3">
                 Why Choose HomeShine?
             </h2>
 
@@ -249,9 +360,10 @@
 
         <div class="row g-4">
 
+            <!-- Card 1 -->
             <div class="col-md-4">
 
-                <div class="card feature-card shadow-sm h-100 p-4 text-center">
+                <div class="card feature-card h-100 p-4 text-center">
 
                     <div class="feature-icon mb-3">
                         🧹
@@ -262,16 +374,20 @@
                     </h4>
 
                     <p class="text-secondary mt-3">
-                        Experienced and trusted cleaning professionals.
+
+                        Experienced and trusted cleaning professionals
+                        for your home.
+
                     </p>
 
                 </div>
 
             </div>
 
+            <!-- Card 2 -->
             <div class="col-md-4">
 
-                <div class="card feature-card shadow-sm h-100 p-4 text-center">
+                <div class="card feature-card h-100 p-4 text-center">
 
                     <div class="feature-icon mb-3">
                         📅
@@ -282,16 +398,20 @@
                     </h4>
 
                     <p class="text-secondary mt-3">
-                        Book your cleaning service anytime online.
+
+                        Book your cleaning service anytime
+                        with a simple online process.
+
                     </p>
 
                 </div>
 
             </div>
 
+            <!-- Card 3 -->
             <div class="col-md-4">
 
-                <div class="card feature-card shadow-sm h-100 p-4 text-center">
+                <div class="card feature-card h-100 p-4 text-center">
 
                     <div class="feature-icon mb-3">
                         ✨
@@ -302,7 +422,10 @@
                     </h4>
 
                     <p class="text-secondary mt-3">
-                        We ensure every home stays clean and fresh.
+
+                        We ensure every home stays clean,
+                        fresh, and comfortable.
+
                     </p>
 
                 </div>
@@ -316,7 +439,7 @@
 </section>
 
 <!-- Footer -->
-<footer class="bg-white border-top py-4">
+<footer class="border-top py-4">
 
     <div class="container text-center text-secondary">
 

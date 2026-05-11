@@ -1,43 +1,235 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login - HomeShine</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+
+        body{
+            font-family: 'Poppins', sans-serif;
+            background-color: #F8FAFC;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-card{
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(37,99,235,0.08);
+            border: 1px solid #E5E7EB;
+        }
+
+        .logo{
+            font-size: 34px;
+            font-weight: 700;
+            color: #2563EB;
+        }
+
+        .subtitle{
+            color: #6B7280;
+        }
+
+        .form-label{
+            color: #1F2937;
+            font-weight: 500;
+        }
+
+        .form-control{
+            border-radius: 14px;
+            padding: 12px;
+            border: 1px solid #D1D5DB;
+        }
+
+        .form-control:focus{
+            border-color: #60A5FA;
+            box-shadow: 0 0 0 0.2rem rgba(96,165,250,0.2);
+        }
+
+        .btn-login{
+            background: #2563EB;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 13px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .btn-login:hover{
+            background: #1D4ED8;
+            color: white;
+        }
+
+        .forgot-link{
+            color: #10B981;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .forgot-link:hover{
+            color: #059669;
+        }
+
+        .register-link{
+            color: #2563EB;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .register-link:hover{
+            color: #1D4ED8;
+        }
+
+        .badge-custom{
+            background: rgba(16,185,129,0.12);
+            color: #10B981;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 500;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+    </style>
+
 </head>
+
 <body>
 
-<h2>Login</h2>
+<div class="login-card">
 
-<form method="POST" action="/login">
-    @csrf
+    <!-- Header -->
+    <div class="text-center mb-4">
 
-    @if ($errors->any())
-        <div style="color:red;">
-            {{ $errors->first() }}
+        <div class="badge-custom">
+            Welcome Back
         </div>
+
+        <h1 class="logo">
+            HomeShine
+        </h1>
+
+        <p class="subtitle mt-2">
+            Login to your account
+        </p>
+
+    </div>
+
+    <!-- Error Message -->
+    @if ($errors->any())
+
+        <div class="alert alert-danger rounded-4">
+
+            {{ $errors->first() }}
+
+        </div>
+
     @endif
 
-    <input type="email" name="email" placeholder="Email" value="{{ old('email') }}">
-    @error('email')
-        <div style="color:red;">
-            {{ $message }}
+    <!-- Login Form -->
+    <form method="POST" action="/login">
+
+        @csrf
+
+        <!-- Email -->
+        <div class="mb-3">
+
+            <label class="form-label">
+                Email Address
+            </label>
+
+            <input type="email"
+                   name="email"
+                   class="form-control"
+                   placeholder="Enter your email"
+                   value="{{ old('email') }}">
+
+            @error('email')
+
+                <div class="text-danger mt-2 small">
+
+                    {{ $message }}
+
+                </div>
+
+            @enderror
+
         </div>
-    @enderror
-    <br><br>
 
-    <input type="password" name="password" placeholder="Password">
-    @error('password')
-        <div style="color:red;">
-            {{ $message }}
+        <!-- Password -->
+        <div class="mb-3">
+
+            <label class="form-label">
+                Password
+            </label>
+
+            <input type="password"
+                   name="password"
+                   class="form-control"
+                   placeholder="Enter your password">
+
+            @error('password')
+
+                <div class="text-danger mt-2 small">
+
+                    {{ $message }}
+
+                </div>
+
+            @enderror
+
         </div>
-    @enderror
-    <br><br>
 
-    <button type="submit">Login</button>
+        <!-- Forgot Password -->
+        <div class="text-end mb-4">
 
-    <br><a href="/forgot-password">
-        Forgot Password?
-    </a>
-</form>
+            <a href="/forgot-password" class="forgot-link">
+                Forgot Password?
+            </a>
+
+        </div>
+
+        <!-- Login Button -->
+        <div class="d-grid mb-4">
+
+            <button type="submit" class="btn btn-login">
+                Login
+            </button>
+
+        </div>
+
+        <!-- Register Link -->
+        <div class="text-center">
+
+            <span class="text-secondary">
+                Don't have an account?
+            </span>
+
+            <a href="/register" class="register-link">
+                Register
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
 
 </body>
 </html>
