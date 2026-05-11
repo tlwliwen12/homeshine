@@ -37,6 +37,12 @@
     </select><br><br>
 
     <button type="submit">Register</button>
+    <br><br>
+
+    <p>
+    Already have an account?
+    <a href="/login">Login</a>
+    </p>
 </form>
 
 </body>

@@ -26,6 +26,12 @@
     </button>
 </form>
 
+<br><br>
+
+<a href="/login">
+    Back to Login
+</a>
+
 <br>
 
 </body>
