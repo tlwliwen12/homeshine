@@ -2,37 +2,132 @@
 
 @section('content')
 
-<h1>Manage Services</h1>
+<div class="container-fluid">
 
-@if (session('success'))
-    <div style="color: green;">
-        {{ session('success') }}
-    </div>
-@endif
+    {{-- Header --}}
+    <div class="d-flex justify-content-between align-items-center mb-4">
 
-@foreach ($services as $service)
-    <div style="border:1px solid black; padding:10px; margin-bottom:10px;">
-        <h3>{{ $service->name }}</h3>
-        <p>Category: {{ $service->category }}</p>
-        <p>{{ $service->description }}</p>
-        <p>RM {{ $service->price }}</p>
+        <div>
 
-        @if($service->image)
-        <img src="{{ asset('images/services/' . $service->image) }}" width="120">
-        @endif
-        <br><br>
-        <a href="/admin/services/{{ $service->id }}/edit">
-            <button>Edit</button>
+            <h2 class="fw-bold mb-1">
+                Manage Services
+            </h2>
+
+            <p class="text-muted mb-0">
+                Manage all HomeShine cleaning services
+            </p>
+
+        </div>
+
+        <a href="/admin/services/create"
+           class="btn btn-dark">
+
+            <i class="bi bi-plus-circle"></i>
+            Add Service
+
         </a>
 
-        <form method="POST" action="/admin/services/{{ $service->id }}/delete"
-              style="display:inline;">
-            @csrf
-            <button style="color:red;" onclick="return confirm('Are you sure?')">
-                Delete
-            </button>
-        </form>
     </div>
-@endforeach
+
+    {{-- Success Message --}}
+    @if(session('success'))
+
+        <div class="alert alert-success alert-dismissible fade show">
+
+            {{ session('success') }}
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+
+        </div>
+
+    @endif
+
+    {{-- Services Grid --}}
+    <div class="row g-4">
+
+        @foreach ($services as $service)
+
+            <div class="col-md-4">
+
+                <div class="card shadow-sm border-0 rounded-4 h-100">
+
+                    {{-- Image --}}
+                    @if($service->image)
+
+                        <img src="{{ asset('images/services/' . $service->image) }}"
+                             class="card-img-top"
+                             style="height:220px; object-fit:cover;">
+
+                    @endif
+
+                    {{-- Card Body --}}
+                    <div class="card-body d-flex flex-column">
+
+                        <div class="mb-3">
+
+                            <h5 class="fw-bold">
+                                {{ $service->name }}
+                            </h5>
+
+                            <span class="badge bg-secondary mb-2">
+                                {{ $service->category }}
+                            </span>
+
+                            <p class="text-muted">
+                                {{ $service->description }}
+                            </p>
+
+                            <h5 class="text-success fw-bold">
+                                RM {{ $service->price }}
+                            </h5>
+
+                        </div>
+
+                        {{-- Buttons --}}
+                        <div class="mt-auto d-flex gap-2">
+
+                            {{-- Edit --}}
+                            <a href="/admin/services/{{ $service->id }}/edit"
+                               class="btn btn-primary w-100">
+
+                                <i class="bi bi-pencil-square"></i>
+                                Edit
+
+                            </a>
+
+                            {{-- Delete --}}
+                            <form method="POST"
+                                  action="/admin/services/{{ $service->id }}/delete"
+                                  class="w-100">
+
+                                @csrf
+
+                                <button type="submit"
+                                        class="btn btn-danger w-100"
+                                        onclick="return confirm('Are you sure you want to delete this service?')">
+
+                                    <i class="bi bi-trash"></i>
+                                    Delete
+
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        @endforeach
+
+    </div>
+
+</div>
 
 @endsection
