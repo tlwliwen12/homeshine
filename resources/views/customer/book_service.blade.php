@@ -2,85 +2,64 @@
 
 @section('content')
 
-<div style="padding:20px; font-family:Arial; display:flex; justify-content:center;">
+<div class="container py-4">
 
-    <div style="
-        width:500px;
-        background:#fff;
-        border:1px solid #ddd;
-        border-radius:10px;
-        padding:20px;
-        box-shadow:0 2px 10px rgba(0,0,0,0.1);
-    ">
+    <div class="row justify-content-center">
 
-        <h1 style="margin-bottom:20px;">Book Service</h1>
+        <div class="col-md-6">
 
-        {{-- Service Preview --}}
-        @if($service->image)
-            <img src="{{ asset('images/services/' . $service->image) }}"
-                 style="width:100%; height:200px; object-fit:cover; border-radius:8px;">
-        @endif
+            <div class="card shadow">
 
-        <h3 style="margin-top:15px;">{{ $service->name }}</h3>
+                <div class="card-body">
 
-        <p style="color:#2e7d32; font-size:18px;">
-            <strong>RM {{ $service->price }}</strong>
-        </p>
+                    <h3 class="mb-3">Book Service</h3>
 
-        <hr>
+                    @if($service->image)
+                        <img src="{{ asset('images/services/' . $service->image) }}"
+                             class="img-fluid rounded mb-3">
+                    @endif
 
-        {{-- Booking Form --}}
-        <form method="POST" action="/book-service/{{ $service->id }}">
+                    <h5>{{ $service->name }}</h5>
+                    <p class="text-success">RM {{ $service->price }}</p>
 
-            @csrf
+                    <form method="POST" action="/book-service/{{ $service->id }}">
+                        @csrf
 
-            {{-- Date --}}
-            <label>Booking Date *</label><br>
-            <input type="date"
-                   name="booking_date"
-                   required
-                   style="width:100%; padding:8px; margin-bottom:10px;">
+                        <div class="mb-3">
+                            <label>Date</label>
+                            <input type="date" name="booking_date" class="form-control" required>
+                        </div>
 
-            {{-- Time --}}
-            <label>Booking Time *</label><br>
-            <input type="time"
-                   name="booking_time"
-                   required
-                   style="width:100%; padding:8px; margin-bottom:10px;">
+                        <div class="mb-3">
+                            <label>Time</label>
+                            <input type="time" name="booking_time" class="form-control" required>
+                        </div>
 
-            {{-- Address --}}
-            <label>Address *</label><br>
-            <input type="text"
-                   name="address"
-                   required
-                   style="width:100%; padding:8px; margin-bottom:5px;">
+                        <div class="mb-3">
+                            <label>Address</label>
+                            <input type="text" name="address" class="form-control" required>
 
-            @error('address')
-                <div style="color:red; font-size:13px; margin-bottom:10px;">
-                    {{ $message }}
+                            @error('address')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Notes</label>
+                            <textarea name="notes" class="form-control"></textarea>
+                        </div>
+
+                        <button class="btn btn-dark w-100">
+                            Confirm Booking
+                        </button>
+
+                    </form>
+
                 </div>
-            @enderror
 
-            {{-- Notes --}}
-            <label>Notes (Optional)</label><br>
-            <textarea name="notes"
-                      rows="3"
-                      style="width:100%; padding:8px; margin-bottom:15px;"></textarea>
+            </div>
 
-            {{-- Submit Button --}}
-            <button type="submit" style="
-                width:100%;
-                padding:10px;
-                background:#333;
-                color:white;
-                border:none;
-                border-radius:5px;
-                cursor:pointer;
-            ">
-                Confirm Booking
-            </button>
-
-        </form>
+        </div>
 
     </div>
 

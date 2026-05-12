@@ -2,93 +2,58 @@
 
 @section('content')
 
-<div style="padding:20px; font-family:Arial;">
+<div class="container py-4">
 
-    <h1 style="margin-bottom:20px;">Available Services</h1>
+    <h2 class="mb-4">Available Services</h2>
 
-    <h2 style="margin-bottom:10px;">Service Categories</h2>
+    <!-- Category Buttons -->
+    <div class="mb-4">
 
-    <!-- Category Filters -->
-    <div style="margin-bottom:20px;">
-
-        <a href="/customer/services">
-            <button style="padding:8px 12px; margin:3px; border:none; background:#333; color:#fff; border-radius:5px;">
-                All
-            </button>
-        </a>
-
-        <a href="/customer/services?category=House Cleaning">
-            <button style="padding:8px 12px; margin:3px; border:none; background:#4CAF50; color:white; border-radius:5px;">
-                House Cleaning
-            </button>
-        </a>
-
-        <a href="/customer/services?category=Office Cleaning">
-            <button style="padding:8px 12px; margin:3px; border:none; background:#2196F3; color:white; border-radius:5px;">
-                Office Cleaning
-            </button>
-        </a>
-
-        <a href="/customer/services?category=Deep Cleaning">
-            <button style="padding:8px 12px; margin:3px; border:none; background:#FF9800; color:white; border-radius:5px;">
-                Deep Cleaning
-            </button>
-        </a>
-
-        <a href="/customer/services?category=Sofa Cleaning">
-            <button style="padding:8px 12px; margin:3px; border:none; background:#9C27B0; color:white; border-radius:5px;">
-                Sofa Cleaning
-            </button>
-        </a>
+        <a href="/customer/services" class="btn btn-dark btn-sm">All</a>
+        <a href="/customer/services?category=House Cleaning" class="btn btn-success btn-sm">House Cleaning</a>
+        <a href="/customer/services?category=Office Cleaning" class="btn btn-primary btn-sm">Office Cleaning</a>
+        <a href="/customer/services?category=Deep Cleaning" class="btn btn-warning btn-sm">Deep Cleaning</a>
+        <a href="/customer/services?category=Sofa Cleaning" class="btn btn-secondary btn-sm">Sofa Cleaning</a>
 
     </div>
 
-    <hr>
-
     <!-- Services Grid -->
-    <div style="display:flex; flex-wrap:wrap; gap:15px;">
+    <div class="row g-3">
 
         @foreach ($services as $service)
 
-            <div style="
-                width:250px;
-                border:1px solid #ddd;
-                border-radius:10px;
-                padding:15px;
-                box-shadow:0 2px 6px rgba(0,0,0,0.1);
-                background:#fff;
-            ">
+        <div class="col-md-4">
+
+            <div class="card shadow-sm h-100">
 
                 @if($service->image)
                     <img src="{{ asset('images/services/' . $service->image) }}"
-                         style="width:100%; height:150px; object-fit:cover; border-radius:8px;">
+                         class="card-img-top"
+                         style="height:200px; object-fit:cover;">
                 @endif
 
-                <h3 style="margin-top:10px;">{{ $service->name }}</h3>
+                <div class="card-body">
 
-                <p style="color:gray; font-size:14px;">
-                    Category: {{ $service->category }}
-                </p>
+                    <h5 class="card-title">{{ $service->name }}</h5>
 
-                <p style="font-size:16px;">
-                    <strong style="color:#2e7d32;">RM {{ $service->price }}</strong>
-                </p>
+                    <p class="text-muted mb-1">
+                        {{ $service->category }}
+                    </p>
 
-                <a href="/services/{{ $service->id }}">
-                    <button style="
-                        width:100%;
-                        padding:8px;
-                        border:none;
-                        background:#333;
-                        color:white;
-                        border-radius:5px;
-                        cursor:pointer;
-                    ">
+                    <h6 class="text-success">
+                        RM {{ $service->price }}
+                    </h6>
+
+                    <a href="/services/{{ $service->id }}"
+                       class="btn btn-dark w-100 mt-2">
                         View Details
-                    </button>
-                </a>
+                    </a>
+
+                </div>
 
             </div>
+
+        </div>
 
         @endforeach
 

@@ -1,28 +1,115 @@
-<h1>Reset Password</h1>
+@extends('customer.layout')
 
-<form method="POST" action="/reset-password">
-    @csrf
+@section('content')
 
-    <input type="hidden" name="token" value="{{ $token }}">
+<div class="container py-5">
 
-    <label>Email:</label><br>
-    <input type="email" name="email"><br><br>
+    <div class="row justify-content-center">
 
-    <label>New Password:</label><br>
-    <input type="password" name="password"><br><br>
+        <div class="col-md-5">
 
-    <label>Confirm Password:</label><br>
-    <input type="password" name="password_confirmation"><br><br>
+            <div class="card shadow border-0 rounded-4">
 
-    @error('email')
-        <div style="color:red;">{{ $message }}</div>
-    @enderror
+                <div class="card-body p-4">
 
-    @error('password')
-        <div style="color:red;">{{ $message }}</div>
-    @enderror
+                    {{-- Title --}}
+                    <div class="text-center mb-4">
 
-    <button type="submit">
-        Reset Password
-    </button>
-</form>
+                        <h2 class="fw-bold">
+                            Reset Password
+                        </h2>
+
+                        <p class="text-muted">
+                            Create your new password
+                        </p>
+
+                    </div>
+
+                    {{-- Form --}}
+                    <form method="POST" action="/reset-password">
+
+                        @csrf
+
+                        <input type="hidden"
+                               name="token"
+                               value="{{ $token }}">
+
+                        {{-- Email --}}
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Email Address
+                            </label>
+
+                            <input type="email"
+                                   name="email"
+                                   class="form-control"
+                                   placeholder="Enter your email"
+                                   required>
+
+                            @error('email')
+                                <small class="text-danger">
+                                    {{ $message }}
+                                </small>
+                            @enderror
+
+                        </div>
+
+                        {{-- Password --}}
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                New Password
+                            </label>
+
+                            <input type="password"
+                                   name="password"
+                                   class="form-control"
+                                   placeholder="Enter new password"
+                                   required>
+
+                            @error('password')
+                                <small class="text-danger">
+                                    {{ $message }}
+                                </small>
+                            @enderror
+
+                        </div>
+
+                        {{-- Confirm Password --}}
+                        <div class="mb-4">
+
+                            <label class="form-label">
+                                Confirm Password
+                            </label>
+
+                            <input type="password"
+                                   name="password_confirmation"
+                                   class="form-control"
+                                   placeholder="Confirm password"
+                                   required>
+
+                        </div>
+
+                        {{-- Submit --}}
+                        <button type="submit"
+                                class="btn btn-dark w-100">
+
+                            <i class="bi bi-key-fill"></i>
+                            Reset Password
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@endsection
