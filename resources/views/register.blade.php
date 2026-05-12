@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -12,11 +14,14 @@
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+    <!-- Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
     <style>
 
         body{
             font-family: 'Poppins', sans-serif;
-            background: #F8FAFC;
+            background: linear-gradient(135deg, #F8FAFC, #EFF6FF);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -26,12 +31,18 @@
 
         .register-card{
             width: 100%;
-            max-width: 500px;
-            background: white;
+            max-width: 520px;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(10px);
             border-radius: 24px;
             padding: 40px;
-            box-shadow: 0 10px 30px rgba(37,99,235,0.08);
-            border: 1px solid #E5E7EB;
+            box-shadow: 0 20px 40px rgba(37,99,235,0.10);
+            border: 1px solid rgba(229,231,235,0.6);
+            transition: 0.3s;
+        }
+
+        .register-card:hover{
+            transform: translateY(-4px);
         }
 
         .logo{
@@ -45,8 +56,8 @@
         }
 
         .form-label{
-            color: #1F2937;
             font-weight: 500;
+            color: #1F2937;
         }
 
         .form-control,
@@ -59,7 +70,7 @@
         .form-control:focus,
         .form-select:focus{
             border-color: #60A5FA;
-            box-shadow: 0 0 0 0.2rem rgba(96,165,250,0.2);
+            box-shadow: 0 0 0 0.2rem rgba(96,165,250,0.25);
         }
 
         .btn-register{
@@ -74,12 +85,7 @@
 
         .btn-register:hover{
             background: #1D4ED8;
-            color: white;
-        }
-
-        .password-note{
-            font-size: 13px;
-            color: #6B7280;
+            transform: translateY(-2px);
         }
 
         .login-link{
@@ -93,7 +99,7 @@
         }
 
         .badge-custom{
-            background: rgba(16,185,129,0.1);
+            background: rgba(16,185,129,0.12);
             color: #10B981;
             padding: 8px 16px;
             border-radius: 50px;
@@ -103,7 +109,14 @@
             margin-bottom: 15px;
         }
 
+        .input-group-text{
+            background: white;
+            border-radius: 14px;
+            cursor: pointer;
+        }
+
     </style>
+
 </head>
 
 <body>
@@ -122,12 +135,12 @@
         </h1>
 
         <p class="subtitle mt-2">
-            Create your account to start booking cleaning services
+            Create your account and start booking cleaning services
         </p>
 
     </div>
 
-    <!-- Error Messages -->
+    <!-- Errors -->
     @if ($errors->any())
 
         <div class="alert alert-danger rounded-4">
@@ -135,9 +148,7 @@
             <ul class="mb-0">
 
                 @foreach ($errors->all() as $error)
-
                     <li>{{ $error }}</li>
-
                 @endforeach
 
             </ul>
@@ -146,7 +157,7 @@
 
     @endif
 
-    <!-- Register Form -->
+    <!-- Form -->
     <form method="POST" action="/register">
 
         @csrf
@@ -154,9 +165,7 @@
         <!-- Name -->
         <div class="mb-3">
 
-            <label class="form-label">
-                Full Name
-            </label>
+            <label class="form-label">Full Name</label>
 
             <input type="text"
                    name="name"
@@ -169,9 +178,7 @@
         <!-- Email -->
         <div class="mb-3">
 
-            <label class="form-label">
-                Email Address
-            </label>
+            <label class="form-label">Email Address</label>
 
             <input type="email"
                    name="email"
@@ -184,17 +191,26 @@
         <!-- Password -->
         <div class="mb-3">
 
-            <label class="form-label">
-                Password
-            </label>
+            <label class="form-label">Password</label>
 
-            <input type="password"
-                   name="password"
-                   class="form-control"
-                   placeholder="Enter your password">
+            <div class="input-group">
 
-            <div class="password-note mt-2">
-                Password must contain uppercase, lowercase, number, and symbol.
+                <input type="password"
+                       name="password"
+                       id="password"
+                       class="form-control"
+                       placeholder="Enter your password">
+
+                <span class="input-group-text" onclick="togglePassword()">
+
+                    <i class="bi bi-eye" id="eyeIcon"></i>
+
+                </span>
+
+            </div>
+
+            <div class="small text-muted mt-2">
+                Must include uppercase, lowercase, number & symbol.
             </div>
 
         </div>
@@ -202,15 +218,11 @@
         <!-- Role -->
         <div class="mb-4">
 
-            <label class="form-label">
-                Select Role
-            </label>
+            <label class="form-label">Select Role</label>
 
             <select name="role" class="form-select">
 
-                <option value="">
-                    Choose your role
-                </option>
+                <option value="">Choose your role</option>
 
                 <option value="customer" {{ old('role') == 'customer' ? 'selected' : '' }}>
                     Customer
@@ -224,11 +236,14 @@
 
         </div>
 
-        <!-- Button -->
+        <!-- Submit -->
         <div class="d-grid mb-3">
 
             <button type="submit" class="btn btn-register">
+
+                <i class="bi bi-person-plus me-1"></i>
                 Create Account
+
             </button>
 
         </div>
@@ -250,5 +265,27 @@
 
 </div>
 
+<script>
+
+function togglePassword(){
+
+    let input = document.getElementById("password");
+    let icon = document.getElementById("eyeIcon");
+
+    if(input.type === "password"){
+        input.type = "text";
+        icon.classList.remove("bi-eye");
+        icon.classList.add("bi-eye-slash");
+    }else{
+        input.type = "password";
+        icon.classList.remove("bi-eye-slash");
+        icon.classList.add("bi-eye");
+    }
+
+}
+
+</script>
+
 </body>
+
 </html>

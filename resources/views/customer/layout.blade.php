@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -12,9 +14,8 @@
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 
     <!-- SweetAlert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -23,14 +24,17 @@
 
         body{
             font-family: 'Poppins', sans-serif;
-            background-color: #F8FAFC;
+            background: #F8FAFC;
             color: #1F2937;
         }
 
         /* Navbar */
         .navbar{
             background: white;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.04);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
         .navbar-brand{
@@ -42,15 +46,19 @@
         .nav-link{
             color: #1F2937 !important;
             font-weight: 500;
-            margin-left: 10px;
+            margin-left: 8px;
+            padding: 8px 14px;
+            border-radius: 10px;
             transition: 0.3s;
         }
 
         .nav-link:hover{
+            background: #EFF6FF;
             color: #2563EB !important;
         }
 
         .nav-link.active{
+            background: #EFF6FF;
             color: #2563EB !important;
             font-weight: 600;
         }
@@ -58,14 +66,13 @@
         /* Main Content */
         .main-content{
             padding-top: 40px;
-            padding-bottom: 40px;
+            padding-bottom: 60px;
         }
 
         /* Page Title */
         .page-title{
             font-size: 32px;
             font-weight: 700;
-            color: #1F2937;
         }
 
         /* Cards */
@@ -74,6 +81,12 @@
             border: none;
             border-radius: 24px;
             box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+            transition: 0.3s;
+        }
+
+        .custom-card:hover{
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.08);
         }
 
         /* Buttons */
@@ -95,7 +108,6 @@
             background: white;
             border-top: 1px solid #E5E7EB;
             padding: 20px 0;
-            margin-top: 50px;
         }
 
     </style>
@@ -110,7 +122,7 @@
 <script>
 
 Swal.fire({
-    title: 'Success!',
+    title: 'Success',
     text: '{{ session('success') }}',
     icon: 'success',
     confirmButtonColor: '#2563EB',
@@ -126,12 +138,12 @@ Swal.fire({
 
     <div class="container">
 
-        <!-- Logo -->
+        <!-- Brand -->
         <a class="navbar-brand" href="/customer/dashboard">
             HomeShine
         </a>
 
-        <!-- Mobile Button -->
+        <!-- Mobile Toggle -->
         <button class="navbar-toggler"
                 type="button"
                 data-bs-toggle="collapse"
@@ -147,54 +159,42 @@ Swal.fire({
             <ul class="navbar-nav ms-auto align-items-center">
 
                 <li class="nav-item">
-
-                    <a class="nav-link"
+                    <a class="nav-link {{ request()->is('customer/dashboard') ? 'active' : '' }}"
                        href="/customer/dashboard">
-
-                        <i class="bi bi-house-door me-1"></i>
-                        Dashboard
-
+                        <i class="bi bi-house-door me-1"></i> Dashboard
                     </a>
-
                 </li>
 
                 <li class="nav-item">
-
-                    <a class="nav-link"
+                    <a class="nav-link {{ request()->is('customer/services') ? 'active' : '' }}"
                        href="/customer/services">
-
-                        <i class="bi bi-grid me-1"></i>
-                        Services
-
+                        <i class="bi bi-grid me-1"></i> Services
                     </a>
-
                 </li>
 
                 <li class="nav-item">
-
-                    <a class="nav-link"
+                    <a class="nav-link {{ request()->is('customer/bookings') ? 'active' : '' }}"
                        href="/customer/bookings">
-
-                        <i class="bi bi-calendar-check me-1"></i>
-                        My Bookings
-
+                        <i class="bi bi-calendar-check me-1"></i> Bookings
                     </a>
+                </li>
 
+                <!-- User -->
+                <li class="nav-item ms-3">
+                    <span class="fw-semibold text-secondary">
+                        Hi, {{ Auth::user()->name }}
+                    </span>
                 </li>
 
                 <!-- Logout -->
                 <li class="nav-item ms-3">
 
-                    <form method="POST"
-                          action="{{ route('logout') }}">
-
+                    <form method="POST" action="{{ route('logout') }}">
                         @csrf
 
                         <button type="submit"
                                 class="btn btn-danger rounded-pill px-4">
-
                             Logout
-
                         </button>
 
                     </form>
@@ -231,4 +231,5 @@ Swal.fire({
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
+
 </html>

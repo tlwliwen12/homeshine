@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -12,11 +14,14 @@
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+    <!-- Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
     <style>
 
         body{
             font-family: 'Poppins', sans-serif;
-            background-color: #F8FAFC;
+            background: linear-gradient(135deg, #F8FAFC, #EFF6FF);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -26,13 +31,19 @@
 
         .verify-card{
             width: 100%;
-            max-width: 550px;
-            background: white;
+            max-width: 520px;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(10px);
             border-radius: 24px;
             padding: 45px;
-            box-shadow: 0 10px 30px rgba(37,99,235,0.08);
-            border: 1px solid #E5E7EB;
+            box-shadow: 0 20px 40px rgba(37,99,235,0.10);
+            border: 1px solid rgba(229,231,235,0.6);
             text-align: center;
+            transition: 0.3s;
+        }
+
+        .verify-card:hover{
+            transform: translateY(-4px);
         }
 
         .logo{
@@ -42,20 +53,27 @@
         }
 
         .verify-icon{
-            width: 90px;
-            height: 90px;
+            width: 95px;
+            height: 95px;
             background: rgba(16,185,129,0.12);
             color: #10B981;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 40px;
+            font-size: 42px;
             margin: 0 auto 25px;
+            animation: float 2s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+            100% { transform: translateY(0px); }
         }
 
         .verify-title{
-            font-size: 30px;
+            font-size: 28px;
             font-weight: 700;
             color: #1F2937;
         }
@@ -63,7 +81,7 @@
         .verify-text{
             color: #6B7280;
             line-height: 1.8;
-            margin-top: 15px;
+            margin-top: 12px;
         }
 
         .btn-custom{
@@ -78,7 +96,7 @@
 
         .btn-custom:hover{
             background: #1D4ED8;
-            color: white;
+            transform: translateY(-2px);
         }
 
         .back-link{
@@ -91,6 +109,17 @@
             color: #059669;
         }
 
+        .badge-custom{
+            background: rgba(16,185,129,0.12);
+            color: #10B981;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 500;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
     </style>
 
 </head>
@@ -99,14 +128,19 @@
 
 <div class="verify-card">
 
+    <!-- Badge -->
+    <div class="badge-custom">
+        Security Verification
+    </div>
+
     <!-- Logo -->
-    <h1 class="logo mb-4">
+    <h1 class="logo mb-3">
         HomeShine
     </h1>
 
     <!-- Icon -->
     <div class="verify-icon">
-        ✉️
+        <i class="bi bi-envelope-check"></i>
     </div>
 
     <!-- Title -->
@@ -114,11 +148,11 @@
         Verify Your Email
     </h2>
 
-    <!-- Description -->
+    <!-- Text -->
     <p class="verify-text">
 
-        Please verify your email address by clicking the verification
-        link sent to your email inbox.
+        We’ve sent a verification link to your email address.
+        Please check your inbox and click the link to activate your account.
 
     </p>
 
@@ -133,7 +167,7 @@
 
     @endif
 
-    <!-- Resend Form -->
+    <!-- Resend Button -->
     <form method="POST"
           action="{{ route('verification.send') }}"
           class="mt-4">
@@ -142,18 +176,19 @@
 
         <button type="submit" class="btn btn-custom">
 
-            Resend Verification Email
+            <i class="bi bi-arrow-repeat me-1"></i>
+            Resend Email
 
         </button>
 
     </form>
 
-    <!-- Back to Login -->
+    <!-- Back -->
     <div class="mt-4">
 
         <a href="/login" class="back-link">
 
-            Back to Login
+            ← Back to Login
 
         </a>
 
@@ -162,4 +197,5 @@
 </div>
 
 </body>
+
 </html>

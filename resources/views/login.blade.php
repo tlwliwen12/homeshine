@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -12,11 +14,14 @@
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+    <!-- Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
     <style>
 
         body{
             font-family: 'Poppins', sans-serif;
-            background-color: #F8FAFC;
+            background: linear-gradient(135deg, #F8FAFC, #EFF6FF);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -26,12 +31,18 @@
 
         .login-card{
             width: 100%;
-            max-width: 500px;
-            background: white;
+            max-width: 480px;
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(10px);
             border-radius: 24px;
             padding: 40px;
-            box-shadow: 0 10px 30px rgba(37,99,235,0.08);
-            border: 1px solid #E5E7EB;
+            box-shadow: 0 20px 40px rgba(37,99,235,0.10);
+            border: 1px solid rgba(229,231,235,0.6);
+            transition: 0.3s;
+        }
+
+        .login-card:hover{
+            transform: translateY(-4px);
         }
 
         .logo{
@@ -45,8 +56,8 @@
         }
 
         .form-label{
-            color: #1F2937;
             font-weight: 500;
+            color: #1F2937;
         }
 
         .form-control{
@@ -57,7 +68,7 @@
 
         .form-control:focus{
             border-color: #60A5FA;
-            box-shadow: 0 0 0 0.2rem rgba(96,165,250,0.2);
+            box-shadow: 0 0 0 0.2rem rgba(96,165,250,0.25);
         }
 
         .btn-login{
@@ -72,7 +83,7 @@
 
         .btn-login:hover{
             background: #1D4ED8;
-            color: white;
+            transform: translateY(-2px);
         }
 
         .forgot-link{
@@ -106,6 +117,13 @@
             margin-bottom: 15px;
         }
 
+        .input-group-text{
+            border-radius: 14px;
+            background: white;
+            border: 1px solid #D1D5DB;
+            cursor: pointer;
+        }
+
     </style>
 
 </head>
@@ -131,7 +149,7 @@
 
     </div>
 
-    <!-- Error Message -->
+    <!-- Error -->
     @if ($errors->any())
 
         <div class="alert alert-danger rounded-4">
@@ -142,7 +160,7 @@
 
     @endif
 
-    <!-- Login Form -->
+    <!-- Form -->
     <form method="POST" action="/login">
 
         @csrf
@@ -150,9 +168,7 @@
         <!-- Email -->
         <div class="mb-3">
 
-            <label class="form-label">
-                Email Address
-            </label>
+            <label class="form-label">Email Address</label>
 
             <input type="email"
                    name="email"
@@ -161,13 +177,9 @@
                    value="{{ old('email') }}">
 
             @error('email')
-
-                <div class="text-danger mt-2 small">
-
+                <div class="text-danger small mt-2">
                     {{ $message }}
-
                 </div>
-
             @enderror
 
         </div>
@@ -175,29 +187,35 @@
         <!-- Password -->
         <div class="mb-3">
 
-            <label class="form-label">
-                Password
-            </label>
+            <label class="form-label">Password</label>
 
-            <input type="password"
-                   name="password"
-                   class="form-control"
-                   placeholder="Enter your password">
+            <div class="input-group">
+
+                <input type="password"
+                       name="password"
+                       id="password"
+                       class="form-control"
+                       placeholder="Enter your password">
+
+                <span class="input-group-text"
+                      onclick="togglePassword()">
+
+                    <i class="bi bi-eye" id="eyeIcon"></i>
+
+                </span>
+
+            </div>
 
             @error('password')
-
-                <div class="text-danger mt-2 small">
-
+                <div class="text-danger small mt-2">
                     {{ $message }}
-
                 </div>
-
             @enderror
 
         </div>
 
-        <!-- Forgot Password -->
-        <div class="text-end mb-4">
+        <!-- Forgot -->
+        <div class="text-end mb-3">
 
             <a href="/forgot-password" class="forgot-link">
                 Forgot Password?
@@ -205,7 +223,7 @@
 
         </div>
 
-        <!-- Login Button -->
+        <!-- Button -->
         <div class="d-grid mb-4">
 
             <button type="submit" class="btn btn-login">
@@ -214,7 +232,7 @@
 
         </div>
 
-        <!-- Register Link -->
+        <!-- Register -->
         <div class="text-center">
 
             <span class="text-secondary">
@@ -231,5 +249,27 @@
 
 </div>
 
+<script>
+
+function togglePassword(){
+
+    let input = document.getElementById("password");
+    let icon = document.getElementById("eyeIcon");
+
+    if(input.type === "password"){
+        input.type = "text";
+        icon.classList.remove("bi-eye");
+        icon.classList.add("bi-eye-slash");
+    }else{
+        input.type = "password";
+        icon.classList.remove("bi-eye-slash");
+        icon.classList.add("bi-eye");
+    }
+
+}
+
+</script>
+
 </body>
+
 </html>
