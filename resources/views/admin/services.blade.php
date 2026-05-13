@@ -93,6 +93,97 @@
 
     @endif
 
+    {{-- Search Bar --}}
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+        <div class="card-body">
+
+            <form method="GET"
+                  action="/admin/services">
+
+                <div class="row g-2 align-items-center">
+
+                    {{-- Search Input --}}
+                    <div class="col-md-10">
+
+                        <div class="input-group">
+
+                            <span class="input-group-text bg-white border-end-0 rounded-start-pill">
+
+                                <i class="bi bi-search text-secondary"></i>
+
+                            </span>
+
+                            <input type="text"
+                                   name="search"
+                                   class="form-control border-start-0 rounded-end-pill"
+                                   placeholder="Search service name, category or description..."
+                                   value="{{ request('search') }}">
+
+                        </div>
+
+                    </div>
+
+                    {{-- Search Button --}}
+                    <div class="col-md-2 d-grid">
+
+                        <button class="btn btn-dark rounded-pill">
+
+                            <i class="bi bi-search me-1"></i>
+                            Search
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    {{-- Category Filter --}}
+    <div class="mb-4 d-flex flex-wrap gap-2">
+
+        <a href="/admin/services"
+           class="btn btn-dark btn-sm rounded-pill">
+
+            All
+
+        </a>
+
+        <a href="/admin/services?category=House Cleaning"
+           class="btn btn-success btn-sm rounded-pill">
+
+            House Cleaning
+
+        </a>
+
+        <a href="/admin/services?category=Office Cleaning"
+           class="btn btn-primary btn-sm rounded-pill">
+
+            Office Cleaning
+
+        </a>
+
+        <a href="/admin/services?category=Deep Cleaning"
+           class="btn btn-warning btn-sm rounded-pill">
+
+            Deep Cleaning
+
+        </a>
+
+        <a href="/admin/services?category=Sofa Cleaning"
+           class="btn btn-secondary btn-sm rounded-pill">
+
+            Sofa Cleaning
+
+        </a>
+
+    </div>
+
     {{-- Services Grid --}}
     <div class="row g-4">
 

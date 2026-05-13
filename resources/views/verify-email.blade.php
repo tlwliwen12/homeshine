@@ -183,17 +183,6 @@
 
     </form>
 
-    <!-- Back -->
-    <div class="mt-4">
-
-        <a href="/login" class="back-link">
-
-            ← Back to Login
-
-        </a>
-
-    </div>
-
 </div>
 
 </body>

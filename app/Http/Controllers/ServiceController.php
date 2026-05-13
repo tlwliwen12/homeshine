@@ -8,11 +8,28 @@ use App\Models\Service;
 
 class ServiceController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $this->adminCheck();
+        $query = Service::query();
 
-        $services = Service::all();
+        // Search function
+        if ($request->search) {
+
+            $query->where(function ($q) use ($request) {
+
+                $q->where('name', 'like', '%' . $request->search . '%')
+                  ->orWhere('category', 'like', '%' . $request->search . '%')
+                  ->orWhere('description', 'like', '%' . $request->search . '%');
+
+            });
+        }
+
+        // Category filter
+        if ($request->category) {
+            $query->where('category', $request->category);
+        }
+
+        $services = $query->get();
 
         return view('admin.services', compact('services'));
     }

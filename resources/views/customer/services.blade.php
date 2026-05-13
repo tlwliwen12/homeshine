@@ -6,6 +6,57 @@
 
     <h2 class="mb-4">Available Services</h2>
 
+    {{-- Search Section --}}
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+        <div class="card-body">
+
+            <form method="GET"
+                  action="/customer/services">
+
+                <div class="row g-2 align-items-center">
+
+                    {{-- Search Input --}}
+                    <div class="col-md-10">
+
+                        <div class="input-group">
+
+                            <span class="input-group-text bg-white border-end-0 rounded-start-pill">
+
+                                <i class="bi bi-search text-secondary"></i>
+
+                            </span>
+
+                            <input type="text"
+                                   name="search"
+                                   class="form-control border-start-0 rounded-end-pill"
+                                   placeholder="Search cleaning services..."
+                                   value="{{ request('search') }}">
+
+                        </div>
+
+                    </div>
+
+                    {{-- Search Button --}}
+                    <div class="col-md-2 d-grid">
+
+                        <button class="btn btn-dark rounded-pill">
+
+                            <i class="bi bi-search me-1"></i>
+                            Search
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
     <!-- Category Buttons -->
     <div class="mb-4">
 

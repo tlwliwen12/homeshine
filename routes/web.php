@@ -110,7 +110,19 @@ Route::get('/customer/services', function (Request $request) {
 
     $query = Service::query();
 
-    // filter category
+    // Search keyword
+    if ($request->search) {
+
+        $query->where(function ($q) use ($request) {
+
+            $q->where('name', 'like', '%' . $request->search . '%')
+              ->orWhere('category', 'like', '%' . $request->search . '%')
+              ->orWhere('description', 'like', '%' . $request->search . '%');
+
+        });
+    }
+
+    // Category filter
     if ($request->category) {
         $query->where('category', $request->category);
     }
