@@ -2,22 +2,62 @@
 
 @section('content')
 
+<style>
+
+    .form-card{
+        border-radius: 18px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+        border: none;
+    }
+
+    .form-header{
+        padding-bottom: 15px;
+        border-bottom: 1px solid #eee;
+        margin-bottom: 20px;
+    }
+
+    .form-control, .form-select{
+        border-radius: 12px;
+        padding: 10px 14px;
+    }
+
+    .form-control:focus, .form-select:focus{
+        box-shadow: none;
+        border-color: #000;
+    }
+
+    .btn{
+        border-radius: 12px;
+        padding: 10px 18px;
+    }
+
+    .hint-text{
+        font-size: 13px;
+        color: #888;
+    }
+
+    .image-preview{
+        max-width: 260px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+</style>
+
 <div class="container-fluid">
 
     <div class="row justify-content-center">
 
         <div class="col-lg-8">
 
-            <div class="card shadow-sm border-0 rounded-4">
+            <div class="card form-card">
 
                 <div class="card-body p-4">
 
                     {{-- Header --}}
-                    <div class="mb-4">
+                    <div class="form-header">
 
-                        <h2 class="fw-bold">
-                            Edit Service
-                        </h2>
+                        <h2 class="fw-bold mb-1">Edit Service</h2>
 
                         <p class="text-muted mb-0">
                             Update service information
@@ -35,9 +75,7 @@
                         {{-- Service Name --}}
                         <div class="mb-3">
 
-                            <label class="form-label fw-semibold">
-                                Service Name
-                            </label>
+                            <label class="form-label fw-semibold">Service Name</label>
 
                             <input type="text"
                                    name="name"
@@ -50,9 +88,7 @@
                         {{-- Category --}}
                         <div class="mb-3">
 
-                            <label class="form-label fw-semibold">
-                                Category
-                            </label>
+                            <label class="form-label fw-semibold">Category</label>
 
                             <select name="category"
                                     class="form-select">
@@ -84,9 +120,7 @@
                         {{-- Description --}}
                         <div class="mb-3">
 
-                            <label class="form-label fw-semibold">
-                                Detailed Service Description
-                            </label>
+                            <label class="form-label fw-semibold">Service Description</label>
 
                             <textarea name="description"
                                       rows="5"
@@ -98,9 +132,7 @@
                         {{-- Price --}}
                         <div class="mb-3">
 
-                            <label class="form-label fw-semibold">
-                                Price (RM)
-                            </label>
+                            <label class="form-label fw-semibold">Price (RM)</label>
 
                             <input type="number"
                                    name="price"
@@ -108,21 +140,26 @@
                                    class="form-control"
                                    required>
 
+                            <div class="hint-text mt-1">
+                                Example: 80 (without RM)
+                            </div>
+
                         </div>
 
                         {{-- Duration --}}
                         <div class="mb-3">
 
-                            <label class="form-label fw-semibold">
-                                Service Duration
-                            </label>
+                            <label class="form-label fw-semibold">Service Duration</label>
 
                             <input type="text"
                                    name="duration"
                                    value="{{ $service->duration }}"
                                    class="form-control"
-                                   placeholder="Example: 2 Hours"
                                    required>
+
+                            <div class="hint-text mt-1">
+                                Example: 2 Hours
+                            </div>
 
                         </div>
 
@@ -131,15 +168,14 @@
 
                             <div class="mb-3">
 
-                                <label class="form-label fw-semibold">
-                                    Current Image
-                                </label>
+                                <label class="form-label fw-semibold">Current Image</label>
 
-                                <br>
+                                <div class="mt-2">
 
-                                <img src="{{ asset('images/services/' . $service->image) }}"
-                                     class="img-fluid rounded shadow-sm"
-                                     style="max-width:250px;">
+                                    <img src="{{ asset('images/services/' . $service->image) }}"
+                                         class="image-preview">
+
+                                </div>
 
                             </div>
 
@@ -148,13 +184,15 @@
                         {{-- Upload New Image --}}
                         <div class="mb-4">
 
-                            <label class="form-label fw-semibold">
-                                Change Image
-                            </label>
+                            <label class="form-label fw-semibold">Change Image</label>
 
                             <input type="file"
                                    name="image"
                                    class="form-control">
+
+                            <div class="hint-text mt-1">
+                                Upload only if you want to replace the current image.
+                            </div>
 
                         </div>
 
@@ -164,7 +202,7 @@
                             <button type="submit"
                                     class="btn btn-primary">
 
-                                <i class="bi bi-save"></i>
+                                <i class="bi bi-save me-1"></i>
                                 Update Service
 
                             </button>

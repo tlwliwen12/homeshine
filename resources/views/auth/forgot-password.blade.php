@@ -1,107 +1,266 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
 
-    <title>Forgot Password</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Forgot Password - HomeShine</title>
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
           rel="stylesheet">
 
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+
+        body{
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #F8FAFC, #EFF6FF);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* Card */
+        .forgot-card{
+            width: 100%;
+            max-width: 500px;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(37,99,235,0.10);
+            border: 1px solid rgba(229,231,235,0.6);
+            transition: 0.3s;
+            animation: fadeIn 0.6s ease;
+        }
+
+        .forgot-card:hover{
+            transform: translateY(-4px);
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+
+            from{
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to{
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        }
+
+        /* Text */
+        .subtitle{
+            color: #6B7280;
+            line-height: 1.7;
+        }
+
+        /* Badge */
+        .badge-custom{
+            background: rgba(16,185,129,0.12);
+            color: #10B981;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 500;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        /* Form */
+        .form-label{
+            font-weight: 500;
+            color: #1F2937;
+        }
+
+        .form-control{
+            border-radius: 14px;
+            padding: 12px;
+            border: 1px solid #D1D5DB;
+            transition: 0.3s;
+        }
+
+        .form-control:hover{
+            border-color: #93C5FD;
+        }
+
+        .form-control:focus{
+            border-color: #60A5FA;
+            box-shadow: 0 0 0 0.2rem rgba(96,165,250,0.25);
+        }
+
+        /* Button */
+        .btn-custom{
+            background: #2563EB;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 13px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .btn-custom:hover{
+            background: #1D4ED8;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Back Link */
+        .back-link{
+            color: #10B981;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .back-link:hover{
+            color: #059669;
+        }
+
+        /* Icon Circle */
+        .icon-box{
+            width: 90px;
+            height: 90px;
+            background: rgba(37,99,235,0.10);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            font-size: 38px;
+            color: #2563EB;
+        }
+
+    </style>
+
 </head>
 
-<body style="background-color:#f8f9fa;">
+<body>
 
-<div class="container py-5">
+<div class="forgot-card">
 
-    <div class="row justify-content-center">
+    <!-- Header -->
+    <div class="text-center mb-4">
 
-        <div class="col-md-5">
+        <span class="badge-custom">
+            Password Recovery
+        </span>
 
-            <div class="card shadow border-0 rounded-4">
+        <!-- Icon -->
+        <div class="icon-box mt-4">
 
-                <div class="card-body p-4">
+            📧
 
-                    {{-- Title --}}
-                    <div class="text-center mb-4">
+        </div>
 
-                        <h2 class="fw-bold">
-                            Forgot Password
-                        </h2>
+        <!-- Title -->
+        <h3 class="fw-bold mb-3">
 
-                        <p class="text-muted">
-                            Enter your email to receive a password reset link
-                        </p>
+            Forgot Password?
 
-                    </div>
+        </h3>
 
-                    {{-- Success Message --}}
-                    @if(session('status'))
+        <!-- Subtitle -->
+        <p class="subtitle">
 
-                        <div class="alert alert-success">
+            Enter your email address and we’ll send you
+            a password reset link.
 
-                            {{ session('status') }}
+        </p>
 
-                        </div>
+    </div>
 
-                    @endif
+    <!-- Success Message -->
+    @if(session('status'))
 
-                    {{-- Form --}}
-                    <form method="POST" action="/forgot-password">
+        <div class="alert alert-success rounded-4">
 
-                        @csrf
+            {{ session('status') }}
 
-                        <div class="mb-4">
+        </div>
 
-                            <label class="form-label">
-                                Email Address
-                            </label>
+    @endif
 
-                            <input type="email"
-                                   name="email"
-                                   class="form-control"
-                                   placeholder="Enter your email"
-                                   required>
+    <!-- Form -->
+    <form method="POST" action="/forgot-password">
 
-                            @error('email')
+        @csrf
 
-                                <small class="text-danger">
-                                    {{ $message }}
-                                </small>
+        <!-- Email -->
+        <div class="mb-4">
 
-                            @enderror
+            <label class="form-label">
 
-                        </div>
+                Email Address
 
-                        {{-- Submit Button --}}
-                        <button type="submit"
-                                class="btn btn-dark w-100">
+            </label>
 
-                            <i class="bi bi-envelope-fill"></i>
-                            Send Reset Link
+            <input type="email"
+                   name="email"
+                   class="form-control"
+                   placeholder="Enter your email"
+                   value="{{ old('email') }}"
+                   required>
 
-                        </button>
+            @error('email')
 
-                    </form>
+                <div class="text-danger small mt-2">
 
-                    {{-- Back To Login --}}
-                    <div class="text-center mt-3">
-
-                        <a href="/login"
-                           class="text-decoration-none">
-
-                            Back to Login
-
-                        </a>
-
-                    </div>
+                    {{ $message }}
 
                 </div>
 
-            </div>
+            @enderror
 
         </div>
+
+        <!-- Submit Button -->
+        <div class="d-grid mb-3">
+
+            <button type="submit"
+                    class="btn btn-custom">
+
+                <i class="bi bi-send-fill me-1"></i>
+
+                Send Reset Link
+
+            </button>
+
+        </div>
+
+    </form>
+
+    <!-- Back To Login -->
+    <div class="text-center mt-4">
+
+        <a href="/login"
+           class="back-link">
+
+            ← Back to Login
+
+        </a>
 
     </div>
 
 </div>
+
+</body>
+
+</html>

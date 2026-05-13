@@ -2,6 +2,24 @@
 
 @section('content')
 
+<style>
+
+    .service-card{
+        transition: 0.3s;
+    }
+
+    .service-card:hover{
+        transform: translateY(-5px);
+        box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+    }
+
+    .service-image{
+        height: 220px;
+        object-fit: cover;
+    }
+
+</style>
+
 <div class="container-fluid">
 
     {{-- Header --}}
@@ -20,9 +38,9 @@
         </div>
 
         <a href="/admin/services/create"
-           class="btn btn-dark">
+           class="btn btn-dark rounded-pill px-4">
 
-            <i class="bi bi-plus-circle"></i>
+            <i class="bi bi-plus-circle me-1"></i>
             Add Service
 
         </a>
@@ -32,7 +50,7 @@
     {{-- Success Message --}}
     @if(session('success'))
 
-        <div class="alert alert-success alert-dismissible fade show">
+        <div class="alert alert-success alert-dismissible fade show rounded-4">
 
             {{ session('success') }}
 
@@ -45,55 +63,109 @@
 
     @endif
 
+    {{-- Empty State --}}
+    @if($services->count() == 0)
+
+        <div class="card border-0 shadow-sm rounded-4 p-5 text-center">
+
+            <div class="mb-3">
+
+                <i class="bi bi-broom fs-1 text-secondary"></i>
+
+            </div>
+
+            <h4 class="fw-bold">
+                No Services Found
+            </h4>
+
+            <p class="text-muted">
+                Start by creating your first cleaning service.
+            </p>
+
+            <a href="/admin/services/create"
+               class="btn btn-primary rounded-pill px-4">
+
+                Add Service
+
+            </a>
+
+        </div>
+
+    @endif
+
     {{-- Services Grid --}}
     <div class="row g-4">
 
         @foreach ($services as $service)
 
-            <div class="col-md-4">
+            <div class="col-md-6 col-lg-4">
 
-                <div class="card shadow-sm border-0 rounded-4 h-100">
+                <div class="card service-card shadow-sm border-0 rounded-4 h-100 overflow-hidden">
 
                     {{-- Image --}}
                     @if($service->image)
 
                         <img src="{{ asset('images/services/' . $service->image) }}"
-                             class="card-img-top"
-                             style="height:220px; object-fit:cover;">
+                             class="card-img-top service-image">
+
+                    @else
+
+                        <div class="service-image bg-light d-flex align-items-center justify-content-center">
+
+                            <i class="bi bi-image text-secondary fs-1"></i>
+
+                        </div>
 
                     @endif
 
                     {{-- Card Body --}}
                     <div class="card-body d-flex flex-column">
 
-                        <div class="mb-3">
+                        {{-- Category --}}
+                        <span class="badge bg-dark-subtle text-dark mb-3 align-self-start">
 
-                            <h5 class="fw-bold">
-                                {{ $service->name }}
-                            </h5>
+                            {{ $service->category }}
 
-                            <span class="badge bg-secondary mb-2">
-                                {{ $service->category }}
-                            </span>
+                        </span>
 
-                            <p class="text-muted">
-                                {{ $service->description }}
-                            </p>
+                        {{-- Service Name --}}
+                        <h4 class="fw-bold">
 
-                            <h5 class="text-success fw-bold">
-                                RM {{ $service->price }}
-                            </h5>
+                            {{ $service->name }}
 
-                        </div>
+                        </h4>
+
+                        {{-- Description --}}
+                        <p class="text-muted">
+
+                            {{ Str::limit($service->description, 100) }}
+
+                        </p>
+
+                        {{-- Price --}}
+                        <h5 class="text-success fw-bold mb-2">
+
+                            <i class="bi bi-cash-stack"></i>
+                            RM {{ $service->price }}
+
+                        </h5>
+
+                        {{-- Duration --}}
+                        <p class="text-secondary mb-4">
+
+                            <i class="bi bi-clock"></i>
+                            {{ $service->duration }}
+
+                        </p>
 
                         {{-- Buttons --}}
                         <div class="mt-auto d-flex gap-2">
 
                             {{-- Edit --}}
                             <a href="/admin/services/{{ $service->id }}/edit"
-                               class="btn btn-primary w-100">
+                               class="btn btn-primary w-100 rounded-pill">
 
-                                <i class="bi bi-pencil-square"></i>
+                                <i class="bi bi-pencil-square me-1"></i>
                                 Edit
 
                             </a>
@@ -106,10 +178,10 @@
                                 @csrf
 
                                 <button type="submit"
-                                        class="btn btn-danger w-100"
+                                        class="btn btn-danger w-100 rounded-pill"
                                         onclick="return confirm('Are you sure you want to delete this service?')">
 
-                                    <i class="bi bi-trash"></i>
+                                    <i class="bi bi-trash me-1"></i>
                                     Delete
 
                                 </button>

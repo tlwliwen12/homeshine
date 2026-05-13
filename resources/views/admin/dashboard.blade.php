@@ -2,158 +2,240 @@
 
 @section('content')
 
-<div class="container-fluid">
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-center mb-5">
 
-    {{-- Page Title --}}
-    <div class="mb-4">
+    <div>
 
-        <h2 class="fw-bold">
+        <h1 class="fw-bold mb-2">
+
             Admin Dashboard
-        </h2>
 
-        <p class="text-muted">
-            Welcome back, {{ Auth::user()->name }}
+        </h1>
+
+        <p class="text-secondary mb-0">
+
+            Welcome back, {{ Auth::user()->name }} 👋
+
         </p>
 
     </div>
 
-    {{-- Dashboard Cards --}}
-    <div class="row g-4">
+    <div>
 
-        {{-- Services Card --}}
-        <div class="col-md-4">
+        <span class="badge bg-success-subtle text-success px-4 py-3 rounded-pill">
 
-            <div class="card shadow-sm border-0 rounded-4">
+            System Active
 
-                <div class="card-body">
+        </span>
 
-                    <div class="d-flex justify-content-between align-items-center">
+    </div>
 
-                        <div>
+</div>
 
-                            <h5 class="fw-bold">
-                                Services
-                            </h5>
+<!-- Dashboard Cards -->
+<div class="row g-4">
 
-                            <p class="text-muted mb-0">
-                                Manage cleaning services
-                            </p>
+    <!-- Services Card -->
+    <div class="col-md-6 col-lg-4">
 
-                        </div>
+        <div class="card custom-card h-100 p-4">
 
-                        <i class="bi bi-broom fs-1 text-primary"></i>
+            <div class="d-flex justify-content-between align-items-start">
+
+                <div>
+
+                    <div class="mb-3"
+                         style="
+                            width:70px;
+                            height:70px;
+                            border-radius:20px;
+                            background:rgba(37,99,235,0.1);
+                            display:flex;
+                            align-items:center;
+                            justify-content:center;
+                         ">
+
+                        <i class="bi bi-grid fs-2 text-primary"></i>
 
                     </div>
 
-                    <a href="/admin/services"
-                       class="btn btn-primary mt-3">
+                    <h4 class="fw-bold">
 
-                        View Services
+                        Services
 
-                    </a>
+                    </h4>
+
+                    <p class="text-secondary mt-3 mb-4">
+
+                        Manage all cleaning services
+                        available in HomeShine.
+
+                    </p>
 
                 </div>
 
             </div>
 
-        </div>
+            <a href="/admin/services"
+               class="btn btn-primary rounded-pill px-4">
 
-        {{-- Add Service Card --}}
-        <div class="col-md-4">
+                View Services
 
-            <div class="card shadow-sm border-0 rounded-4">
-
-                <div class="card-body">
-
-                    <div class="d-flex justify-content-between align-items-center">
-
-                        <div>
-
-                            <h5 class="fw-bold">
-                                Add Service
-                            </h5>
-
-                            <p class="text-muted mb-0">
-                                Create a new cleaning service
-                            </p>
-
-                        </div>
-
-                        <i class="bi bi-plus-circle fs-1 text-success"></i>
-
-                    </div>
-
-                    <a href="/admin/services/create"
-                       class="btn btn-success mt-3">
-
-                        Add New Service
-
-                    </a>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        {{-- Dashboard Info Card --}}
-        <div class="col-md-4">
-
-            <div class="card shadow-sm border-0 rounded-4">
-
-                <div class="card-body">
-
-                    <div class="d-flex justify-content-between align-items-center">
-
-                        <div>
-
-                            <h5 class="fw-bold">
-                                System Status
-                            </h5>
-
-                            <p class="text-muted mb-0">
-                                HomeShine system is running
-                            </p>
-
-                        </div>
-
-                        <i class="bi bi-check-circle fs-1 text-warning"></i>
-
-                    </div>
-
-                    <button class="btn btn-warning mt-3 text-white"
-                            disabled>
-
-                        Active
-
-                    </button>
-
-                </div>
-
-            </div>
+            </a>
 
         </div>
 
     </div>
 
-    {{-- Information Section --}}
-    <div class="card shadow-sm border-0 rounded-4 mt-5">
+    <!-- Add Service -->
+    <div class="col-md-6 col-lg-4">
 
-        <div class="card-body">
+        <div class="card custom-card h-100 p-4">
 
-            <h4 class="fw-bold mb-3">
+            <div class="d-flex justify-content-between align-items-start">
 
-                <i class="bi bi-info-circle"></i>
-                Admin Information
+                <div>
 
-            </h4>
+                    <div class="mb-3"
+                         style="
+                            width:70px;
+                            height:70px;
+                            border-radius:20px;
+                            background:rgba(16,185,129,0.1);
+                            display:flex;
+                            align-items:center;
+                            justify-content:center;
+                         ">
 
-            <p class="text-muted mb-0">
+                        <i class="bi bi-plus-circle fs-2 text-success"></i>
 
-                Use the navigation menu to manage services,
-                monitor bookings, and maintain the HomeShine system.
+                    </div>
 
-            </p>
+                    <h4 class="fw-bold">
+
+                        Add Service
+
+                    </h4>
+
+                    <p class="text-secondary mt-3 mb-4">
+
+                        Create new cleaning services
+                        for customers.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <a href="/admin/services/create"
+               class="btn btn-success rounded-pill px-4">
+
+                Add Service
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- System Status -->
+    <div class="col-md-6 col-lg-4">
+
+        <div class="card custom-card h-100 p-4">
+
+            <div class="d-flex justify-content-between align-items-start">
+
+                <div>
+
+                    <div class="mb-3"
+                         style="
+                            width:70px;
+                            height:70px;
+                            border-radius:20px;
+                            background:rgba(245,158,11,0.1);
+                            display:flex;
+                            align-items:center;
+                            justify-content:center;
+                         ">
+
+                        <i class="bi bi-check-circle fs-2 text-warning"></i>
+
+                    </div>
+
+                    <h4 class="fw-bold">
+
+                        System Status
+
+                    </h4>
+
+                    <p class="text-secondary mt-3 mb-4">
+
+                        HomeShine platform is operating
+                        normally.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <button class="btn btn-warning text-white rounded-pill px-4"
+                    disabled>
+
+                Running
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Information Section -->
+<div class="card custom-card border-0 mt-5">
+
+    <div class="card-body p-5">
+
+        <div class="row align-items-center">
+
+            <!-- Left -->
+            <div class="col-lg-8">
+
+                <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill mb-3">
+
+                    HomeShine Management
+
+                </span>
+
+                <h3 class="fw-bold mb-3">
+
+                    Manage Your Cleaning Service Platform Easily
+
+                </h3>
+
+                <p class="text-secondary mb-0"
+                   style="line-height:1.8;">
+
+                    Use the admin dashboard to manage cleaning services,
+                    maintain system operations, and improve customer experience.
+
+                </p>
+
+            </div>
+
+            <!-- Right -->
+            <div class="col-lg-4 text-center mt-4 mt-lg-0">
+
+                <div style="font-size:90px;">
+
+                    🧹
+
+                </div>
+
+            </div>
 
         </div>
 
