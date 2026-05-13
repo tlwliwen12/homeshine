@@ -263,6 +263,18 @@
 
     </form>
 
+    <div class="text-center mt-3">
+
+        <a href="{{ url('/') }}"
+           class="btn btn-outline-secondary rounded-pill px-4">
+
+            <i class="bi bi-house-door me-1"></i>
+            Back to Home
+
+        </a>
+
+    </div>
+
 </div>
 
 <script>
