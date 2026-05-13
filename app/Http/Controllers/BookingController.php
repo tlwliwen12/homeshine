@@ -19,24 +19,44 @@ class BookingController extends Controller
     public function store(Request $request, $serviceId)
     {
         $request->validate([
-            'booking_date' => 'required|date',
-            'booking_time' => 'required',
-            'address' => [
-                'required',
-                'min:10',
-                'max:255',
-                'regex:/^[A-Za-z0-9\s,\-\/#]+$/'
-            ],
-            'notes' => 'nullable'
-        ],[
-            'address.required' => 'Address is required.',
 
-            'address.min' => 'Address must be at least 10 characters.',
+        'booking_date' => [
+            'required',
+            'date',
+            'after_or_equal:today'
+        ],
 
-            'address.max' => 'Address is too long.',
+        'booking_time' => [
+            'required'
+        ],
 
-            'address.regex' => 'Address contains invalid characters.'
-        ]);
+        'address' => [
+            'required',
+            'min:10',
+            'max:255',
+            'regex:/^[A-Za-z0-9\s,\-\/#]+$/'
+        ],
+
+        'notes' => [
+            'nullable',
+            'max:500'
+        ]
+
+    ], [
+
+        'booking_date.required' => 'Booking date is required.',
+        'booking_date.after_or_equal' => 'Booking date cannot be in the past.',
+
+        'booking_time.required' => 'Please select booking time.',
+
+        'address.required' => 'Address is required.',
+        'address.min' => 'Address must be at least 10 characters.',
+        'address.max' => 'Address is too long.',
+        'address.regex' => 'Address contains invalid characters.',
+
+        'notes.max' => 'Notes cannot exceed 500 characters.'
+
+    ]);
 
         Booking::create([
             'user_id' => Auth::id(),
@@ -61,6 +81,11 @@ class BookingController extends Controller
         // Filter by booking date
         if ($request->booking_date) {
             $query->where('booking_date', $request->booking_date);
+        }
+
+        // Filter by status
+        if ($request->status) {
+            $query->where('status', $request->status);
         }
 
         $bookings = $query->latest()->get();

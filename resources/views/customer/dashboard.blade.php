@@ -67,7 +67,7 @@
         <!-- Right Image -->
         <div class="col-lg-5 text-center p-4">
 
-            <img src="{{ asset('images/cleaning.png') }}"
+            <img src="{{ asset('images/logo.png') }}"
                  class="img-fluid"
                  style="max-width:320px;"
                  alt="Cleaning Service">

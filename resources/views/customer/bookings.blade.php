@@ -16,13 +16,42 @@
     <!-- Filter -->
     <form class="mb-4" method="GET" action="/customer/bookings">
 
-        <input type="date" name="booking_date"
+        <!-- Date Filter -->
+        <input type="date"
+               name="booking_date"
                value="{{ request('booking_date') }}"
                class="form-control w-25 d-inline">
 
-        <button class="btn btn-primary btn-sm">Filter</button>
+        <!-- Status Filter -->
+        <select name="status"
+                class="form-select w-25 d-inline">
 
-        <a href="/customer/bookings" class="btn btn-secondary btn-sm">
+            <option value="">All Status</option>
+
+            <option value="Pending"
+                {{ request('status') == 'Pending' ? 'selected' : '' }}>
+                Pending
+            </option>
+
+            <option value="Approved"
+                {{ request('status') == 'Approved' ? 'selected' : '' }}>
+                Approved
+            </option>
+
+            <option value="Rejected"
+                {{ request('status') == 'Rejected' ? 'selected' : '' }}>
+                Rejected
+            </option>
+
+        </select>
+
+        <!-- Buttons -->
+        <button class="btn btn-primary btn-sm">
+            Filter
+        </button>
+
+        <a href="/customer/bookings"
+            class="btn btn-secondary btn-sm">
             Reset
         </a>
 

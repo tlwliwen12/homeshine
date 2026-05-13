@@ -28,11 +28,21 @@
                         <div class="mb-3">
                             <label>Date</label>
                             <input type="date" name="booking_date" class="form-control" required>
+                            @error('booking_date')
+                                <div class="text-danger">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
 
                         <div class="mb-3">
                             <label>Time</label>
                             <input type="time" name="booking_time" class="form-control" required>
+                            @error('booking_time')
+                               <div class="text-danger">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
 
                         <div class="mb-3">
@@ -40,13 +50,18 @@
                             <input type="text" name="address" class="form-control" required>
 
                             @error('address')
-                                <small class="text-danger">{{ $message }}</small>
+                                <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
 
                         <div class="mb-3">
                             <label>Notes</label>
                             <textarea name="notes" class="form-control"></textarea>
+                            @error('notes')
+                                <div class="text-danger">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
 
                         <button class="btn btn-dark w-100">

@@ -182,7 +182,9 @@ Swal.fire({
                 <!-- User -->
                 <li class="nav-item ms-3">
                     <span class="fw-semibold text-secondary">
+                        @auth
                         Hi, {{ Auth::user()->name }}
+                        @endauth
                     </span>
                 </li>
 
