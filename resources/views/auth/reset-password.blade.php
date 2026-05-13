@@ -1,6 +1,16 @@
-@extends('customer.layout')
+<!DOCTYPE html>
+<html>
+<head>
 
-@section('content')
+    <title>Forgot Password</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+</head>
+
+<body style="background-color:#f8f9fa;">
 
 <div class="container py-5">
 
@@ -111,5 +121,3 @@
     </div>
 
 </div>
-
-@endsection

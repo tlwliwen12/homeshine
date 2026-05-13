@@ -292,7 +292,7 @@
             <!-- Right -->
             <div class="col-lg-6 text-center mt-5 mt-lg-0">
 
-                <img src="{{ asset('images/cleaning.png') }}"
+                <img src="{{ asset('images/logo.png') }}"
                      class="img-fluid"
                      style="max-width:500px; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1));"
                      alt="Cleaning Service">
