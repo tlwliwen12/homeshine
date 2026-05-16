@@ -135,6 +135,35 @@ Route::get('/customer/services', function (Request $request) {
 
 })->middleware(['auth', 'verified']);
 
+Route::post('/customer/bookings/{id}/cancel', function ($id) {
+
+    $booking = Booking::findOrFail($id);
+
+    // Security check
+    if ($booking->user_id != Auth::id()) {
+        abort(403);
+    }
+
+    // Only pending booking can cancel
+    if ($booking->status == 'Pending') {
+
+        $booking->update([
+            'status' => 'Cancelled'
+        ]);
+
+        return back()->with(
+            'success',
+            'Booking cancelled successfully.'
+        );
+    }
+
+    return back()->with(
+        'error',
+        'Only pending bookings can be cancelled.'
+    );
+
+})->middleware('auth');
+
 Route::get('/services/{id}', [ServiceController::class, 'show'])
     ->middleware(['auth', 'verified']);
 

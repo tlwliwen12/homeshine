@@ -13,6 +13,12 @@
         </div>
     @endif
 
+    @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <!-- Filter -->
     <form class="mb-4" method="GET" action="/customer/bookings">
 
@@ -107,10 +113,11 @@
                             <span class="badge bg-warning">Pending</span>
                         @elseif($booking->status == 'Approved')
                             <span class="badge bg-success">Approved</span>
-                        @else
+                        @elseif($booking->status == 'Rejected')
                             <span class="badge bg-danger">Rejected</span>
+                        @else
+                            <span class="badge bg-secondary">Cancelled</span>
                         @endif
-
                     </p>
 
                     <p>
@@ -139,6 +146,22 @@
                             Pay Now
 
                         </a>
+
+                    @endif
+
+                    @if($booking->status == 'Pending')
+
+                    <form method="POST"
+                          action="/customer/bookings/{{ $booking->id }}/cancel">
+
+                        @csrf
+
+                        <button class="btn btn-danger btn-sm w-100"
+                                onclick="return confirm('Cancel this booking?')">
+                            Cancel Booking
+                        </button>
+
+                    </form>
 
                     @endif
 
