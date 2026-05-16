@@ -13,7 +13,9 @@ class Booking extends Model
         'booking_time',
         'address',
         'notes',
-        'status'
+        'status',
+        'payment_status',
+        'bill_code'
     ];
 
     public function user()

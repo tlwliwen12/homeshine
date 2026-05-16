@@ -95,6 +95,35 @@
 
                     </p>
 
+                    <p>
+                        <strong>Payment:</strong>
+
+                        @if($booking->payment_status == 'Paid')
+
+                            <span class="badge bg-success">
+                                Paid
+                            </span>
+
+                        @else
+
+                            <span class="badge bg-danger">
+                                Unpaid
+                            </span>
+
+                        @endif
+                    </p>
+
+                    @if($booking->payment_status == 'Unpaid')
+
+                        <a href="/customer/payment/{{ $booking->id }}"
+                           class="btn btn-dark btn-sm">
+
+                            Pay Now
+
+                        </a>
+
+                    @endif
+
                 </div>
 
             </div>

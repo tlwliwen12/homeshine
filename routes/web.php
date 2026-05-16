@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
+use App\Models\Booking;
 
 Route::get('/', function () {
 
@@ -140,6 +142,89 @@ Route::get('/services/{id}', [ServiceController::class, 'show'])
 Route::get('/forgot-password', function () {
     return view('auth.forgot-password');
 })->middleware('guest')->name('password.request');
+
+Route::get('/customer/payment/{id}', function ($id) {
+
+    $booking = Booking::findOrFail($id);
+
+    return view('customer.payment', compact('booking'));
+
+})->middleware('auth');
+
+Route::get('/payment/{id}', function ($id) {
+
+    $booking = Booking::findOrFail($id);
+
+    $user = Auth::user();
+
+    $response = Http::asForm()->post(
+        env('TOYYIBPAY_URL').'/index.php/api/createBill',
+
+        [
+
+            'userSecretKey' => env('TOYYIBPAY_SECRET_KEY'),
+
+            'categoryCode' => env('TOYYIBPAY_CATEGORY_CODE'),
+
+            'billName' => 'HomeShine Booking',
+
+            'billDescription' => $booking->service->name,
+
+            'billPriceSetting' => 1,
+
+            'billPayorInfo' => 1,
+
+            // amount in cent
+            'billAmount' => $booking->service->price * 100,
+
+            'billReturnUrl' =>
+                url('/payment-success/'.$booking->id),
+
+            'billCallbackUrl' =>
+                url('/payment-callback'),
+
+            'billExternalReferenceNo' =>
+                'BOOKING-'.$booking->id,
+
+            'billTo' => $user->name,
+
+            'billEmail' => $user->email,
+
+            'billPhone' => '0123456789',
+
+            'billPaymentChannel' => 0,
+
+        ]
+    );
+
+    $result = $response->json();
+
+    $billCode = $result[0]['BillCode'];
+
+    $booking->update([
+        'bill_code' => $billCode
+    ]);
+
+    return redirect(
+        env('TOYYIBPAY_URL').'/'.$billCode
+    );
+
+})->middleware('auth');
+
+Route::get('/payment-success/{id}', function ($id) {
+
+    $booking = Booking::findOrFail($id);
+
+    $booking->update([
+        'payment_status' => 'Paid'
+    ]);
+
+    return redirect('/customer/bookings')
+        ->with('success',
+            'Payment completed successfully!'
+        );
+
+})->middleware('auth');
 
 
 // Send reset link
