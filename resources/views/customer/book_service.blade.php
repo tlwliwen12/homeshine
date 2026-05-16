@@ -3,6 +3,11 @@
 @section('content')
 
 <div class="container py-4">
+    <a href="/customer/services"
+       class="btn btn-outline-secondary mb-3">
+        <i class="bi bi-arrow-left me-2"></i>
+        Back to Services
+    </a>
 
     <div class="row justify-content-center">
 
