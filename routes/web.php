@@ -151,6 +151,17 @@ Route::get('/customer/payment/{id}', function ($id) {
 
 })->middleware('auth');
 
+Route::get('/customer/payments', function () {
+
+    $payments = Booking::where('user_id', Auth::id())
+        ->whereNotNull('bill_code')
+        ->latest()
+        ->get();
+
+    return view('customer.payments', compact('payments'));
+
+})->middleware('auth');
+
 Route::get('/payment/{id}', function ($id) {
 
     $booking = Booking::findOrFail($id);

@@ -179,6 +179,15 @@ Swal.fire({
                     </a>
                 </li>
 
+                <li class="nav-item">
+
+                    <a href="/customer/payments" class="nav-link">
+                        <i class="bi bi-credit-card"></i>
+                        Payment History
+                    </a>
+
+                </li>
+
                 <!-- User -->
                 <li class="nav-item ms-3">
                     <span class="fw-semibold text-secondary">
