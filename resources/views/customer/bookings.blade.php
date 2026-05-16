@@ -45,6 +45,24 @@
 
         </select>
 
+        <!-- Payment Status -->
+        <select name="payment_status"
+                class="form-select w-25 d-inline">
+
+            <option value="">All Payment Status</option>
+
+            <option value="Paid"
+                {{ request('payment_status') == 'Paid' ? 'selected' : '' }}>
+                Paid
+            </option>
+
+            <option value="Unpaid"
+                {{ request('payment_status') == 'Unpaid' ? 'selected' : '' }}>
+                Unpaid
+            </option>
+
+        </select>
+
         <!-- Buttons -->
         <button class="btn btn-primary btn-sm">
             Filter

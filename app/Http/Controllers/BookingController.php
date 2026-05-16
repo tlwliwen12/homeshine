@@ -88,6 +88,12 @@ class BookingController extends Controller
             $query->where('status', $request->status);
         }
 
+        // Filter by payment status
+        if ($request->payment_status) {
+            $query->where('payment_status', $request->payment_status);
+        }
+
+
         $bookings = $query->latest()->get();
 
         return view('customer.bookings', compact('bookings'));
