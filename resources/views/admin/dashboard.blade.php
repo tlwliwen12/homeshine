@@ -33,6 +33,97 @@
 
 </div>
 
+<!-- Notifications -->
+@if(auth()->user()->notifications->count() > 0)
+
+    <div class="card custom-card border-0 mb-5">
+
+        <div class="card-body p-4">
+
+            <!-- Notification Header -->
+            <div class="d-flex align-items-center mb-4">
+
+                <div style="
+                    width:70px;
+                    height:70px;
+                    border-radius:20px;
+                    background:rgba(245,158,11,0.1);
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                ">
+
+                    <i class="bi bi-bell-fill fs-2 text-warning"></i>
+
+                </div>
+
+                <div class="ms-3">
+
+                    <h4 class="fw-bold mb-1">
+
+                        Notifications
+
+                    </h4>
+
+                    <p class="text-secondary mb-0">
+
+                        Latest booking cancellation updates
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- Notification List -->
+            @foreach(auth()->user()->notifications->take(5) as $notification)
+
+                <div class="border rounded-4 p-4 mb-3">
+
+                    <div class="d-flex justify-content-between align-items-start">
+
+                        <div>
+
+                            <h6 class="fw-semibold mb-2">
+
+                                {{ $notification->data['message'] }}
+
+                            </h6>
+
+                            <p class="text-secondary mb-1">
+
+                                <strong>Service:</strong>
+                                {{ $notification->data['service'] }}
+
+                            </p>
+
+                            <p class="text-secondary mb-0">
+
+                                <strong>Customer:</strong>
+                                {{ $notification->data['customer'] }}
+
+                            </p>
+
+                        </div>
+
+                        <span class="badge bg-warning text-dark px-3 py-2 rounded-pill">
+
+                            Cancelled
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            @endforeach
+
+        </div>
+
+    </div>
+
+@endif
+
 <!-- Dashboard Cards -->
 <div class="row g-4">
 
