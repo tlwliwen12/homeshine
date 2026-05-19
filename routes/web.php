@@ -197,7 +197,10 @@ Route::get('/payment/{id}', function ($id) {
 
     $user = Auth::user();
 
-    $response = Http::asForm()->post(
+    $response = Http::asForm()
+    ->timeout(60)
+    ->retry(3, 2000)
+    ->post(
         env('TOYYIBPAY_URL').'/index.php/api/createBill',
 
         [
@@ -237,6 +240,10 @@ Route::get('/payment/{id}', function ($id) {
         ]
     );
 
+    if (!$response->successful()) {
+        return back()->with('error', 'Payment gateway error. Please try again later.');
+    }
+
     $result = $response->json();
 
     $billCode = $result[0]['BillCode'];
@@ -256,7 +263,8 @@ Route::get('/payment-success/{id}', function ($id) {
     $booking = Booking::findOrFail($id);
 
     $booking->update([
-        'payment_status' => 'Paid'
+        'payment_status' => 'Paid',
+        'status' => 'Pending'
     ]);
 
     return redirect('/customer/bookings')

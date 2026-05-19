@@ -58,20 +58,17 @@ class BookingController extends Controller
 
     ]);
 
-        Booking::create([
+        $booking = Booking::create([
             'user_id' => Auth::id(),
             'service_id' => $serviceId,
             'booking_date' => $request->booking_date,
             'booking_time' => $request->booking_time,
             'address' => $request->address,
             'notes' => $request->notes,
-            'status' => 'Pending'
+            'status' => 'Waiting Payment'
         ]);
 
-        return redirect('/customer/bookings')
-            ->with('success',
-                'Your booking has been confirmed successfully!'
-            );
+        return redirect('/customer/payment/'.$booking->id);
     }
 
     public function index(Request $request)

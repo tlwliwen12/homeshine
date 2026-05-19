@@ -138,17 +138,6 @@
                         @endif
                     </p>
 
-                    @if($booking->payment_status == 'Unpaid')
-
-                        <a href="/customer/payment/{{ $booking->id }}"
-                           class="btn btn-dark btn-sm">
-
-                            Pay Now
-
-                        </a>
-
-                    @endif
-
                     @if($booking->status == 'Pending')
 
                     <form method="POST"
