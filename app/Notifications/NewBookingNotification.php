@@ -6,7 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class BookingCancelledNotification extends Notification
+class NewBookingNotification extends Notification
 {
     use Queueable;
 
@@ -17,22 +17,22 @@ class BookingCancelledNotification extends Notification
         $this->booking = $booking;
     }
 
-    // Send via database + email
+    // Database + Email
     public function via($notifiable)
     {
         return ['database', 'mail'];
     }
 
-    // Email notification
+    // Email
     public function toMail($notifiable)
     {
         return (new MailMessage)
 
-            ->subject('Booking Cancelled')
+            ->subject('New Booking Received')
 
             ->greeting('Hello '.$notifiable->name.',')
 
-            ->line('A booking has been cancelled.')
+            ->line('A new booking has been created.')
 
             ->line('Booking ID: #'.$this->booking->id)
 
@@ -44,18 +44,14 @@ class BookingCancelledNotification extends Notification
 
             ->line('Time: '.$this->booking->booking_time)
 
-            ->line(
-                $this->booking->payment_status == 'Paid'
-                ? 'Refund request is pending.'
-                : 'No payment was made.'
-            )
+            ->line('Address: '.$this->booking->address)
 
             ->action(
                 'View Dashboard',
                 url('/login')
             )
 
-            ->line('Thank you for using HomeShine.');
+            ->line('Please review this booking.');
     }
 
     // Database notification
@@ -64,7 +60,7 @@ class BookingCancelledNotification extends Notification
         return [
 
             'message' =>
-                'Booking #'.$this->booking->id.' has been cancelled by customer.',
+                'New booking #'.$this->booking->id.' has been created.',
 
             'service' =>
                 $this->booking->service->name,

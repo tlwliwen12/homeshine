@@ -183,7 +183,7 @@ Swal.fire({
 
                     <a href="/customer/payments" class="nav-link">
                         <i class="bi bi-credit-card"></i>
-                        Payment
+                        History
                     </a>
 
                 </li>

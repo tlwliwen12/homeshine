@@ -90,27 +90,73 @@
 
                             </h6>
 
-                            <p class="text-secondary mb-1">
+                            @if(isset($notification->data['service']))
 
-                                <strong>Service:</strong>
-                                {{ $notification->data['service'] }}
+                                <p class="text-secondary mb-1">
 
-                            </p>
+                                    <strong>Service:</strong>
+                                    {{ $notification->data['service'] }}
 
-                            <p class="text-secondary mb-0">
+                                </p>
 
-                                <strong>Customer:</strong>
-                                {{ $notification->data['customer'] }}
+                            @endif
 
-                            </p>
+                            @if(isset($notification->data['customer']))
+
+                                <p class="text-secondary mb-0">
+
+                                    <strong>Customer:</strong>
+                                    {{ $notification->data['customer'] }}
+
+                                </p>
+
+                            @endif
 
                         </div>
 
-                        <span class="badge bg-warning text-dark px-3 py-2 rounded-pill">
+                        @if(str_contains(strtolower($notification->data['message']), 'cancel'))
 
-                            Cancelled
+                            <span class="badge bg-danger px-3 py-2 rounded-pill">
+                                Cancelled
+                            </span>
 
-                        </span>
+                        @elseif(str_contains(strtolower($notification->data['message']), 'reschedule'))
+
+                            <span class="badge bg-warning text-dark px-3 py-2 rounded-pill">
+                                Rescheduled
+                            </span>
+
+                        @elseif(str_contains(strtolower($notification->data['message']), 'created'))
+
+                            <span class="badge bg-primary px-3 py-2 rounded-pill">
+                                New Booking
+                            </span>
+
+                        @elseif(str_contains(strtolower($notification->data['message']), 'approved'))
+
+                            <span class="badge bg-success px-3 py-2 rounded-pill">
+                                Approved
+                            </span>
+
+                        @elseif(str_contains(strtolower($notification->data['message']), 'refund'))
+
+                            <span class="badge bg-info text-dark px-3 py-2 rounded-pill">
+                                Refund
+                            </span>
+
+                        @elseif(str_contains(strtolower($notification->data['message']), 'payment'))
+
+                            <span class="badge bg-success px-3 py-2 rounded-pill">
+                                Payment
+                            </span>
+
+                        @else
+
+                            <span class="badge bg-secondary px-3 py-2 rounded-pill">
+                                Notification
+                            </span>
+
+                        @endif
 
                     </div>
 

@@ -339,7 +339,7 @@
                                 </button>
 
                     @endif
-
+                    <br><br>
 
                     {{-- Show payment button ONLY when cleaner approved --}}
                     @if(

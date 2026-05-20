@@ -15,7 +15,12 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use App\Models\Booking;
 use App\Models\User;
+use App\Notifications\BookingApprovedNotification;
+use Illuminate\Support\Facades\Notification;
 use App\Notifications\BookingCancelledNotification;
+use App\Notifications\RefundApprovedNotification;
+use App\Notifications\BookingRescheduledNotification;
+use App\Notifications\PaymentCompletedNotification;
 
 Route::get('/', function () {
 
@@ -296,6 +301,20 @@ function (Request $request, $id) {
 
     ]);
 
+    // Notify admin + cleaner
+    $users = User::whereIn(
+        'role',
+        ['admin', 'cleaner']
+    )->get();
+
+    foreach ($users as $user) {
+
+        $user->notify(
+            new BookingRescheduledNotification($booking)
+        );
+
+    }
+
     return back()->with(
         'success',
         'Booking rescheduled successfully!'
@@ -535,19 +554,32 @@ function ($id) {
 })->middleware('auth');
 
 
-Route::get('/payment-success/{id}',
-function ($id) {
+Route::get('/payment-success/{id}', function ($id) {
 
     $booking = Booking::findOrFail($id);
 
     $booking->update([
 
-        'payment_status' => 'Paid'
+        'payment_status' => 'Paid',
+        'status' => 'Approved'
 
     ]);
 
-    return redirect('/customer/bookings')
+    // Notify admin + cleaner
+    $users = User::whereIn(
+        'role',
+        ['admin', 'cleaner']
+    )->get();
 
+    foreach ($users as $user) {
+
+        $user->notify(
+            new PaymentCompletedNotification($booking)
+        );
+
+    }
+
+    return redirect('/customer/bookings')
         ->with(
             'success',
             'Payment completed successfully!'
@@ -567,24 +599,23 @@ Route::post('/cleaner/bookings/{id}/approve', function ($id) {
 
     $booking = Booking::findOrFail($id);
 
-    // Check if another approved booking exists
-    $conflict = Booking::where('booking_date', $booking->booking_date)
-        ->where('booking_time', $booking->booking_time)
-        ->where('status', 'Approved')
-        ->exists();
-
-    if ($conflict) {
-
-        return back()->with(
-            'error',
-            'Cleaner already has a job at this time slot.'
-        );
-
-    }
-
+    // Update status
     $booking->update([
         'status' => 'Approved'
     ]);
+
+    // Send notification + email to customer
+    $booking->user->notify(
+        new BookingApprovedNotification($booking)
+    );
+
+    // Send notification + email to admin
+    $admins = User::where('role', 'admin')->get();
+
+    Notification::send(
+        $admins,
+        new BookingApprovedNotification($booking)
+    );
 
     return back()->with(
         'success',
@@ -616,6 +647,33 @@ Route::get('/cleaner/jobs', function () {
         ->get();
 
     return view('cleaner.jobs', compact('bookings'));
+
+})->middleware('auth');
+
+Route::post('/admin/refunds/{id}/approve', function ($id) {
+
+    $booking = Booking::findOrFail($id);
+
+    // Update refund status
+    $booking->update([
+
+        'refund_status' => 'Refunded'
+
+    ]);
+
+    // Send notification + email to customer
+    $booking->user->notify(
+
+        new RefundApprovedNotification($booking)
+
+    );
+
+    return back()->with(
+
+        'success',
+        'Refund approved successfully.'
+
+    );
 
 })->middleware('auth');
 

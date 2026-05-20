@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Service;
 use App\Models\Booking;
+use App\Models\User;
+use App\Notifications\NewBookingNotification;
 
 class BookingController extends Controller
 {
@@ -81,6 +83,19 @@ class BookingController extends Controller
             'address' => $request->address,
             'notes' => $request->notes,
         ]);
+
+        // Notify admin + cleaner
+        $users = User::whereIn(
+            'role',
+            ['admin', 'cleaner']
+        )->get();
+
+        foreach ($users as $user) {
+
+            $user->notify(
+                new NewBookingNotification($booking)
+            );
+        }
 
         return redirect('/customer/bookings')
             ->with('success',
