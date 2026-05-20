@@ -276,7 +276,29 @@
 
                     </div>
 
+                    @if($booking->refund_status)
 
+                    <p class="mb-0">
+
+                        <strong>Refund:</strong>
+
+                        @if($booking->refund_status == 'Pending')
+
+                            <span class="badge bg-warning text-dark">
+                                Pending
+                            </span>
+
+                        @elseif($booking->refund_status == 'Refunded')
+
+                            <span class="badge bg-success">
+                                Refunded
+                            </span>
+
+                        @endif
+
+                    </p>
+
+                    @endif
 
                     <!-- Action Buttons -->
                     @if($booking->status == 'Pending')
@@ -506,8 +528,21 @@
                         <!-- Text -->
                         <p class="text-secondary mb-4">
 
-                            Are you sure you want to cancel this booking?
-                            This action cannot be undone.
+                            @if($booking->payment_status == 'Paid')
+
+                               Are you sure you want to cancel this booking?
+
+                                <br><br>
+
+                                Your payment has already been completed.
+                                Refund request will be sent to admin for processing.
+
+                            @else
+
+                                Are you sure you want to cancel this booking?
+                                This action cannot be undone.
+
+                            @endif
 
                         </p>
 

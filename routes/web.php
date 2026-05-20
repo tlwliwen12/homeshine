@@ -208,37 +208,54 @@ function ($id) {
         abort(403);
     }
 
-    // Only pending booking can cancel
-    if ($booking->status == 'Pending') {
-
-        $booking->update([
-
-            'status' => 'Cancelled'
-
-        ]);
-
-        // Notify admin + cleaner
-        $users = User::whereIn(
-            'role',
-            ['admin', 'cleaner']
-        )->get();
-
-        foreach ($users as $user) {
-
-            $user->notify(
-                new BookingCancelledNotification($booking)
-            );
-        }
+    // Prevent double cancel
+    if ($booking->status == 'Cancelled') {
 
         return back()->with(
-            'success',
-            'Booking cancelled successfully.'
+            'error',
+            'Booking already cancelled.'
         );
     }
 
+    // Cancel booking
+    $booking->status = 'Cancelled';
+
+    // If already paid -> refund pending
+    if ($booking->payment_status == 'Paid') {
+
+        $booking->refund_status = 'Pending';
+
+    }
+
+    $booking->save();
+
+    // Notify admin + cleaner
+    $users = User::whereIn(
+        'role',
+        ['admin', 'cleaner']
+    )->get();
+
+    foreach ($users as $user) {
+
+        $user->notify(
+            new BookingCancelledNotification($booking)
+        );
+
+    }
+
+    // Success message
+    if ($booking->payment_status == 'Paid') {
+
+        return back()->with(
+            'success',
+            'Booking cancelled successfully. Refund request submitted.'
+        );
+
+    }
+
     return back()->with(
-        'error',
-        'Only pending bookings can be cancelled.'
+        'success',
+        'Booking cancelled successfully.'
     );
 
 })->middleware('auth');
