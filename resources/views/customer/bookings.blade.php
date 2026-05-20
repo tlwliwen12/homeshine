@@ -240,7 +240,7 @@
                             <i class="bi bi-clock me-2 text-primary"></i>
 
                             <strong>Time:</strong>
-                            {{ $booking->booking_time }}
+                            {{ \Carbon\Carbon::parse($booking->booking_time)->format('h:i A') }}
 
                         </p>
 
@@ -302,8 +302,19 @@
                                 Cancel Booking
 
                             </button>
-
                         </div>
+
+                        @elseif($booking->status == 'Approved')
+
+                                <!-- Only Cancel Button -->
+                                <button class="btn btn-danger rounded-pill"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#cancelModal{{ $booking->id }}">
+
+                                    <i class="bi bi-x-circle me-2"></i>
+                                    Cancel Booking
+
+                                </button>
 
                     @endif
 
@@ -398,10 +409,31 @@
                                     New Time
                                 </label>
 
-                                <input type="time"
-                                       name="booking_time"
-                                       class="form-control rounded-3"
-                                       required>
+                                <select name="booking_time"
+                                        class="form-select rounded-3"
+                                        required>
+
+                                    <option value="">
+                                        Select Time Slot
+                                    </option>
+
+                                    <option value="08:00:00">
+                                        08:00 AM
+                                    </option>
+
+                                    <option value="10:00:00">
+                                        10:00 AM
+                                    </option>
+
+                                    <option value="14:00:00">
+                                        02:00 PM
+                                    </option>
+
+                                    <option value="16:00:00">
+                                        04:00 PM
+                                    </option>
+
+                                </select>
 
                             </div>
 

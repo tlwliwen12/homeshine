@@ -42,7 +42,31 @@
 
                         <div class="mb-3">
                             <label>Time</label>
-                            <input type="time" name="booking_time" class="form-control" required>
+                            <select name="booking_time"
+                                    class="form-select"
+                                    required>
+
+                                <option value="">
+                                    Select Time Slot
+                                </option>
+
+                                <option value="08:00:00">
+                                    08:00 AM
+                                </option>
+
+                                <option value="10:00:00">
+                                    10:00 AM
+                                </option>
+
+                                <option value="14:00:00">
+                                    02:00 PM
+                                </option>
+
+                                <option value="16:00:00">
+                                    04:00 PM
+                                </option>
+
+                            </select>
                             @error('booking_time')
                                <div class="text-danger">
                                     {{ $message }}
