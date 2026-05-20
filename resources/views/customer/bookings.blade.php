@@ -276,32 +276,52 @@
 
                     </div>
 
+
+
                     <!-- Action Buttons -->
                     @if($booking->status == 'Pending')
 
-                    <div class="d-grid gap-2">
+                        <div class="d-grid gap-2">
 
-                        <!-- Reschedule -->
-                        <button class="btn btn-warning text-white rounded-pill"
-                                data-bs-toggle="modal"
-                                data-bs-target="#rescheduleModal{{ $booking->id }}">
+                            <!-- Reschedule -->
+                            <button class="btn btn-warning text-white rounded-pill"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#rescheduleModal{{ $booking->id }}">
 
-                            <i class="bi bi-calendar2-week me-2"></i>
-                            Reschedule Booking
+                                <i class="bi bi-calendar2-week me-2"></i>
+                                Reschedule Booking
 
-                        </button>
+                            </button>
 
-                        <!-- Cancel -->
-                        <button class="btn btn-danger rounded-pill"
-                                data-bs-toggle="modal"
-                                data-bs-target="#cancelModal{{ $booking->id }}">
+                            <!-- Cancel -->
+                            <button class="btn btn-danger rounded-pill"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#cancelModal{{ $booking->id }}">
 
-                            <i class="bi bi-x-circle me-2"></i>
-                            Cancel Booking
+                                <i class="bi bi-x-circle me-2"></i>
+                                Cancel Booking
 
-                        </button>
+                            </button>
 
-                    </div>
+                        </div>
+
+                    @endif
+
+
+                    {{-- Show payment button ONLY when cleaner approved --}}
+                    @if(
+                        $booking->status == 'Approved'
+                        &&
+                        $booking->payment_status != 'Paid'
+                    )
+
+                        <a href="/payment/{{ $booking->id }}"
+                           class="btn btn-success rounded-pill w-100">
+
+                            <i class="bi bi-credit-card me-2"></i>
+                            Pay Now
+
+                        </a>
 
                     @endif
 

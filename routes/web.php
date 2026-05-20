@@ -525,9 +525,7 @@ function ($id) {
 
     $booking->update([
 
-        'payment_status' => 'Paid',
-
-        'status' => 'Pending'
+        'payment_status' => 'Paid'
 
     ]);
 
@@ -537,6 +535,44 @@ function ($id) {
             'success',
             'Payment completed successfully!'
         );
+
+})->middleware('auth');
+
+Route::get('/cleaner/bookings', function () {
+
+    $bookings = Booking::latest()->get();
+
+    return view('cleaner.bookings', compact('bookings'));
+
+})->middleware('auth');
+
+Route::post('/cleaner/bookings/{id}/approve', function ($id) {
+
+    $booking = Booking::findOrFail($id);
+
+    $booking->update([
+        'status' => 'Approved'
+    ]);
+
+    return back()->with(
+        'success',
+        'Booking approved successfully.'
+    );
+
+})->middleware('auth');
+
+Route::post('/cleaner/bookings/{id}/reject', function ($id) {
+
+    $booking = Booking::findOrFail($id);
+
+    $booking->update([
+        'status' => 'Rejected'
+    ]);
+
+    return back()->with(
+        'success',
+        'Booking rejected successfully.'
+    );
 
 })->middleware('auth');
 

@@ -65,10 +65,12 @@ class BookingController extends Controller
             'booking_time' => $request->booking_time,
             'address' => $request->address,
             'notes' => $request->notes,
-            'status' => 'Waiting Payment'
         ]);
 
-        return redirect('/customer/payment/'.$booking->id);
+        return redirect('/customer/bookings')
+            ->with('success',
+                'Booking submitted successfully. Please wait for approval.'
+            );
     }
 
     public function index(Request $request)
