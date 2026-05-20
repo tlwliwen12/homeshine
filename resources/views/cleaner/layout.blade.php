@@ -133,6 +133,19 @@ $pendingBookings = Booking::where('status', 'Pending')->count();
 
                 </li>
 
+                <!-- Accepted Jobs -->
+                <li class="nav-item">
+
+                    <a class="nav-link"
+                       href="/cleaner/jobs">
+
+                        <i class="bi bi-briefcase-fill me-1"></i>
+                        Accepted Jobs
+
+                    </a>
+
+                </li>
+
                 <!-- User -->
                 <li class="nav-item ms-3">
 

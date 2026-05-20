@@ -576,6 +576,17 @@ Route::post('/cleaner/bookings/{id}/reject', function ($id) {
 
 })->middleware('auth');
 
+Route::get('/cleaner/jobs', function () {
+
+    $bookings = Booking::where('status', 'Approved')
+        ->orderBy('booking_date')
+        ->orderBy('booking_time')
+        ->get();
+
+    return view('cleaner.jobs', compact('bookings'));
+
+})->middleware('auth');
+
 Route::post('/logout', function () {
 
     Auth::logout();

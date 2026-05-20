@@ -4,28 +4,20 @@
 
 <div class="container-fluid">
 
+    <!-- Header -->
     <div class="mb-4">
 
         <h2 class="fw-bold">
-            Manage Bookings
+            Accepted Jobs
         </h2>
 
         <p class="text-secondary">
-            Approve or reject customer bookings
+            View approved cleaning schedules
         </p>
 
     </div>
 
-    @if(session('success'))
-
-        <div class="alert alert-success rounded-4 border-0 shadow-sm">
-
-            {{ session('success') }}
-
-        </div>
-
-    @endif
-
+    <!-- Jobs -->
     <div class="row g-4">
 
         @forelse($bookings as $booking)
@@ -40,12 +32,14 @@
                     <div class="mb-3">
 
                         <h5 class="fw-bold mb-1">
+
                             {{ $booking->service->name }}
+
                         </h5>
 
                         <small class="text-secondary">
 
-                            Booking #{{ $booking->id }}
+                            Job #{{ $booking->id }}
 
                         </small>
 
@@ -82,7 +76,7 @@
                     </p>
 
                     <!-- Address -->
-                    <p class="mb-4">
+                    <p class="mb-3">
 
                         <i class="bi bi-geo-alt me-2 text-primary"></i>
 
@@ -91,49 +85,8 @@
 
                     </p>
 
-                    <!-- Status -->
+                    <!-- Payment -->
                     <div class="mb-3">
-
-                        <strong>Status:</strong>
-
-                        @if($booking->status == 'Pending')
-
-                            <span class="badge bg-warning text-dark px-3 py-2 rounded-pill">
-
-                                Pending
-
-                            </span>
-
-                        @elseif($booking->status == 'Approved')
-
-                            <span class="badge bg-success px-3 py-2 rounded-pill">
-
-                                Approved
-
-                            </span>
-
-                        @elseif($booking->status == 'Cancelled')
-
-                            <span class="badge bg-secondary px-3 py-2 rounded-pill">
-
-                                Cancelled
-
-                            </span>
-
-                        @else
-
-                            <span class="badge bg-danger px-3 py-2 rounded-pill">
-
-                                Rejected
-
-                            </span>
-
-                        @endif
-
-                    </div>
-
-                    <!-- Payment Status -->
-                    <div class="mb-4">
 
                         <strong>Payment:</strong>
 
@@ -157,46 +110,12 @@
 
                     </div>
 
-                    <!-- Buttons -->
-                    @if($booking->status == 'Pending')
+                    <!-- Status -->
+                    <span class="badge bg-success px-3 py-2 rounded-pill">
 
-                    <div class="d-flex gap-2">
+                        Approved Job
 
-                        <!-- Approve -->
-                        <form method="POST"
-                              action="/cleaner/bookings/{{ $booking->id }}/approve"
-                              class="w-50">
-
-                            @csrf
-
-                            <button class="btn btn-success rounded-pill w-100">
-
-                                <i class="bi bi-check-circle me-1"></i>
-                                Approve
-
-                            </button>
-
-                        </form>
-
-                        <!-- Reject -->
-                        <form method="POST"
-                              action="/cleaner/bookings/{{ $booking->id }}/reject"
-                              class="w-50">
-
-                            @csrf
-
-                            <button class="btn btn-danger rounded-pill w-100">
-
-                                <i class="bi bi-x-circle me-1"></i>
-                                Reject
-
-                            </button>
-
-                        </form>
-
-                    </div>
-
-                    @endif
+                    </span>
 
                 </div>
 
@@ -212,14 +131,18 @@
 
                 <div class="card-body text-center py-5">
 
-                    <i class="bi bi-calendar-x fs-1 text-secondary"></i>
+                    <i class="bi bi-briefcase fs-1 text-secondary"></i>
 
                     <h4 class="fw-bold mt-3">
-                        No Bookings Found
+
+                        No Accepted Jobs
+
                     </h4>
 
                     <p class="text-secondary">
-                        No bookings available right now.
+
+                        No approved jobs available right now.
+
                     </p>
 
                 </div>
