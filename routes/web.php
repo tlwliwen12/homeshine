@@ -550,6 +550,21 @@ Route::post('/cleaner/bookings/{id}/approve', function ($id) {
 
     $booking = Booking::findOrFail($id);
 
+    // Check if another approved booking exists
+    $conflict = Booking::where('booking_date', $booking->booking_date)
+        ->where('booking_time', $booking->booking_time)
+        ->where('status', 'Approved')
+        ->exists();
+
+    if ($conflict) {
+
+        return back()->with(
+            'error',
+            'Cleaner already has a job at this time slot.'
+        );
+
+    }
+
     $booking->update([
         'status' => 'Approved'
     ]);

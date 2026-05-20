@@ -27,6 +27,42 @@
                     <h5>{{ $service->name }}</h5>
                     <p class="text-success">RM {{ $service->price }}</p>
 
+                    @if(session('error'))
+
+                        <div class="alert alert-danger rounded-4 border-0 shadow-sm mb-4">
+
+                            <i class="bi bi-exclamation-circle-fill me-2"></i>
+
+                            {{ session('error') }}
+
+                        </div>
+
+                    @endif
+
+                    @if($errors->any())
+
+                        <div class="alert alert-danger rounded-4 border-0 shadow-sm mb-4">
+
+                            <i class="bi bi-exclamation-circle-fill me-2"></i>
+
+                            {{ $errors->first() }}
+
+                        </div>
+
+                    @endif
+
+                    @if($errors->any())
+
+                        <div class="alert alert-danger rounded-4 border-0 shadow-sm mb-4">
+
+                            <i class="bi bi-exclamation-circle-fill me-2"></i>
+
+                            {{ $errors->first() }}
+
+                        </div>
+
+                    @endif
+
                     <form method="POST" action="/book-service/{{ $service->id }}">
                         @csrf
 

@@ -58,6 +58,21 @@ class BookingController extends Controller
 
     ]);
 
+        // Check existing booking at same date + time
+        $existingBooking = Booking::where('booking_date', $request->booking_date)
+            ->where('booking_time', $request->booking_time)
+            ->whereIn('status', ['Pending', 'Approved'])
+            ->exists();
+
+        if ($existingBooking) {
+
+            return back()->with(
+                'error',
+                'The selected booking slot is unavailable. Please choose another date or time.'
+            )->withInput();
+
+        }
+
         $booking = Booking::create([
             'user_id' => Auth::id(),
             'service_id' => $serviceId,
