@@ -21,6 +21,8 @@ use App\Notifications\BookingCancelledNotification;
 use App\Notifications\RefundApprovedNotification;
 use App\Notifications\BookingRescheduledNotification;
 use App\Notifications\PaymentCompletedNotification;
+use App\Notifications\CleanerApprovedNotification;
+use App\Notifications\CleanerRejectedNotification;
 
 Route::get('/', function () {
 
@@ -64,6 +66,21 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
             ->with('success', 'Email verified successfully!');
     }
 
+    $user = $request->user();
+
+    if (
+        $user->role == 'cleaner' &&
+        $user->approval_status != 'approved'
+    ) {
+
+        Auth::logout();
+
+        return redirect('/login')->with(
+            'success',
+            'Email verified successfully. Your cleaner account is waiting for admin approval.'
+        );
+    }
+
     return redirect('/cleaner/dashboard')
         ->with('success', 'Email verified successfully!');
 
@@ -85,6 +102,62 @@ function (Request $request) {
 
 })->middleware(['auth', 'throttle:6,1'])
   ->name('verification.send');
+
+Route::get('/admin/cleaners', function () {
+
+    if (Auth::user()->role != 'admin') {
+        abort(403);
+    }
+
+    $cleaners = User::where(
+        'role',
+        'cleaner'
+    )->get();
+
+    return view(
+        'admin.cleaners',
+        compact('cleaners')
+    );
+
+})->middleware('auth');
+
+Route::post('/admin/cleaners/{id}/approve', function ($id) {
+
+    $cleaner = User::findOrFail($id);
+
+    $cleaner->update([
+        'approval_status' => 'approved'
+    ]);
+
+    $cleaner->notify(
+        new CleanerApprovedNotification()
+    );
+
+    return back()->with(
+        'success',
+        'Cleaner approved successfully.'
+    );
+
+})->middleware('auth');
+
+Route::post('/admin/cleaners/{id}/reject', function ($id) {
+
+    $cleaner = User::findOrFail($id);
+
+    $cleaner->update([
+        'approval_status' => 'rejected'
+    ]);
+
+    $cleaner->notify(
+        new CleanerRejectedNotification()
+    );
+
+    return back()->with(
+        'success',
+        'Cleaner rejected successfully.'
+    );
+
+})->middleware('auth');
 
 Route::get('/login', [AuthController::class, 'showLogin']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -558,25 +631,20 @@ Route::get('/payment-success/{id}', function ($id) {
 
     $booking = Booking::findOrFail($id);
 
-    $booking->update([
+    if ($booking->payment_status !== 'Paid') {
 
-        'payment_status' => 'Paid',
-        'status' => 'Approved'
+        $booking->update([
+            'payment_status' => 'Paid',
+            'status' => 'Approved'
+        ]);
 
-    ]);
+        $users = User::whereIn('role', ['admin', 'cleaner'])->get();
 
-    // Notify admin + cleaner
-    $users = User::whereIn(
-        'role',
-        ['admin', 'cleaner']
-    )->get();
-
-    foreach ($users as $user) {
-
-        $user->notify(
-            new PaymentCompletedNotification($booking)
-        );
-
+        foreach ($users as $user) {
+            $user->notify(
+                new PaymentCompletedNotification($booking)
+            );
+        }
     }
 
     return redirect('/customer/bookings')

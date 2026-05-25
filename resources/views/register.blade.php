@@ -201,12 +201,6 @@
                        class="form-control"
                        placeholder="Enter your password">
 
-                <span class="input-group-text" onclick="togglePassword()">
-
-                    <i class="bi bi-eye" id="eyeIcon"></i>
-
-                </span>
-
             </div>
 
             <div class="small text-muted mt-2">
@@ -276,27 +270,6 @@
     </div>
 
 </div>
-
-<script>
-
-function togglePassword(){
-
-    let input = document.getElementById("password");
-    let icon = document.getElementById("eyeIcon");
-
-    if(input.type === "password"){
-        input.type = "text";
-        icon.classList.remove("bi-eye");
-        icon.classList.add("bi-eye-slash");
-    }else{
-        input.type = "password";
-        icon.classList.remove("bi-eye-slash");
-        icon.classList.add("bi-eye");
-    }
-
-}
-
-</script>
 
 </body>
 

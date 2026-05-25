@@ -84,11 +84,15 @@
 
                         <div>
 
-                            <h6 class="fw-semibold mb-2">
+                            @if(isset($notification->data['title']))
+                                <h6 class="fw-bold mb-2">
+                                    {{ $notification->data['title'] }}
+                                </h6>
+                            @endif
 
+                            <p class="mb-0">
                                 {{ $notification->data['message'] }}
-
-                            </h6>
+                            </p>
 
                             @if(isset($notification->data['service']))
 
@@ -148,6 +152,16 @@
 
                             <span class="badge bg-success px-3 py-2 rounded-pill">
                                 Payment
+                            </span>
+
+                        @elseif(
+                            str_contains(strtolower($notification->data['message']), 'cleaner')
+                            ||
+                            str_contains(strtolower($notification->data['title'] ?? ''), 'cleaner')
+                        )
+
+                            <span class="badge bg-info px-3 py-2 rounded-pill">
+                                New Cleaner
                             </span>
 
                         @else

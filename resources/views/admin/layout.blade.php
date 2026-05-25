@@ -163,6 +163,18 @@
 
                 </li>
 
+                <li class="nav-item">
+
+                    <a class="nav-link"
+                       href="/admin/cleaners">
+
+                        <i class="bi bi-person-badge me-1"></i>
+                        Manage Cleaners
+
+                    </a>
+
+                </li>
+
                 <!-- Logout -->
                 <li class="nav-item ms-3">
 

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\CleanerRegistrationNotification;
 
 class AuthController extends Controller
 {
@@ -25,7 +26,27 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => $request->role,
+
+            'approval_status' =>
+                $request->role == 'cleaner'
+                ? 'pending'
+                : 'approved'
         ]);
+
+        if ($user->role == 'cleaner') {
+
+            $admins = User::where(
+                'role',
+                'admin'
+            )->get();
+
+            foreach ($admins as $admin) {
+
+                $admin->notify(
+                    new CleanerRegistrationNotification($user)
+                );
+            }
+        }
 
         Auth::login($user);
 
@@ -71,7 +92,16 @@ class AuthController extends Controller
         if (Auth::attempt($request->only('email', 'password'))) {
             $request->session()->regenerate();
 
-            // Check role
+            $user = Auth::user();
+            if (
+                $user->role === 'cleaner' &&
+                $user->approval_status !== 'approved'
+            ) {
+                Auth::logout();
+                return back()->withErrors([
+                    'email' => 'Your cleaner account is waiting for admin approval.'
+                ]);
+            }
             return $this->redirectByRole();
         }
 
@@ -106,7 +136,7 @@ class AuthController extends Controller
                 'regex:/[\W_]/',
             ],
 
-            'role' => 'required|in:customer,cleaner,admin'
+            'role' => 'required|in:customer,cleaner'
         ];
     }
 

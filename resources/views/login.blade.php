@@ -160,6 +160,12 @@
 
     @endif
 
+    @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <!-- Form -->
     <form method="POST" action="/login">
 
