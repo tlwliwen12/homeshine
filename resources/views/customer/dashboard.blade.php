@@ -15,6 +15,87 @@
 
 </div>
 
+@if(auth()->user()->notifications->count() > 0)
+
+<div class="card custom-card border-0 mb-4">
+
+    <div class="card-body p-4">
+
+        <div class="d-flex align-items-center mb-3">
+
+            <div class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
+                 style="width:60px;height:60px;">
+
+                <i class="bi bi-bell-fill text-primary fs-4"></i>
+
+            </div>
+
+            <div class="ms-3">
+
+                <h4 class="fw-bold mb-0">
+                    Notifications
+                </h4>
+
+                <small class="text-secondary">
+                    Latest updates on your bookings
+                </small>
+
+            </div>
+
+        </div>
+
+        @foreach(auth()->user()->notifications->take(5) as $notification)
+
+            <div class="border rounded-4 p-3 mb-3">
+
+                <div class="d-flex justify-content-between align-items-start">
+
+                    <div>
+
+                        <h6 class="fw-bold mb-1">
+
+                            {{ $notification->data['title'] ?? 'Notification' }}
+
+                        </h6>
+
+                        <p class="mb-0 text-secondary">
+
+                            {{ $notification->data['message'] }}
+
+                        </p>
+
+                    </div>
+
+                    @if(isset($notification->data['status']))
+
+                        @if($notification->data['status'] == 'In Progress')
+
+                            <span class="badge bg-info text-dark px-3 py-2 rounded-pill">
+                                In Progress
+                            </span>
+
+                        @elseif($notification->data['status'] == 'Completed')
+
+                            <span class="badge bg-success px-3 py-2 rounded-pill">
+                                Completed
+                            </span>
+
+                        @endif
+
+                    @endif
+
+                </div>
+
+            </div>
+
+        @endforeach
+
+    </div>
+
+</div>
+
+@endif
+
 <!-- Hero Section -->
 <div class="card custom-card border-0 overflow-hidden mb-5">
 

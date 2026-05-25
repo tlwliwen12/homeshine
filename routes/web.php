@@ -23,6 +23,7 @@ use App\Notifications\BookingRescheduledNotification;
 use App\Notifications\PaymentCompletedNotification;
 use App\Notifications\CleanerApprovedNotification;
 use App\Notifications\CleanerRejectedNotification;
+use App\Notifications\JobStatusUpdatedNotification;
 
 Route::get('/', function () {
 
@@ -174,6 +175,49 @@ Route::get('/cleaner/dashboard', function () {
     return view('cleaner.dashboard');
 
 })->middleware('auth', 'verified');
+
+Route::post('/cleaner/jobs/{id}/status', function (Request $request, $id) {
+
+    $booking = Booking::findOrFail($id);
+
+    $request->validate([
+        'status' => 'required|in:Approved,In Progress,Completed'
+    ]);
+
+    $booking->update([
+        'status' => $request->status
+    ]);
+
+    // Notify customer
+    $booking->user->notify(
+        new JobStatusUpdatedNotification($booking)
+    );
+
+    return back()->with(
+        'success',
+        'Job status updated successfully.'
+    );
+
+})->middleware('auth');
+
+Route::post('/cleaner/jobs/{id}/status', function (Request $request, $id) {
+
+    $booking = Booking::findOrFail($id);
+
+    $request->validate([
+        'status' => 'required|in:Approved,In Progress,Completed'
+    ]);
+
+    $booking->update([
+        'status' => $request->status
+    ]);
+
+    return back()->with(
+        'success',
+        'Job status updated successfully.'
+    );
+
+})->middleware('auth');
 
 
 Route::get('/admin/dashboard', function () {
@@ -709,7 +753,10 @@ Route::post('/cleaner/bookings/{id}/reject', function ($id) {
 
 Route::get('/cleaner/jobs', function () {
 
-    $bookings = Booking::where('status', 'Approved')
+    $bookings = Booking::whereIn('status', [
+            'Approved',
+            'In Progress'
+        ])
         ->orderBy('booking_date')
         ->orderBy('booking_time')
         ->get();

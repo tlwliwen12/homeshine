@@ -110,12 +110,48 @@
 
                     </div>
 
-                    <!-- Status -->
-                    <span class="badge bg-success px-3 py-2 rounded-pill">
+                    <!-- Job Status -->
+                    <div class="mt-3">
 
-                        Approved Job
+                        <strong class="d-block mb-2">
+                            Job Status
+                        </strong>
 
-                    </span>
+                        <form method="POST"
+                              action="/cleaner/jobs/{{ $booking->id }}/status">
+
+                            @csrf
+
+                            <select name="status"
+                                    class="form-select mb-2">
+
+                                <option value="Approved"
+                                    {{ $booking->status == 'Approved' ? 'selected' : '' }}>
+                                    Approved
+                                </option>
+
+                                <option value="In Progress"
+                                    {{ $booking->status == 'In Progress' ? 'selected' : '' }}>
+                                    In Progress
+                                </option>
+
+                                <option value="Completed"
+                                    {{ $booking->status == 'Completed' ? 'selected' : '' }}>
+                                    Completed
+                                </option>
+
+                            </select>
+
+                            <button type="submit"
+                                    class="btn btn-primary w-100 rounded-pill">
+
+                                Update Status
+
+                            </button>
+
+                        </form>
+
+                    </div>
 
                 </div>
 
