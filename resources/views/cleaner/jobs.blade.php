@@ -17,6 +17,31 @@
 
     </div>
 
+    <div class="d-flex gap-2 mb-4">
+
+        <a href="/cleaner/jobs"
+           class="btn {{ request('filter') ? 'btn-outline-primary' : 'btn-primary' }} rounded-pill">
+
+            All Jobs
+
+        </a>
+
+        <a href="/cleaner/jobs?filter=upcoming"
+           class="btn {{ request('filter') == 'upcoming' ? 'btn-primary' : 'btn-outline-primary' }} rounded-pill">
+
+            Upcoming Jobs
+
+        </a>
+
+        <a href="/cleaner/jobs?filter=completed"
+           class="btn {{ request('filter') == 'completed' ? 'btn-success' : 'btn-outline-success' }} rounded-pill">
+
+            Completed Jobs
+
+        </a>
+
+    </div>
+
     <!-- Jobs -->
     <div class="row g-4">
 
@@ -114,42 +139,80 @@
                     <div class="mt-3">
 
                         <strong class="d-block mb-2">
-                            Job Status
+                            Current Status
                         </strong>
 
-                        <form method="POST"
-                              action="/cleaner/jobs/{{ $booking->id }}/status">
+                        @if($booking->status == 'Approved')
 
-                            @csrf
+                            <span class="badge bg-primary px-3 py-2 rounded-pill mb-3">
+                                Upcoming
+                            </span>
 
-                            <select name="status"
-                                    class="form-select mb-2">
+                        @elseif($booking->status == 'In Progress')
 
-                                <option value="Approved"
-                                    {{ $booking->status == 'Approved' ? 'selected' : '' }}>
-                                    Approved
-                                </option>
+                            <span class="badge bg-warning text-dark px-3 py-2 rounded-pill mb-3">
+                                In Progress
+                            </span>
 
-                                <option value="In Progress"
-                                    {{ $booking->status == 'In Progress' ? 'selected' : '' }}>
-                                    In Progress
-                                </option>
+                        @elseif($booking->status == 'Completed')
 
-                                <option value="Completed"
-                                    {{ $booking->status == 'Completed' ? 'selected' : '' }}>
-                                    Completed
-                                </option>
+                            <span class="badge bg-success px-3 py-2 rounded-pill mb-3">
+                                Completed
+                            </span>
 
-                            </select>
+                        @endif
 
-                            <button type="submit"
-                                    class="btn btn-primary w-100 rounded-pill">
+                        @if($booking->payment_status == 'Paid')
 
-                                Update Status
+                            @if($booking->status != 'Completed')
 
-                            </button>
+                                <form method="POST"
+                                    action="/cleaner/jobs/{{ $booking->id }}/status">
 
-                        </form>
+                                    @csrf
+
+                                    <select name="status"
+                                            class="form-select mb-2">
+
+                                        <option value="Approved"
+                                            {{ $booking->status == 'Approved' ? 'selected' : '' }}>
+                                            Approved
+                                        </option>
+
+                                        <option value="In Progress"
+                                            {{ $booking->status == 'In Progress' ? 'selected' : '' }}>
+                                            In Progress
+                                        </option>
+
+                                        <option value="Completed"
+                                            {{ $booking->status == 'Completed' ? 'selected' : '' }}>
+                                            Completed
+                                        </option>
+
+                                    </select>
+
+                                    <button type="submit"
+                                            class="btn btn-primary w-100 rounded-pill">
+
+                                        Update Status
+
+                                    </button>
+
+                                </form>
+
+                            @endif
+
+                        @else
+
+                            <div class="alert alert-warning mb-0">
+
+                                <i class="bi bi-exclamation-triangle me-2"></i>
+
+                                Waiting for customer payment.
+
+                            </div>
+
+                        @endif
 
                     </div>
 

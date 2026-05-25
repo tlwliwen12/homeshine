@@ -98,6 +98,16 @@
                                 Approved
                             </option>
 
+                            <option value="In Progress"
+                                {{ request('status') == 'In Progress' ? 'selected' : '' }}>
+                                In Progress
+                            </option>
+
+                            <option value="Completed"
+                                {{ request('status') == 'Completed' ? 'selected' : '' }}>
+                                Completed
+                            </option>
+
                             <option value="Rejected"
                                 {{ request('status') == 'Rejected' ? 'selected' : '' }}>
                                 Rejected
@@ -201,8 +211,20 @@
 
                             @elseif($booking->status == 'Approved')
 
-                                <span class="badge bg-success px-3 py-2 rounded-pill">
+                                <span class="badge bg-primary px-3 py-2 rounded-pill">
                                     Approved
+                                </span>
+
+                            @elseif($booking->status == 'In Progress')
+
+                                <span class="badge bg-info text-dark px-3 py-2 rounded-pill">
+                                    In Progress
+                                </span>
+
+                            @elseif($booking->status == 'Completed')
+
+                                <span class="badge bg-success px-3 py-2 rounded-pill">
+                                    Completed
                                 </span>
 
                             @elseif($booking->status == 'Rejected')
@@ -211,7 +233,7 @@
                                     Rejected
                                 </span>
 
-                            @else
+                            @elseif($booking->status == 'Cancelled')
 
                                 <span class="badge bg-secondary px-3 py-2 rounded-pill">
                                     Cancelled

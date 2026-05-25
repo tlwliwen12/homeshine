@@ -204,6 +204,15 @@ Route::post('/cleaner/jobs/{id}/status', function (Request $request, $id) {
 
     $booking = Booking::findOrFail($id);
 
+    // Prevent status update if unpaid
+    if ($booking->payment_status != 'Paid') {
+
+        return back()->with(
+            'error',
+            'Customer payment has not been completed.'
+        );
+    }
+
     $request->validate([
         'status' => 'required|in:Approved,In Progress,Completed'
     ]);
@@ -212,13 +221,16 @@ Route::post('/cleaner/jobs/{id}/status', function (Request $request, $id) {
         'status' => $request->status
     ]);
 
+    $booking->user->notify(
+        new JobStatusUpdatedNotification($booking)
+    );
+
     return back()->with(
         'success',
         'Job status updated successfully.'
     );
 
 })->middleware('auth');
-
 
 Route::get('/admin/dashboard', function () {
 
@@ -751,17 +763,32 @@ Route::post('/cleaner/bookings/{id}/reject', function ($id) {
 
 })->middleware('auth');
 
-Route::get('/cleaner/jobs', function () {
+Route::get('/cleaner/jobs', function (Request $request) {
 
-    $bookings = Booking::whereIn('status', [
+    $query = Booking::where('payment_status', 'Paid');
+
+    // Filter
+    if ($request->filter == 'upcoming') {
+
+        $query->whereIn('status', [
             'Approved',
             'In Progress'
-        ])
+        ]);
+
+    } elseif ($request->filter == 'completed') {
+
+        $query->where('status', 'Completed');
+    }
+
+    $bookings = $query
         ->orderBy('booking_date')
         ->orderBy('booking_time')
         ->get();
 
-    return view('cleaner.jobs', compact('bookings'));
+    return view(
+        'cleaner.jobs',
+        compact('bookings')
+    );
 
 })->middleware('auth');
 
