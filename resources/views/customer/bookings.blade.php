@@ -53,128 +53,6 @@
 
     @endif
 
-    <!-- Filter Card -->
-    <div class="card border-0 shadow-sm rounded-4 mb-4">
-
-        <div class="card-body p-4">
-
-            <form method="GET" action="/customer/bookings">
-
-                <div class="row g-3 align-items-end">
-
-                    <!-- Date Filter -->
-                    <div class="col-md-3">
-
-                        <label class="form-label fw-semibold">
-                            Booking Date
-                        </label>
-
-                        <input type="date"
-                               name="booking_date"
-                               value="{{ request('booking_date') }}"
-                               class="form-control rounded-3">
-
-                    </div>
-
-                    <!-- Status Filter -->
-                    <div class="col-md-3">
-
-                        <label class="form-label fw-semibold">
-                            Booking Status
-                        </label>
-
-                        <select name="status"
-                                class="form-select rounded-3">
-
-                            <option value="">All Status</option>
-
-                            <option value="Pending"
-                                {{ request('status') == 'Pending' ? 'selected' : '' }}>
-                                Pending
-                            </option>
-
-                            <option value="Approved"
-                                {{ request('status') == 'Approved' ? 'selected' : '' }}>
-                                Approved
-                            </option>
-
-                            <option value="In Progress"
-                                {{ request('status') == 'In Progress' ? 'selected' : '' }}>
-                                In Progress
-                            </option>
-
-                            <option value="Completed"
-                                {{ request('status') == 'Completed' ? 'selected' : '' }}>
-                                Completed
-                            </option>
-
-                            <option value="Rejected"
-                                {{ request('status') == 'Rejected' ? 'selected' : '' }}>
-                                Rejected
-                            </option>
-
-                            <option value="Cancelled"
-                                {{ request('status') == 'Cancelled' ? 'selected' : '' }}>
-                                Cancelled
-                            </option>
-
-                        </select>
-
-                    </div>
-
-                    <!-- Payment Filter -->
-                    <div class="col-md-3">
-
-                        <label class="form-label fw-semibold">
-                            Payment Status
-                        </label>
-
-                        <select name="payment_status"
-                                class="form-select rounded-3">
-
-                            <option value="">All Payment</option>
-
-                            <option value="Paid"
-                                {{ request('payment_status') == 'Paid' ? 'selected' : '' }}>
-                                Paid
-                            </option>
-
-                            <option value="Unpaid"
-                                {{ request('payment_status') == 'Unpaid' ? 'selected' : '' }}>
-                                Unpaid
-                            </option>
-
-                        </select>
-
-                    </div>
-
-                    <!-- Buttons -->
-                    <div class="col-md-3 d-flex gap-2">
-
-                        <button class="btn btn-primary rounded-pill px-4 w-100">
-
-                            <i class="bi bi-funnel-fill me-1"></i>
-                            Filter
-
-                        </button>
-
-                        <a href="/customer/bookings"
-                           class="btn btn-outline-secondary rounded-pill px-4 w-100">
-
-                            Reset
-
-                        </a>
-
-                    </div>
-
-                </div>
-
-            </form>
-
-        </div>
-
-    </div>
-
     <!-- Booking Cards -->
     <div class="row g-4">
 
@@ -298,9 +176,10 @@
 
                     </div>
 
+                    <!-- Refund -->
                     @if($booking->refund_status)
 
-                    <p class="mb-0">
+                    <p class="mb-3">
 
                         <strong>Refund:</strong>
 
@@ -346,24 +225,59 @@
                                 Cancel Booking
 
                             </button>
+
                         </div>
 
-                        @elseif($booking->status == 'Approved')
+                    @elseif($booking->status == 'Approved')
 
-                                <!-- Only Cancel Button -->
-                                <button class="btn btn-danger rounded-pill"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#cancelModal{{ $booking->id }}">
+                        <button class="btn btn-danger rounded-pill w-100"
+                                data-bs-toggle="modal"
+                                data-bs-target="#cancelModal{{ $booking->id }}">
 
-                                    <i class="bi bi-x-circle me-2"></i>
-                                    Cancel Booking
+                            <i class="bi bi-x-circle me-2"></i>
+                            Cancel Booking
 
-                                </button>
+                        </button>
 
                     @endif
-                    <br><br>
 
-                    {{-- Show payment button ONLY when cleaner approved --}}
+                    <!-- Review Button -->
+                    @if($booking->status == 'Completed')
+
+                        @php
+
+                            $reviewed = \App\Models\Review::where(
+                                'booking_id',
+                                $booking->id
+                            )->exists();
+
+                        @endphp
+
+                        @if(!$reviewed)
+
+                            <button class="btn btn-warning rounded-pill w-100 mt-3"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#reviewModal{{ $booking->id }}">
+
+                                <i class="bi bi-star-fill me-2"></i>
+                                Rate Service
+
+                            </button>
+
+                        @else
+
+                            <div class="alert alert-success mt-3 mb-0">
+
+                                <i class="bi bi-check-circle me-2"></i>
+                                Review Submitted
+
+                            </div>
+
+                        @endif
+
+                    @endif
+
+                    <!-- Payment Button -->
                     @if(
                         $booking->status == 'Approved'
                         &&
@@ -371,7 +285,7 @@
                     )
 
                         <a href="/payment/{{ $booking->id }}"
-                           class="btn btn-success rounded-pill w-100">
+                           class="btn btn-success rounded-pill w-100 mt-3">
 
                             <i class="bi bi-credit-card me-2"></i>
                             Pay Now
@@ -386,7 +300,7 @@
 
         </div>
 
-        <!-- ================= RESCHEDULE MODAL ================= -->
+        <!-- RESCHEDULE MODAL -->
         <div class="modal fade"
              id="rescheduleModal{{ $booking->id }}"
              tabindex="-1">
@@ -397,42 +311,15 @@
 
                     <div class="modal-body p-4">
 
-                        <!-- Icon -->
-                        <div class="text-center mb-4">
+                        <h4 class="fw-bold mb-3">
+                            Reschedule Booking
+                        </h4>
 
-                            <div style="
-                                width:80px;
-                                height:80px;
-                                border-radius:50%;
-                                background:rgba(245,158,11,0.12);
-                                display:flex;
-                                align-items:center;
-                                justify-content:center;
-                                margin:auto;
-                            ">
-
-                                <i class="bi bi-calendar-event-fill
-                                          text-warning fs-1"></i>
-
-                            </div>
-
-                            <h4 class="fw-bold mt-3">
-                                Reschedule Booking
-                            </h4>
-
-                            <p class="text-secondary">
-                                Update your booking date and time
-                            </p>
-
-                        </div>
-
-                        <!-- Form -->
                         <form method="POST"
                               action="/customer/bookings/{{ $booking->id }}/reschedule">
 
                             @csrf
 
-                            <!-- Date -->
                             <div class="mb-3">
 
                                 <label class="form-label fw-semibold">
@@ -446,7 +333,6 @@
 
                             </div>
 
-                            <!-- Time -->
                             <div class="mb-4">
 
                                 <label class="form-label fw-semibold">
@@ -457,31 +343,17 @@
                                         class="form-select rounded-3"
                                         required>
 
-                                    <option value="">
-                                        Select Time Slot
-                                    </option>
+                                    <option value="">Select Time Slot</option>
 
-                                    <option value="08:00:00">
-                                        08:00 AM
-                                    </option>
-
-                                    <option value="10:00:00">
-                                        10:00 AM
-                                    </option>
-
-                                    <option value="14:00:00">
-                                        02:00 PM
-                                    </option>
-
-                                    <option value="16:00:00">
-                                        04:00 PM
-                                    </option>
+                                    <option value="08:00:00">08:00 AM</option>
+                                    <option value="10:00:00">10:00 AM</option>
+                                    <option value="14:00:00">02:00 PM</option>
+                                    <option value="16:00:00">04:00 PM</option>
 
                                 </select>
 
                             </div>
 
-                            <!-- Buttons -->
                             <div class="d-flex gap-3">
 
                                 <button type="button"
@@ -510,7 +382,7 @@
 
         </div>
 
-        <!-- ================= CANCEL MODAL ================= -->
+        <!-- CANCEL MODAL -->
         <div class="modal fade"
              id="cancelModal{{ $booking->id }}"
              tabindex="-1">
@@ -521,54 +393,16 @@
 
                     <div class="modal-body p-4 text-center">
 
-                        <!-- Icon -->
-                        <div class="mb-4">
-
-                            <div style="
-                                width:80px;
-                                height:80px;
-                                border-radius:50%;
-                                background:rgba(239,68,68,0.12);
-                                display:flex;
-                                align-items:center;
-                                justify-content:center;
-                                margin:auto;
-                            ">
-
-                                <i class="bi bi-exclamation-triangle-fill
-                                          text-danger fs-1"></i>
-
-                            </div>
-
-                        </div>
-
-                        <!-- Title -->
                         <h4 class="fw-bold mb-3">
                             Cancel Booking?
                         </h4>
 
-                        <!-- Text -->
                         <p class="text-secondary mb-4">
 
-                            @if($booking->payment_status == 'Paid')
-
-                               Are you sure you want to cancel this booking?
-
-                                <br><br>
-
-                                Your payment has already been completed.
-                                Refund request will be sent to admin for processing.
-
-                            @else
-
-                                Are you sure you want to cancel this booking?
-                                This action cannot be undone.
-
-                            @endif
+                            Are you sure you want to cancel this booking?
 
                         </p>
 
-                        <!-- Buttons -->
                         <div class="d-flex gap-3">
 
                             <button type="button"
@@ -594,6 +428,92 @@
                             </form>
 
                         </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- REVIEW MODAL -->
+        <div class="modal fade"
+             id="reviewModal{{ $booking->id }}"
+             tabindex="-1">
+
+            <div class="modal-dialog modal-dialog-centered">
+
+                <div class="modal-content border-0 rounded-4">
+
+                    <div class="modal-body p-4">
+
+                        <h4 class="fw-bold mb-3">
+                            Rate Service
+                        </h4>
+
+                        <form method="POST"
+                              action="/customer/review/{{ $booking->id }}">
+
+                            @csrf
+
+                            <!-- Rating -->
+                            <div class="mb-3">
+
+                                <label class="form-label fw-semibold">
+                                    Rating
+                                </label>
+
+                                <select name="rating"
+                                        class="form-select rounded-3"
+                                        required>
+
+                                    <option value="">Select Rating</option>
+
+                                    <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+                                    <option value="4">⭐⭐⭐⭐ Good</option>
+                                    <option value="3">⭐⭐⭐ Average</option>
+                                    <option value="2">⭐⭐ Poor</option>
+                                    <option value="1">⭐ Bad</option>
+
+                                </select>
+
+                            </div>
+
+                            <!-- Review -->
+                            <div class="mb-4">
+
+                                <label class="form-label fw-semibold">
+                                    Review
+                                </label>
+
+                                <textarea name="review"
+                                          rows="4"
+                                          class="form-control rounded-3"
+                                          placeholder="Share your experience..."></textarea>
+
+                            </div>
+
+                            <!-- Buttons -->
+                            <div class="d-flex gap-3">
+
+                                <button type="button"
+                                        class="btn btn-light rounded-pill w-50"
+                                        data-bs-dismiss="modal">
+
+                                    Cancel
+
+                                </button>
+
+                                <button class="btn btn-warning rounded-pill w-50">
+
+                                    Submit Review
+
+                                </button>
+
+                            </div>
+
+                        </form>
 
                     </div>
 

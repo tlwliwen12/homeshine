@@ -98,6 +98,67 @@
 
                     @endif
 
+                    @php
+
+                    $reviews = \App\Models\Review::where(
+                        'service_id',
+                        $service->id
+                    )->latest()->get();
+
+                    @endphp
+
+                    <div class="card border-0 shadow-sm rounded-4 mt-5">
+
+                        <div class="card-body p-4">
+
+                            <h4 class="fw-bold mb-4">
+
+                                Customer Reviews
+
+                            </h4>
+
+                            @forelse($reviews as $review)
+
+                                <div class="border rounded-4 p-3 mb-3">
+
+                                    <div class="d-flex justify-content-between">
+
+                                        <strong>
+
+                                            {{ $review->user->name }}
+
+                                        </strong>
+
+                                        <span class="text-warning">
+
+                                            {{ str_repeat('⭐', $review->rating) }}
+
+                                        </span>
+
+                                    </div>
+
+                                    <p class="text-secondary mb-0 mt-2">
+
+                                        {{ $review->review }}
+
+                                    </p>
+
+                                </div>
+
+                            @empty
+
+                                <p class="text-secondary mb-0">
+
+                                    No reviews yet.
+
+                                </p>
+
+                            @endforelse
+
+                        </div>
+
+                    </div>
+
                 </div>
 
             </div>

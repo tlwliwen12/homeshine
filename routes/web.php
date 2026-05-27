@@ -24,6 +24,7 @@ use App\Notifications\PaymentCompletedNotification;
 use App\Notifications\CleanerApprovedNotification;
 use App\Notifications\CleanerRejectedNotification;
 use App\Notifications\JobStatusUpdatedNotification;
+use App\Models\Review;
 
 Route::get('/', function () {
 
@@ -863,17 +864,14 @@ Route::middleware('auth')->group(function () {
 
         ]);
 
-        Auth::user()->update([
+        $user = User::find(Auth::id());
 
-            'name' => $request->name,
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+        $user->address = $request->address;
 
-            'email' => $request->email,
-
-            'phone' => $request->phone,
-
-            'address' => $request->address,
-
-        ]);
+        $user->save();
 
         return back()->with(
             'success',
@@ -883,6 +881,63 @@ Route::middleware('auth')->group(function () {
     });
 
 });
+
+Route::post('/customer/review/{id}',
+function (Request $request, $id) {
+
+    $booking = Booking::findOrFail($id);
+
+    // Security check
+    if ($booking->user_id != Auth::id()) {
+        abort(403);
+    }
+
+    // Only completed booking can review
+    if ($booking->status != 'Completed') {
+
+        return back()->with(
+            'error',
+            'You can only review completed services.'
+        );
+    }
+
+    // Prevent duplicate review
+    if (Review::where('booking_id', $booking->id)->exists()) {
+
+        return back()->with(
+            'error',
+            'You already reviewed this service.'
+        );
+    }
+
+    $request->validate([
+
+        'rating' => 'required|integer|min:1|max:5',
+
+        'review' => 'nullable|max:1000',
+
+    ]);
+
+    Review::create([
+
+        'user_id' => Auth::id(),
+
+        'service_id' => $booking->service_id,
+
+        'booking_id' => $booking->id,
+
+        'rating' => $request->rating,
+
+        'review' => $request->review,
+
+    ]);
+
+    return back()->with(
+        'success',
+        'Review submitted successfully!'
+    );
+
+})->middleware('auth');
 
 Route::post('/logout', function () {
 
