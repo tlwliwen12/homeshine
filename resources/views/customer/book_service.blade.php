@@ -111,12 +111,32 @@
                         </div>
 
                         <div class="mb-3">
+
                             <label>Address</label>
-                            <input type="text" name="address" class="form-control" required>
+
+                            <input type="text"
+                                   name="address"
+                                   class="form-control"
+                                   value="{{ old('address', Auth::user()->address) }}"
+                                   required>
+
+                            <small class="text-secondary">
+
+                                Your saved profile address is auto-filled.
+                                You may edit it for this booking.
+
+                            </small>
 
                             @error('address')
-                                <div class="text-danger">{{ $message }}</div>
+
+                                <div class="text-danger">
+
+                                    {{ $message }}
+
+                                </div>
+
                             @enderror
+
                         </div>
 
                         <div class="mb-3">

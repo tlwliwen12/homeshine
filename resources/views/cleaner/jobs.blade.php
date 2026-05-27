@@ -157,6 +157,16 @@
 
                     </p>
 
+                    <!-- Phone -->
+                    <p class="mb-2">
+
+                        <i class="bi bi-telephone me-2 text-primary"></i>
+
+                        <strong>Phone:</strong>
+                        {{ $booking->user->phone ?? 'N/A' }}
+
+                    </p>
+
                     <!-- Date -->
                     <p class="mb-2">
 
