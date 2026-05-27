@@ -765,19 +765,40 @@ Route::post('/cleaner/bookings/{id}/reject', function ($id) {
 
 Route::get('/cleaner/jobs', function (Request $request) {
 
-    $query = Booking::where('payment_status', 'Paid');
+    $query = Booking::query();
 
-    // Filter
+    // Status filter
     if ($request->filter == 'upcoming') {
 
-        $query->whereIn('status', [
-            'Approved',
-            'In Progress'
-        ]);
+        $query->whereIn(
+            'status',
+            ['Approved', 'In Progress']
+        );
 
     } elseif ($request->filter == 'completed') {
 
-        $query->where('status', 'Completed');
+        $query->where(
+            'status',
+            'Completed'
+        );
+
+    }
+
+    // Payment filter
+    if ($request->payment == 'paid') {
+
+        $query->where(
+            'payment_status',
+            'Paid'
+        );
+
+    } elseif ($request->payment == 'unpaid') {
+
+        $query->where(
+            'payment_status',
+            'Unpaid'
+        );
+
     }
 
     $bookings = $query

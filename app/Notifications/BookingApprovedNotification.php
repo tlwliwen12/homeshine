@@ -28,6 +28,7 @@ class BookingApprovedNotification extends Notification
             ->subject('Booking Approved')
             ->greeting('Hello ' . $notifiable->name . ',')
             ->line('A booking has been approved.')
+            ->line('Customer Name: ' . $this->booking->user->name)
             ->line('Service: ' . $this->booking->service->name)
             ->line('Date: ' . $this->booking->booking_date)
             ->line('Time: ' . $this->booking->booking_time)

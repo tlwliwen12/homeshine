@@ -17,28 +17,105 @@
 
     </div>
 
-    <div class="d-flex gap-2 mb-4">
+    <!-- Filter Card -->
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
 
-        <a href="/cleaner/jobs"
-           class="btn {{ request('filter') ? 'btn-outline-primary' : 'btn-primary' }} rounded-pill">
+        <div class="card-body p-4">
 
-            All Jobs
+            <form method="GET"
+                  action="/cleaner/jobs">
 
-        </a>
+                <div class="row g-3 align-items-end">
 
-        <a href="/cleaner/jobs?filter=upcoming"
-           class="btn {{ request('filter') == 'upcoming' ? 'btn-primary' : 'btn-outline-primary' }} rounded-pill">
+                    <!-- Job Status -->
+                    <div class="col-md-4">
 
-            Upcoming Jobs
+                        <label class="form-label fw-semibold">
+                            Job Status
+                        </label>
 
-        </a>
+                        <select name="filter"
+                                class="form-select rounded-3">
 
-        <a href="/cleaner/jobs?filter=completed"
-           class="btn {{ request('filter') == 'completed' ? 'btn-success' : 'btn-outline-success' }} rounded-pill">
+                            <option value="">
+                                All Jobs
+                            </option>
 
-            Completed Jobs
+                            <option value="upcoming"
+                                {{ request('filter') == 'upcoming' ? 'selected' : '' }}>
 
-        </a>
+                                Upcoming Jobs
+
+                            </option>
+
+                            <option value="completed"
+                                {{ request('filter') == 'completed' ? 'selected' : '' }}>
+
+                                Completed Jobs
+
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <!-- Payment Status -->
+                    <div class="col-md-4">
+
+                        <label class="form-label fw-semibold">
+                            Payment Status
+                        </label>
+
+                        <select name="payment"
+                                class="form-select rounded-3">
+
+                            <option value="">
+                                All Payments
+                            </option>
+
+                            <option value="paid"
+                                {{ request('payment') == 'paid' ? 'selected' : '' }}>
+
+                                Paid
+
+                            </option>
+
+                            <option value="unpaid"
+                                {{ request('payment') == 'unpaid' ? 'selected' : '' }}>
+
+                                Unpaid
+
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="col-md-4 d-flex gap-2">
+
+                        <button class="btn btn-primary rounded-pill w-100">
+
+                            <i class="bi bi-funnel-fill me-2"></i>
+
+                            Filter
+
+                        </button>
+
+                        <a href="/cleaner/jobs"
+                           class="btn btn-outline-secondary rounded-pill w-100">
+
+                            Reset
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
 
     </div>
 
