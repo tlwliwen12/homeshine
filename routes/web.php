@@ -840,6 +840,50 @@ Route::post('/admin/refunds/{id}/approve', function ($id) {
 
 })->middleware('auth');
 
+Route::middleware('auth')->group(function () {
+
+    Route::get('/customer/profile', function () {
+
+        return view('customer.profile');
+
+    });
+
+    Route::post('/customer/profile/update',
+    function (Request $request) {
+
+        $request->validate([
+
+            'name' => 'required|max:255',
+
+            'email' => 'required|email|max:255',
+
+            'phone' => 'nullable|max:20',
+
+            'address' => 'nullable|max:500',
+
+        ]);
+
+        Auth::user()->update([
+
+            'name' => $request->name,
+
+            'email' => $request->email,
+
+            'phone' => $request->phone,
+
+            'address' => $request->address,
+
+        ]);
+
+        return back()->with(
+            'success',
+            'Profile updated successfully!'
+        );
+
+    });
+
+});
+
 Route::post('/logout', function () {
 
     Auth::logout();

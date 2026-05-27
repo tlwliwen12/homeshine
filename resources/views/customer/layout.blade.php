@@ -197,6 +197,18 @@ Swal.fire({
                     </span>
                 </li>
 
+                <li class="nav-item">
+
+                    <a class="nav-link"
+                       href="/customer/profile">
+
+                        <i class="bi bi-person-circle me-1"></i>
+                        Profile
+
+                    </a>
+
+                </li>
+
                 <!-- Logout -->
                 <li class="nav-item ms-3">
 
