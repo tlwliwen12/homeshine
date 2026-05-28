@@ -146,6 +146,18 @@ $pendingBookings = Booking::where('status', 'Pending')->count();
 
                 </li>
 
+                <li class="nav-item">
+
+                    <a href="/cleaner/transactions"
+                       class="nav-link">
+
+                        <i class="bi bi-wallet2 me-2"></i>
+                        Transaction History
+
+                    </a>
+
+                </li>
+
                 <!-- User -->
                 <li class="nav-item ms-3">
 

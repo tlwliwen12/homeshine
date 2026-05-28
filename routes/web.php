@@ -971,6 +971,31 @@ Route::middleware('auth')->group(function () {
 
 });
 
+Route::get('/cleaner/transactions', function () {
+
+    $transactions = Booking::where(
+            'cleaner_id',
+            Auth::id()
+        )
+        ->where('payment_status', 'Paid')
+        ->where('status', 'Completed')
+        ->latest()
+        ->get();
+
+    // total earnings
+    $totalEarnings = $transactions->sum(function ($booking) {
+
+        return $booking->service->price;
+
+    });
+
+    return view(
+        'cleaner.transactions',
+        compact('transactions', 'totalEarnings')
+    );
+
+})->middleware('auth');
+
 Route::post('/logout', function () {
 
     Auth::logout();
