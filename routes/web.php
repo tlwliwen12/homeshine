@@ -724,21 +724,18 @@ Route::post('/cleaner/bookings/{id}/approve', function ($id) {
 
     $booking = Booking::findOrFail($id);
 
-    // Update status
-    $booking->update([
-        'status' => 'Approved'
-    ]);
+    $booking->status = 'Approved';
 
-    // Send notification + email to customer
+    // SAVE CLEANER
+    $booking->cleaner_id = Auth::id();
+
+    $booking->save();
+
+    // reload relationship
+    $booking->load('cleaner');
+
+    // customer notification
     $booking->user->notify(
-        new BookingApprovedNotification($booking)
-    );
-
-    // Send notification + email to admin
-    $admins = User::where('role', 'admin')->get();
-
-    Notification::send(
-        $admins,
         new BookingApprovedNotification($booking)
     );
 
@@ -938,6 +935,48 @@ function (Request $request, $id) {
     );
 
 })->middleware('auth');
+
+Route::middleware('auth')->group(function () {
+
+    // Cleaner Profile Page
+    Route::get('/cleaner/profile', function () {
+
+        return view('cleaner.profile');
+
+    });
+
+    // Update Cleaner Profile
+    Route::post('/cleaner/profile/update', function (Request $request) {
+
+        $request->validate([
+
+            'name' => 'required|max:255',
+
+            'email' => 'required|email|max:255',
+
+            'phone' => 'nullable|max:20',
+
+            'gender' => 'nullable',
+
+        ]);
+
+        $user = User::find(Auth::id());
+
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+        $user->gender = $request->gender;
+
+        $user->save();
+
+        return back()->with(
+            'success',
+            'Profile updated successfully!'
+        );
+
+    });
+
+});
 
 Route::post('/logout', function () {
 

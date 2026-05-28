@@ -27,4 +27,9 @@ class Booking extends Model
     {
         return $this->belongsTo(Service::class);
     }
+
+    public function cleaner()
+    {
+        return $this->belongsTo(User::class, 'cleaner_id');
+    }
 }

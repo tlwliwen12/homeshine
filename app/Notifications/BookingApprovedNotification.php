@@ -24,6 +24,12 @@ class BookingApprovedNotification extends Notification
 
     public function toMail($notifiable)
     {
+        $booking = $this->booking;
+
+            $cleanerName = $booking->cleaner ? $booking->cleaner->name : 'Not Assigned';
+            $cleanerPhone = $booking->cleaner ? $booking->cleaner->phone : '-';
+            $cleanerGender = $booking->cleaner ? $booking->cleaner->gender : '-';
+
         return (new MailMessage)
             ->subject('Booking Approved')
             ->greeting('Hello ' . $notifiable->name . ',')
@@ -32,6 +38,9 @@ class BookingApprovedNotification extends Notification
             ->line('Service: ' . $this->booking->service->name)
             ->line('Date: ' . $this->booking->booking_date)
             ->line('Time: ' . $this->booking->booking_time)
+            ->line('Cleaner Assigned: ' . $cleanerName)
+            ->line('Cleaner Gender: ' . $cleanerGender)
+            ->line('Cleaner Phone: ' . $cleanerPhone)
             ->action('View Booking', url('/customer/bookings'))
             ->line('Thank you for using HomeShine!');
     }

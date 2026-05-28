@@ -157,6 +157,19 @@ $pendingBookings = Booking::where('status', 'Pending')->count();
 
                 </li>
 
+                <li class="nav-item">
+
+                    <a href="/cleaner/profile"
+                       class="nav-link">
+
+                        <i class="bi bi-person-circle me-2"></i>
+
+                        My Profile
+
+                    </a>
+
+                </li>
+
                 <!-- Logout -->
                 <li class="nav-item ms-3">
 

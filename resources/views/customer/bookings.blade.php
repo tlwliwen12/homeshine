@@ -153,6 +153,45 @@
 
                         </p>
 
+                        @if($booking->cleaner)
+
+                            <hr>
+
+                            <h6 class="fw-bold mb-3">
+
+                                Assigned Cleaner
+
+                            </h6>
+
+                            <p class="mb-2">
+
+                                <i class="bi bi-person-badge me-2 text-primary"></i>
+
+                                <strong>Name:</strong>
+                                {{ $booking->cleaner->name }}
+
+                            </p>
+
+                            <p class="mb-2">
+
+                                <i class="bi bi-gender-ambiguous me-2 text-primary"></i>
+
+                                <strong>Gender:</strong>
+                                {{ $booking->cleaner->gender ?? '-' }}
+
+                            </p>
+
+                            <p class="mb-2">
+
+                                <i class="bi bi-telephone me-2 text-primary"></i>
+
+                                <strong>Phone:</strong>
+                                {{ $booking->cleaner->phone ?? '-' }}
+
+                            </p>
+
+                        @endif
+
                     </div>
 
                     <!-- Payment -->
