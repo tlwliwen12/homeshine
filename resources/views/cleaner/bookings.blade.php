@@ -123,33 +123,37 @@
                         @if($booking->status == 'Pending')
 
                             <span class="badge bg-warning text-dark px-3 py-2 rounded-pill">
-
                                 Pending
-
                             </span>
 
                         @elseif($booking->status == 'Approved')
 
-                            <span class="badge bg-success px-3 py-2 rounded-pill">
-
+                            <span class="badge bg-primary px-3 py-2 rounded-pill">
                                 Approved
+                            </span>
 
+                        @elseif($booking->status == 'In Progress')
+
+                            <span class="badge bg-info text-dark px-3 py-2 rounded-pill">
+                                In Progress
+                            </span>
+
+                        @elseif($booking->status == 'Completed')
+
+                            <span class="badge bg-success px-3 py-2 rounded-pill">
+                                Completed
                             </span>
 
                         @elseif($booking->status == 'Cancelled')
 
                             <span class="badge bg-secondary px-3 py-2 rounded-pill">
-
                                 Cancelled
-
                             </span>
 
-                        @else
+                        @elseif($booking->status == 'Rejected')
 
                             <span class="badge bg-danger px-3 py-2 rounded-pill">
-
                                 Rejected
-
                             </span>
 
                         @endif

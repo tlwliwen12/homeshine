@@ -251,7 +251,7 @@
 
                         @if($booking->payment_status == 'Paid')
 
-                            @if($booking->status != 'Completed')
+                            @if(in_array($booking->status, ['Approved', 'In Progress']))
 
                                 <form method="POST"
                                     action="/cleaner/jobs/{{ $booking->id }}/status">
@@ -260,11 +260,6 @@
 
                                     <select name="status"
                                             class="form-select mb-2">
-
-                                        <option value="Approved"
-                                            {{ $booking->status == 'Approved' ? 'selected' : '' }}>
-                                            Approved
-                                        </option>
 
                                         <option value="In Progress"
                                             {{ $booking->status == 'In Progress' ? 'selected' : '' }}>

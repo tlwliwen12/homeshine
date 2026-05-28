@@ -181,31 +181,12 @@ Route::post('/cleaner/jobs/{id}/status', function (Request $request, $id) {
 
     $booking = Booking::findOrFail($id);
 
-    $request->validate([
-        'status' => 'required|in:Approved,In Progress,Completed'
-    ]);
+    // only assigned cleaner can update
+    if ($booking->cleaner_id != Auth::id()) {
+        abort(403);
+    }
 
-    $booking->update([
-        'status' => $request->status
-    ]);
-
-    // Notify customer
-    $booking->user->notify(
-        new JobStatusUpdatedNotification($booking)
-    );
-
-    return back()->with(
-        'success',
-        'Job status updated successfully.'
-    );
-
-})->middleware('auth');
-
-Route::post('/cleaner/jobs/{id}/status', function (Request $request, $id) {
-
-    $booking = Booking::findOrFail($id);
-
-    // Prevent status update if unpaid
+    // Prevent update if unpaid
     if ($booking->payment_status != 'Paid') {
 
         return back()->with(
@@ -222,6 +203,7 @@ Route::post('/cleaner/jobs/{id}/status', function (Request $request, $id) {
         'status' => $request->status
     ]);
 
+    // notify customer
     $booking->user->notify(
         new JobStatusUpdatedNotification($booking)
     );
@@ -691,16 +673,17 @@ Route::get('/payment-success/{id}', function ($id) {
     if ($booking->payment_status !== 'Paid') {
 
         $booking->update([
-            'payment_status' => 'Paid',
-            'status' => 'Approved'
+            'payment_status' => 'Paid'
         ]);
 
         $users = User::whereIn('role', ['admin', 'cleaner'])->get();
 
         foreach ($users as $user) {
+
             $user->notify(
                 new PaymentCompletedNotification($booking)
             );
+
         }
     }
 
@@ -763,7 +746,10 @@ Route::post('/cleaner/bookings/{id}/reject', function ($id) {
 
 Route::get('/cleaner/jobs', function (Request $request) {
 
-    $query = Booking::query();
+    $query = Booking::where(
+        'cleaner_id',
+        Auth::id()
+    );
 
     // Status filter
     if ($request->filter == 'upcoming') {
@@ -778,6 +764,13 @@ Route::get('/cleaner/jobs', function (Request $request) {
         $query->where(
             'status',
             'Completed'
+        );
+
+    } else {
+
+        $query->whereNotIn(
+            'status',
+            ['Cancelled', 'Rejected']
         );
 
     }
