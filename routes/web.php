@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Http;
 use App\Models\Booking;
 use App\Models\User;
 use App\Notifications\BookingApprovedNotification;
-use Illuminate\Support\Facades\Notification;
 use App\Notifications\BookingCancelledNotification;
 use App\Notifications\RefundApprovedNotification;
 use App\Notifications\BookingRescheduledNotification;
@@ -25,6 +24,7 @@ use App\Notifications\CleanerApprovedNotification;
 use App\Notifications\CleanerRejectedNotification;
 use App\Notifications\JobStatusUpdatedNotification;
 use App\Models\Review;
+use App\Notifications\PasswordUpdatedNotification;
 
 Route::get('/', function () {
 
@@ -992,6 +992,77 @@ Route::get('/cleaner/transactions', function () {
     return view(
         'cleaner.transactions',
         compact('transactions', 'totalEarnings')
+    );
+
+})->middleware('auth');
+
+Route::post('/update-password', function (Request $request) {
+
+    $request->validate([
+
+        'current_password' => 'required',
+
+        'new_password' => 'required|min:8',
+
+        'new_password_confirmation' => 'required',
+
+    ]);
+
+    $user = User::find(Auth::id());
+
+    // Check current password
+    if (!Hash::check(
+        $request->current_password,
+        $user->password
+    )) {
+
+        return back()->with(
+            'error',
+            'Current password is incorrect.'
+        );
+
+    }
+
+    // Check confirm password
+    if (
+        $request->new_password !=
+        $request->new_password_confirmation
+    ) {
+
+        return back()->with(
+            'error',
+            'New password and confirm password do not match.'
+        );
+
+    }
+
+    // Prevent same password
+    if (Hash::check(
+        $request->new_password,
+        $user->password
+    )) {
+
+        return back()->with(
+            'error',
+            'New password cannot be the same as current password.'
+        );
+
+    }
+
+    // Update password
+    $user->password = Hash::make(
+        $request->new_password
+    );
+
+    $user->save();
+
+    $user->notify(
+        new PasswordUpdatedNotification()
+    );
+
+    return back()->with(
+        'success',
+        'Password updated successfully!'
     );
 
 })->middleware('auth');

@@ -30,6 +30,18 @@
 
     @endif
 
+    @if(session('error'))
+
+        <div class="alert alert-danger rounded-4 border-0 shadow-sm">
+
+            <i class="bi bi-exclamation-circle-fill me-2"></i>
+
+            {{ session('error') }}
+
+        </div>
+
+    @endif
+
     <!-- Profile Card -->
     <div class="card border-0 shadow-sm rounded-4">
 
@@ -115,6 +127,85 @@
                 </button>
 
             </form>
+
+            <hr class="my-5">
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-body p-4">
+
+                    <h4 class="fw-bold mb-4">
+
+                        Change Password
+
+                    </h4>
+
+                    <form method="POST"
+                          action="/update-password">
+
+                        @csrf
+
+                       <!-- Current Password -->
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+
+                                Current Password
+
+                            </label>
+
+                            <input type="password"
+                                   name="current_password"
+                                   class="form-control rounded-3"
+                                   required>
+
+                        </div>
+
+                        <!-- New Password -->
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+
+                                New Password
+
+                            </label>
+
+                            <input type="password"
+                                   name="new_password"
+                                   class="form-control rounded-3"
+                                   required>
+
+                        </div>
+
+                        <!-- Confirm Password -->
+                        <div class="mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                Confirm New Password
+
+                            </label>
+
+                            <input type="password"
+                                   name="new_password_confirmation"
+                                   class="form-control rounded-3"
+                                   required>
+
+                        </div>
+
+                        <button class="btn btn-primary rounded-pill px-4">
+
+                            <i class="bi bi-shield-lock me-2"></i>
+
+                            Update Password
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
 
         </div>
 

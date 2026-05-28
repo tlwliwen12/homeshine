@@ -24,6 +24,13 @@ class JobStatusUpdatedNotification extends Notification
 
     public function toMail($notifiable)
     {
+
+    $booking = $this->booking;
+
+            $cleanerName = $booking->cleaner ? $booking->cleaner->name : 'Not Assigned';
+            $cleanerPhone = $booking->cleaner ? $booking->cleaner->phone : '-';
+            $cleanerGender = $booking->cleaner ? $booking->cleaner->gender : '-';
+
         return (new MailMessage)
             ->subject('Cleaning Job Status Updated')
             ->greeting('Hello ' . $notifiable->name . '!')
@@ -36,6 +43,11 @@ class JobStatusUpdatedNotification extends Notification
                 'Current Status: '
                 . $this->booking->status
             )
+            ->line('Date: ' . $this->booking->booking_date)
+            ->line('Time: ' . $this->booking->booking_time)
+            ->line('Cleaner Assigned: ' . $cleanerName)
+            ->line('Cleaner Gender: ' . $cleanerGender)
+            ->line('Cleaner Phone: ' . $cleanerPhone)
             ->action(
                 'View My Bookings',
                 url('/customer/bookings')
