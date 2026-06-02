@@ -175,6 +175,15 @@
 
                 </li>
 
+                <a href="/admin/bookings"
+                   class="nav-link">
+
+                    <i class="bi bi-calendar-check me-2"></i>
+
+                    Manage Bookings
+
+                </a>
+
                 <!-- Logout -->
                 <li class="nav-item ms-3">
 

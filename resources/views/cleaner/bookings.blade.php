@@ -150,6 +150,12 @@
                                 Cancelled
                             </span>
 
+                        @elseif($booking->status == 'Refunded')
+
+                            <span class="badge bg-info px-3 py-2 rounded-pill">
+                                Refunded
+                            </span>
+
                         @elseif($booking->status == 'Rejected')
 
                             <span class="badge bg-danger px-3 py-2 rounded-pill">

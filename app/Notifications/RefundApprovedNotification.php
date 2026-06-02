@@ -38,19 +38,15 @@ class RefundApprovedNotification extends Notification
             ->line('Thank you for using HomeShine!');
     }
 
-    public function toArray($notifiable): array
-    {
-        return [
+    public function toArray($notifiable)
+{
+    return [
 
-            'message' =>
-                'Refund requested for booking #'.$this->booking->id,
+        'message' =>
+            'Your refund for booking #'
+            . $this->booking->id .
+            ' has been approved.'
 
-            'service' =>
-                $this->booking->service->name,
-
-            'customer' =>
-                $this->booking->user->name,
-
-        ];
-    }
+    ];
+}
 }

@@ -25,6 +25,7 @@ use App\Notifications\CleanerRejectedNotification;
 use App\Notifications\JobStatusUpdatedNotification;
 use App\Models\Review;
 use App\Notifications\PasswordUpdatedNotification;
+use Illuminate\Support\Facades\Notification;
 
 Route::get('/', function () {
 
@@ -337,7 +338,7 @@ function ($id) {
     // Cancel booking
     $booking->status = 'Cancelled';
 
-    // If already paid -> refund pending
+    // Refund logic
     if ($booking->payment_status == 'Paid') {
 
         $booking->refund_status = 'Pending';
@@ -346,37 +347,82 @@ function ($id) {
 
     $booking->save();
 
-    // Notify admin + cleaner
-    $users = User::whereIn(
+    // Notify admin
+    $admins = User::where(
         'role',
-        ['admin', 'cleaner']
+        'admin'
     )->get();
 
-    foreach ($users as $user) {
-
-        $user->notify(
-            new BookingCancelledNotification($booking)
-        );
-
-    }
-
-    // Success message
-    if ($booking->payment_status == 'Paid') {
-
-        return back()->with(
-            'success',
-            'Booking cancelled successfully. Refund request submitted.'
-        );
-
-    }
+    Notification::send(
+        $admins,
+        new BookingCancelledNotification($booking)
+    );
 
     return back()->with(
         'success',
-        'Booking cancelled successfully.'
+        $booking->payment_status == 'Paid'
+            ? 'Booking cancelled successfully. Refund request submitted.'
+            : 'Booking cancelled successfully.'
     );
 
 })->middleware('auth');
 
+Route::get('/admin/refunds', function () {
+
+    $bookings = Booking::where(
+        'refund_status',
+        'Pending'
+    )->latest()->get();
+
+    return view(
+        'admin.refunds',
+        compact('bookings')
+    );
+
+})->middleware('auth');
+
+Route::post('/admin/refunds/{id}/approve', function ($id) {
+
+    $booking = Booking::findOrFail($id);
+
+    // update refund + booking status
+    $booking->update([
+
+        'refund_status' => 'Refunded',
+        'status' => 'Refunded'
+
+    ]);
+
+    // notify customer
+    $booking->user->notify(
+
+        new RefundApprovedNotification($booking)
+
+    );
+
+    return back()->with(
+
+        'success',
+        'Refund approved successfully.'
+
+    );
+
+})->middleware('auth');
+
+Route::get('/admin/bookings', function () {
+
+    if (Auth::user()->role != 'admin') {
+        abort(403);
+    }
+
+    $bookings = Booking::latest()->get();
+
+    return view(
+        'admin.bookings',
+        compact('bookings')
+    );
+
+})->middleware('auth');
 
 Route::post('/customer/bookings/{id}/reschedule',
 function (Request $request, $id) {
