@@ -102,18 +102,118 @@
 
                 </div>
 
-                <!-- Address -->
+                <!-- Address Line 1 -->
                 <div class="mb-4">
 
                     <label class="form-label fw-semibold">
 
-                        Address
+                        Address Line 1
 
                     </label>
 
-                    <textarea name="address"
-                              rows="4"
-                              class="form-control rounded-3">{{ Auth::user()->address }}</textarea>
+                    <input type="text"
+                           name="address_line_1"
+                           class="form-control rounded-3"
+                           value="{{ Auth::user()->address_line_1 }}">
+
+                </div>
+
+                <!-- Address Line 2 -->
+                <div class="mb-4">
+
+                    <label class="form-label fw-semibold">
+
+                        Address Line 2
+
+                    </label>
+
+                    <input type="text"
+                           name="address_line_2"
+                           class="form-control rounded-3"
+                           value="{{ Auth::user()->address_line_2 }}">
+
+                </div>
+
+                <div class="row">
+
+                    <!-- City -->
+                    <div class="col-md-4 mb-4">
+
+                        <label class="form-label fw-semibold">
+
+                            City
+
+                        </label>
+
+                        <input type="text"
+                               name="city"
+                               class="form-control rounded-3"
+                               value="{{ Auth::user()->city }}">
+
+                    </div>
+
+                    <!-- State -->
+                    <div class="col-md-4 mb-4">
+
+                        <label class="form-label fw-semibold">
+
+                            State
+
+                        </label>
+
+                        <select name="state"
+                                class="form-select rounded-3">
+
+                            <option value="">
+                                Select State
+                            </option>
+
+                            @foreach([
+                                'Johor',
+                                'Kedah',
+                                'Kelantan',
+                                'Melaka',
+                                'Negeri Sembilan',
+                                'Pahang',
+                                'Perak',
+                                'Perlis',
+                                'Pulau Pinang',
+                                'Sabah',
+                                'Sarawak',
+                                'Selangor',
+                                'Terengganu',
+                                'Kuala Lumpur',
+                                'Putrajaya'
+                            ] as $state)
+
+                                <option value="{{ $state }}"
+                                    {{ Auth::user()->state == $state ? 'selected' : '' }}>
+
+                                    {{ $state }}
+
+                                </option>
+
+                            @endforeach
+
+                        </select>
+
+                    </div>
+
+                    <!-- Postcode -->
+                    <div class="col-md-4 mb-4">
+
+                        <label class="form-label fw-semibold">
+
+                            Postcode
+
+                        </label>
+
+                        <input type="text"
+                               name="postcode"
+                               class="form-control rounded-3"
+                               value="{{ Auth::user()->postcode }}">
+
+                    </div>
 
                 </div>
 

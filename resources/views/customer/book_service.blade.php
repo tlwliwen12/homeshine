@@ -51,17 +51,26 @@
 
                     @endif
 
-                    @if($errors->any())
+                    @php
 
-                        <div class="alert alert-danger rounded-4 border-0 shadow-sm mb-4">
+                    $fullAddress =
+                        auth()->user()->address_line_1 .
 
-                            <i class="bi bi-exclamation-circle-fill me-2"></i>
+                        (auth()->user()->address_line_2
+                            ? "\n" . auth()->user()->address_line_2
+                            : '')
 
-                            {{ $errors->first() }}
+                        . "\n"
 
-                        </div>
+                        . auth()->user()->postcode . ' '
 
-                    @endif
+                        . auth()->user()->city
+
+                        . "\n"
+
+                        . auth()->user()->state;
+
+                    @endphp
 
                     <form method="POST" action="/book-service/{{ $service->id }}">
                         @csrf
@@ -112,18 +121,17 @@
 
                         <div class="mb-3">
 
-                            <label>Address</label>
+                            <label>Service Address</label>
 
-                            <input type="text"
-                                   name="address"
-                                   class="form-control"
-                                   value="{{ old('address', Auth::user()->address) }}"
-                                   required>
+                            <textarea name="address"
+                                      rows="5"
+                                      class="form-control"
+                                      required>{{ old('address', $fullAddress) }}</textarea>
 
                             <small class="text-secondary">
 
-                                Your saved profile address is auto-filled.
-                                You may edit it for this booking.
+                                Your profile address has been auto-filled.
+                                You may modify it for this booking.
 
                             </small>
 

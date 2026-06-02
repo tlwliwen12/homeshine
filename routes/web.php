@@ -913,7 +913,11 @@ Route::middleware('auth')->group(function () {
 
             'phone' => 'nullable|max:20',
 
-            'address' => 'nullable|max:500',
+            'address_line_1' => 'nullable|max:255',
+            'address_line_2' => 'nullable|max:255',
+            'city' => 'nullable|max:100',
+            'state' => 'nullable|max:100',
+            'postcode' => 'nullable|max:10',
 
         ]);
 
@@ -922,7 +926,11 @@ Route::middleware('auth')->group(function () {
         $user->name = $request->name;
         $user->email = $request->email;
         $user->phone = $request->phone;
-        $user->address = $request->address;
+        $user->address_line_1 = $request->address_line_1;
+        $user->address_line_2 = $request->address_line_2;
+        $user->city = $request->city;
+        $user->state = $request->state;
+        $user->postcode = $request->postcode;
 
         $user->save();
 

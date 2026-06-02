@@ -36,7 +36,7 @@ class BookingController extends Controller
             'required',
             'min:10',
             'max:255',
-            'regex:/^[A-Za-z0-9\s,\-\/#]+$/'
+            'string'
         ],
 
         'notes' => [
