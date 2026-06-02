@@ -15,6 +15,8 @@ class Booking extends Model
         'notes',
         'status',
         'payment_status',
+        'refund_status',
+        'payout_status',
         'bill_code'
     ];
 

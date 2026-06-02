@@ -51,8 +51,9 @@
                             <th>Customer</th>
                             <th>Service</th>
                             <th>Date</th>
-                            <th>Payment</th>
-                            <th>Earnings</th>
+                            <th>Customer Payment</th>
+                            <th>Payout Status</th>
+                            <th>Amount</th>
 
                         </tr>
 
@@ -97,6 +98,28 @@
                                     Paid
 
                                 </span>
+
+                            </td>
+
+                            <td>
+
+                                @if($booking->payout_status == 'Paid')
+
+                                    <span class="badge bg-success">
+
+                                        Paid to Cleaner
+
+                                    </span>
+
+                                @else
+
+                                    <span class="badge bg-warning text-dark">
+
+                                        Pending
+
+                                    </span>
+
+                                @endif
 
                             </td>
 

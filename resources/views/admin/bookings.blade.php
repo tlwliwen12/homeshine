@@ -112,6 +112,57 @@
 
                     </p>
 
+                    <!-- Payout -->
+                    <p class="mb-3">
+
+                        <strong>Payout:</strong>
+
+                        @if($booking->payout_status == 'Paid')
+
+                            <span class="badge bg-success">
+
+                                Paid to Cleaner
+
+                            </span>
+
+                        @else
+
+                            <span class="badge bg-warning text-dark">
+
+                                Pending
+
+                            </span>
+
+                        @endif
+
+                    </p>
+
+                    @if(
+                            $booking->status == 'Completed'
+                            &&
+                            $booking->payment_status == 'Paid'
+                            &&
+                            $booking->payout_status == 'Pending'
+                        )
+
+                            <form method="POST"
+                                  action="/admin/payouts/{{ $booking->id }}/pay"
+                                  class="mb-3">
+
+                                @csrf
+
+                                <button class="btn btn-primary rounded-pill w-100">
+
+                                    <i class="bi bi-cash-stack me-2"></i>
+
+                                    Pay Cleaner
+
+                                </button>
+
+                            </form>
+
+                        @endif
+
                     <!-- Refund -->
                     <p class="mb-3">
 

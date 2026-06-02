@@ -21,10 +21,10 @@ use App\Notifications\RefundApprovedNotification;
 use App\Notifications\BookingRescheduledNotification;
 use App\Notifications\PaymentCompletedNotification;
 use App\Notifications\CleanerApprovedNotification;
-use App\Notifications\CleanerRejectedNotification;
 use App\Notifications\JobStatusUpdatedNotification;
 use App\Models\Review;
 use App\Notifications\PasswordUpdatedNotification;
+use App\Notifications\CleanerPayoutNotification;
 use Illuminate\Support\Facades\Notification;
 
 Route::get('/', function () {
@@ -150,10 +150,6 @@ Route::post('/admin/cleaners/{id}/reject', function ($id) {
     $cleaner->update([
         'approval_status' => 'rejected'
     ]);
-
-    $cleaner->notify(
-        new CleanerRejectedNotification()
-    );
 
     return back()->with(
         'success',
@@ -377,34 +373,6 @@ Route::get('/admin/refunds', function () {
     return view(
         'admin.refunds',
         compact('bookings')
-    );
-
-})->middleware('auth');
-
-Route::post('/admin/refunds/{id}/approve', function ($id) {
-
-    $booking = Booking::findOrFail($id);
-
-    // update refund + booking status
-    $booking->update([
-
-        'refund_status' => 'Refunded',
-        'status' => 'Refunded'
-
-    ]);
-
-    // notify customer
-    $booking->user->notify(
-
-        new RefundApprovedNotification($booking)
-
-    );
-
-    return back()->with(
-
-        'success',
-        'Refund approved successfully.'
-
     );
 
 })->middleware('auth');
@@ -743,9 +711,17 @@ Route::get('/payment-success/{id}', function ($id) {
 
 Route::get('/cleaner/bookings', function () {
 
-    $bookings = Booking::latest()->get();
+    $bookings = Booking::where(
+        'status',
+        'Pending'
+    )
+    ->latest()
+    ->get();
 
-    return view('cleaner.bookings', compact('bookings'));
+    return view(
+        'cleaner.bookings',
+        compact('bookings')
+    );
 
 })->middleware('auth');
 
@@ -753,17 +729,24 @@ Route::post('/cleaner/bookings/{id}/approve', function ($id) {
 
     $booking = Booking::findOrFail($id);
 
+    // already taken by another cleaner
+    if ($booking->status != 'Pending') {
+
+        return back()->with(
+            'error',
+            'This booking has already been accepted by another cleaner.'
+        );
+
+    }
+
     $booking->status = 'Approved';
 
-    // SAVE CLEANER
     $booking->cleaner_id = Auth::id();
 
     $booking->save();
 
-    // reload relationship
     $booking->load('cleaner');
 
-    // customer notification
     $booking->user->notify(
         new BookingApprovedNotification($booking)
     );
@@ -850,18 +833,52 @@ Route::get('/cleaner/jobs', function (Request $request) {
 
 })->middleware('auth');
 
+Route::post('/admin/payouts/{id}/pay', function ($id) {
+
+    $booking = Booking::findOrFail($id);
+
+    if ($booking->status != 'Completed') {
+
+        return back()->with(
+            'error',
+            'Job must be completed before payout.'
+        );
+
+    }
+
+    $booking->update([
+
+        'payout_status' => 'Paid'
+
+    ]);
+
+    // notify cleaner
+    $booking->cleaner->notify(
+
+        new CleanerPayoutNotification($booking)
+
+    );
+
+    return back()->with(
+
+        'success',
+        'Cleaner payout completed.'
+
+    );
+
+})->middleware('auth');
+
 Route::post('/admin/refunds/{id}/approve', function ($id) {
 
     $booking = Booking::findOrFail($id);
 
-    // Update refund status
     $booking->update([
 
-        'refund_status' => 'Refunded'
+        'refund_status' => 'Refunded',
+        'status' => 'Refunded'
 
     ]);
 
-    // Send notification + email to customer
     $booking->user->notify(
 
         new RefundApprovedNotification($booking)
@@ -1023,21 +1040,42 @@ Route::get('/cleaner/transactions', function () {
             'cleaner_id',
             Auth::id()
         )
-        ->where('payment_status', 'Paid')
-        ->where('status', 'Completed')
+        ->where(
+            'status',
+            'Completed'
+        )
+        ->where(
+            'payment_status',
+            'Paid'
+        )
         ->latest()
         ->get();
 
-    // total earnings
-    $totalEarnings = $transactions->sum(function ($booking) {
+    $totalEarnings = Booking::where(
+            'cleaner_id',
+            Auth::id()
+        )
+        ->where(
+            'status',
+            'Completed'
+        )
+        ->where(
+            'payout_status',
+            'Paid'
+        )
+        ->get()
+        ->sum(function ($booking) {
 
-        return $booking->service->price;
+            return $booking->service->price;
 
-    });
+        });
 
     return view(
         'cleaner.transactions',
-        compact('transactions', 'totalEarnings')
+        compact(
+            'transactions',
+            'totalEarnings'
+        )
     );
 
 })->middleware('auth');
