@@ -137,6 +137,22 @@
 
                     </p>
 
+                    @if($booking->payout_reference)
+
+                    <p class="mb-2">
+
+                        <strong>Payout Ref:</strong>
+
+                        <span class="text-success">
+
+                            {{ $booking->payout_reference }}
+
+                        </span>
+
+                    </p>
+
+                    @endif
+
                     @if(
                             $booking->status == 'Completed'
                             &&
@@ -189,6 +205,22 @@
                         @endif
 
                     </p>
+
+                    @if($booking->refund_reference)
+
+                    <p class="mb-2">
+
+                        <strong>Refund Ref:</strong>
+
+                        <span class="text-primary">
+
+                            {{ $booking->refund_reference }}
+
+                        </span>
+
+                    </p>
+
+                    @endif
 
                     <!-- Refund Button -->
                     @if($booking->refund_status == 'Pending')

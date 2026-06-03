@@ -184,6 +184,19 @@
 
                 </a>
 
+                <li class="nav-item">
+
+                    <a href="/admin/transactions"
+                       class="nav-link">
+
+                       <i class="bi bi-cash-stack me-2"></i>
+
+                       Transactions
+
+                    </a>
+
+                </li>
+
                 <!-- Logout -->
                 <li class="nav-item ms-3">
 

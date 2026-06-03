@@ -26,6 +26,7 @@ use App\Models\Review;
 use App\Notifications\PasswordUpdatedNotification;
 use App\Notifications\CleanerPayoutNotification;
 use Illuminate\Support\Facades\Notification;
+use App\Models\FinanceTransaction;
 
 Route::get('/', function () {
 
@@ -690,6 +691,18 @@ Route::get('/payment-success/{id}', function ($id) {
             'payment_status' => 'Paid'
         ]);
 
+        FinanceTransaction::create([
+
+            'booking_id' => $booking->id,
+
+            'type' => 'Customer Payment',
+
+            'amount' => $booking->service->price,
+
+            'status' => 'Completed'
+
+        ]);
+
         $users = User::whereIn('role', ['admin', 'cleaner'])->get();
 
         foreach ($users as $user) {
@@ -848,7 +861,24 @@ Route::post('/admin/payouts/{id}/pay', function ($id) {
 
     $booking->update([
 
-        'payout_status' => 'Paid'
+        'payout_status' => 'Paid',
+
+        'payout_reference' =>
+            'PAYOUT-' . strtoupper(Str::random(8)),
+
+        'payout_date' => now()
+
+    ]);
+
+    FinanceTransaction::create([
+
+        'booking_id' => $booking->id,
+
+        'type' => 'Cleaner Payout',
+
+        'amount' => $booking->service->price,
+
+        'status' => 'Completed'
 
     ]);
 
@@ -875,7 +905,25 @@ Route::post('/admin/refunds/{id}/approve', function ($id) {
     $booking->update([
 
         'refund_status' => 'Refunded',
-        'status' => 'Refunded'
+
+        'status' => 'Refunded',
+
+        'refund_reference' =>
+            'REF-' . strtoupper(Str::random(8)),
+
+        'refund_date' => now()
+
+    ]);
+
+    FinanceTransaction::create([
+
+        'booking_id' => $booking->id,
+
+        'type' => 'Refund',
+
+        'amount' => $booking->service->price,
+
+        'status' => 'Completed'
 
     ]);
 
@@ -1083,6 +1131,37 @@ Route::get('/cleaner/transactions', function () {
         compact(
             'transactions',
             'totalEarnings'
+        )
+    );
+
+})->middleware('auth');
+
+Route::get('/admin/transactions', function () {
+
+    $transactions = FinanceTransaction::latest()->get();
+
+    $totalIncome = FinanceTransaction::where(
+        'type',
+        'Customer Payment'
+    )->sum('amount');
+
+    $totalRefund = FinanceTransaction::where(
+        'type',
+        'Refund'
+    )->sum('amount');
+
+    $totalPayout = FinanceTransaction::where(
+        'type',
+        'Cleaner Payout'
+    )->sum('amount');
+
+    return view(
+        'admin.transactions',
+        compact(
+            'transactions',
+            'totalIncome',
+            'totalRefund',
+            'totalPayout'
         )
     );
 

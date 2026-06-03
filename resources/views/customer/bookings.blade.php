@@ -236,6 +236,30 @@
 
                         @endif
 
+                        @if($booking->refund_reference)
+
+                        <div>
+
+                            <strong>Refund Ref:</strong>
+
+                            {{ $booking->refund_reference }}
+
+                        </div>
+
+                        @endif
+
+                        @if($booking->refund_date)
+
+                        <div>
+
+                            <strong>Refund Date:</strong>
+
+                            {{ $booking->refund_date }}
+
+                        </div>
+
+                        @endif
+
                     </p>
 
                     @endif

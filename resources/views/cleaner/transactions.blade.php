@@ -53,6 +53,7 @@
                             <th>Date</th>
                             <th>Customer Payment</th>
                             <th>Payout Status</th>
+                            <th>Reference</th>
                             <th>Amount</th>
 
                         </tr>
@@ -120,6 +121,12 @@
                                     </span>
 
                                 @endif
+
+                            </td>
+
+                            <td>
+
+                            {{ $booking->payout_reference ?? '-' }}
 
                             </td>
 
