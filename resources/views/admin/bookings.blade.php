@@ -60,6 +60,42 @@
 
                     </p>
 
+                    @if($booking->cleaner)
+
+                    <p class="mb-2">
+
+                        <strong>Cleaner:</strong>
+
+                        {{ $booking->cleaner->name }}
+
+                    </p>
+
+                    <p class="mb-2">
+
+                        <strong>Bank:</strong>
+
+                        {{ $booking->cleaner->bank_name ?? 'Not Provided' }}
+
+                    </p>
+
+                    <p class="mb-2">
+
+                        <strong>Account Holder:</strong>
+
+                        {{ $booking->cleaner->bank_account_name ?? 'Not Provided' }}
+
+                    </p>
+
+                    <p class="mb-2">
+
+                        <strong>Account No:</strong>
+
+                        {{ $booking->cleaner->bank_account_number ?? 'Not Provided' }}
+
+                    </p>
+
+                    @endif
+
                     <!-- Date -->
                     <p class="mb-2">
 
@@ -161,8 +197,8 @@
                             $booking->payout_status == 'Pending'
                         )
 
-                            <form method="POST"
-                                  action="/admin/payouts/{{ $booking->id }}/pay"
+                            <form method="GET"
+                                  action="/admin/payouts/{{ $booking->id }}/gateway"
                                   class="mb-3">
 
                                 @csrf
@@ -225,8 +261,8 @@
                     <!-- Refund Button -->
                     @if($booking->refund_status == 'Pending')
 
-                        <form method="POST"
-                              action="/admin/refunds/{{ $booking->id }}/approve">
+                        <form method="GET"
+                              action="/admin/refunds/{{ $booking->id }}/pay">
 
                             @csrf
 

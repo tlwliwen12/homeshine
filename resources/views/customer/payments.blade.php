@@ -95,4 +95,120 @@
 
 </div>
 
+<hr class="my-5">
+
+<h3 class="fw-bold mb-3">
+
+    Transaction History
+
+</h3>
+
+<div class="card shadow-sm border-0 rounded-4">
+
+    <div class="card-body">
+
+        <table class="table align-middle">
+
+            <thead>
+
+                <tr>
+
+                    <th>Date</th>
+
+                    <th>Booking</th>
+
+                    <th>Type</th>
+
+                    <th>Amount</th>
+
+                    <th>Status</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @forelse($transactions as $transaction)
+
+                <tr>
+
+                    <td>
+
+                        {{ $transaction->created_at->format('d M Y') }}
+
+                    </td>
+
+                    <td>
+
+                        #{{ $transaction->booking_id }}
+
+                    </td>
+
+                    <td>
+
+                        {{ $transaction->type }}
+
+                    </td>
+
+                    <td>
+
+                        RM {{ number_format($transaction->amount, 2) }}
+
+                    </td>
+
+                    <td>
+
+                        @if($transaction->type == 'Refund')
+
+                            <span class="badge bg-info">
+
+                                Refunded
+
+                            </span>
+
+                        @elseif($transaction->type == 'Customer Payment')
+
+                            <span class="badge bg-success">
+
+                                Paid
+
+                            </span>
+
+                        @else
+
+                            <span class="badge bg-secondary">
+
+                                {{ $transaction->status }}
+
+                            </span>
+
+                        @endif
+
+                    </td>
+
+                </tr>
+
+                @empty
+
+                <tr>
+
+                    <td colspan="5" class="text-center text-muted">
+
+                        No transaction records found.
+
+                    </td>
+
+                </tr>
+
+                @endforelse
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
 @endsection

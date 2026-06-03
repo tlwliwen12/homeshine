@@ -207,6 +207,33 @@ $pendingBookings = Booking::where('status', 'Pending')->count();
 
 </nav>
 
+@php
+
+$user = auth()->user();
+
+$profileComplete =
+    $user->name &&
+    $user->email &&
+    $user->phone;
+
+@endphp
+
+@if(!$profileComplete)
+
+<div class="alert alert-warning m-3">
+
+    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+
+    Your profile is incomplete.
+
+    <a href="/customer/profile">
+        Complete Profile
+    </a>
+
+</div>
+
+@endif
+
 <!-- Content -->
 <div class="container py-4">
 

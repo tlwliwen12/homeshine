@@ -22,5 +22,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'city',
         'state',
         'postcode',
+        'bank_name',
+        'bank_account_name',
+        'bank_account_number',
     ];
 }

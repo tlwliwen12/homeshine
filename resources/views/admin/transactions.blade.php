@@ -74,6 +74,28 @@
 
     </div>
 
+    <div class="col-md-4">
+
+        <div class="card shadow-sm">
+
+            <div class="card-body">
+
+                <h6>Net Profit</h6>
+
+                <h3 class="text-success">
+
+                    RM {{ number_format($netProfit,2) }}
+
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <br><br>
+
     <div class="card shadow-sm">
 
         <div class="card-body">

@@ -2,6 +2,41 @@
 
 @section('content')
 
+@php
+
+$profileComplete =
+    auth()->user()->name &&
+    auth()->user()->email &&
+    auth()->user()->phone &&
+    auth()->user()->gender &&
+    auth()->user()->bank_name &&
+    auth()->user()->bank_account_name &&
+    auth()->user()->bank_account_number;
+
+@endphp
+
+@if($profileComplete)
+
+    <div class="alert alert-success rounded-4">
+
+        <i class="bi bi-check-circle-fill me-2"></i>
+
+        Your profile is complete and ready for payouts.
+
+    </div>
+
+@else
+
+    <div class="alert alert-warning rounded-4">
+
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+
+        Please complete your profile and bank details before receiving payouts.
+
+    </div>
+
+@endif
+
 <div class="container py-4">
 
     <!-- Header -->
@@ -99,6 +134,39 @@
                            value="{{ auth()->user()->phone }}">
 
                 </div>
+
+                <div class="mb-3">
+
+                   <label>Bank Name</label>
+
+                   <input type="text"
+                          name="bank_name"
+                          class="form-control"
+                          value="{{ auth()->user()->bank_name }}">
+
+               </div>
+
+               <div class="mb-3">
+
+                   <label>Account Holder Name</label>
+
+                   <input type="text"
+                          name="bank_account_name"
+                          class="form-control"
+                          value="{{ auth()->user()->bank_account_name }}">
+
+               </div>
+
+               <div class="mb-3">
+
+                   <label>Bank Account Number</label>
+
+                   <input type="text"
+                          name="bank_account_number"
+                          class="form-control"
+                          value="{{ auth()->user()->bank_account_number }}">
+
+               </div>
 
                 <!-- Gender -->
                 <div class="mb-4">

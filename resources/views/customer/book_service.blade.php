@@ -53,22 +53,22 @@
 
                     @php
 
-                    $fullAddress =
-                        auth()->user()->address_line_1 .
+                    $addressParts = array_filter([
 
-                        (auth()->user()->address_line_2
-                            ? "\n" . auth()->user()->address_line_2
-                            : '')
+                        auth()->user()->address_line_1,
 
-                        . "\n"
+                        auth()->user()->address_line_2,
 
-                        . auth()->user()->postcode . ' '
+                        trim(
+                            auth()->user()->postcode . ' ' .
+                            auth()->user()->city
+                        ),
 
-                        . auth()->user()->city
+                        auth()->user()->state
 
-                        . "\n"
+                    ]);
 
-                        . auth()->user()->state;
+                    $fullAddress = implode("\n", $addressParts);
 
                     @endphp
 

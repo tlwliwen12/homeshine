@@ -355,6 +355,15 @@ function ($id) {
         new BookingCancelledNotification($booking)
     );
 
+    // Notify assigned cleaner
+    if ($booking->cleaner) {
+
+        $booking->cleaner->notify(
+            new BookingCancelledNotification($booking)
+        );
+
+    }
+
     return back()->with(
         'success',
         $booking->payment_status == 'Paid'
@@ -572,25 +581,37 @@ function ($id) {
 })->middleware('auth');
 
 
-Route::get('/customer/payments',
-function () {
+Route::get('/customer/payments', function () {
 
     $payments = Booking::where(
             'user_id',
             Auth::id()
         )
-
         ->whereNotNull('bill_code')
         ->latest()
         ->get();
 
+    $transactions = FinanceTransaction::whereHas(
+        'booking',
+        function ($query) {
+
+            $query->where(
+                'user_id',
+                Auth::id()
+            );
+
+        }
+    )->latest()->get();
+
     return view(
         'customer.payments',
-        compact('payments')
+        compact(
+            'payments',
+            'transactions'
+        )
     );
 
 })->middleware('auth');
-
 
 Route::get('/payment/{id}',
 function ($id) {
@@ -848,6 +869,10 @@ Route::get('/cleaner/jobs', function (Request $request) {
 
 Route::post('/admin/payouts/{id}/pay', function ($id) {
 
+if (Auth::user()->role != 'admin') {
+    abort(403);
+}
+
     $booking = Booking::findOrFail($id);
 
     if ($booking->status != 'Completed') {
@@ -859,12 +884,30 @@ Route::post('/admin/payouts/{id}/pay', function ($id) {
 
     }
 
+    if ($booking->payout_status == 'Paid') {
+
+        return back()->with(
+            'error',
+            'Cleaner has already been paid.'
+        );
+
+    }
+
+    if (!$booking->cleaner->bank_account_number) {
+
+        return back()->with(
+            'error',
+            'Cleaner has not provided bank account details.'
+        );
+
+    }
+
     $booking->update([
 
         'payout_status' => 'Paid',
 
         'payout_reference' =>
-            'PAYOUT-' . strtoupper(Str::random(8)),
+            'SBX-PAYOUT-' . strtoupper(Str::random(8)),
 
         'payout_date' => now()
 
@@ -898,9 +941,121 @@ Route::post('/admin/payouts/{id}/pay', function ($id) {
 
 })->middleware('auth');
 
-Route::post('/admin/refunds/{id}/approve', function ($id) {
+Route::get('/admin/payouts/{id}/gateway', function ($id) {
 
     $booking = Booking::findOrFail($id);
+
+    $response = Http::asForm()->post(
+
+        env('TOYYIBPAY_URL').'/index.php/api/createBill',
+
+        [
+
+            'userSecretKey' =>
+                env('TOYYIBPAY_SECRET_KEY'),
+
+            'categoryCode' =>
+                env('TOYYIBPAY_CATEGORY_CODE'),
+
+            'billName' =>
+                'Cleaner Payout',
+
+            'billDescription' =>
+                'Cleaner Payment Booking #'.$booking->id,
+
+            'billPriceSetting' => 1,
+
+            'billPayorInfo' => 1,
+
+            'billAmount' =>
+                $booking->service->price * 100,
+
+            'billReturnUrl' =>
+                url('/payout-success/'.$booking->id),
+
+            'billCallbackUrl' =>
+                url('/payout-success/'.$booking->id),
+
+            'billExternalReferenceNo' =>
+                'PAYOUT-'.$booking->id,
+
+            'billTo' =>
+                $booking->cleaner->name,
+
+            'billEmail' =>
+                $booking->cleaner->email,
+
+            'billPhone' =>
+                '0123456789',
+
+            'billPaymentChannel' => 0,
+
+        ]
+    );
+
+    $billCode = $response->json()[0]['BillCode'];
+
+    $booking->update([
+
+        'payout_bill_code' => $billCode
+
+    ]);
+
+    return redirect(
+        env('TOYYIBPAY_URL').'/'.$billCode
+    );
+
+});
+
+Route::get('/payout-success/{id}', function ($id) {
+
+    $booking = Booking::findOrFail($id);
+
+    $booking->update([
+
+        'payout_status' => 'Paid',
+
+        'payout_reference' =>
+            $booking->payout_bill_code,
+
+        'payout_date' => now()
+
+    ]);
+
+    FinanceTransaction::create([
+
+        'booking_id' => $booking->id,
+
+        'type' => 'Cleaner Payout',
+
+        'amount' => $booking->service->price,
+
+        'status' => 'Completed'
+
+    ]);
+
+    return redirect('/admin/bookings')
+        ->with('success',
+            'Cleaner payout completed.');
+
+});
+
+Route::post('/admin/refunds/{id}/approve', function ($id) {
+
+if (Auth::user()->role != 'admin') {
+    abort(403);
+}
+
+    $booking = Booking::findOrFail($id);
+
+    if ($booking->refund_status == 'Refunded') {
+
+        return back()->with(
+            'error',
+            'Refund already processed.'
+        );
+
+    }
 
     $booking->update([
 
@@ -941,6 +1096,105 @@ Route::post('/admin/refunds/{id}/approve', function ($id) {
     );
 
 })->middleware('auth');
+
+Route::get('/admin/refunds/{id}/pay', function ($id) {
+
+    $booking = Booking::findOrFail($id);
+
+    $response = Http::asForm()->post(
+
+        env('TOYYIBPAY_URL').'/index.php/api/createBill',
+
+        [
+
+            'userSecretKey' =>
+                env('TOYYIBPAY_SECRET_KEY'),
+
+            'categoryCode' =>
+                env('TOYYIBPAY_CATEGORY_CODE'),
+
+            'billName' =>
+                'Customer Refund',
+
+            'billDescription' =>
+                'Refund Booking #'.$booking->id,
+
+            'billPriceSetting' => 1,
+
+            'billPayorInfo' => 1,
+
+            'billAmount' =>
+                $booking->service->price * 100,
+
+            'billReturnUrl' =>
+                url('/refund-success/'.$booking->id),
+
+            'billCallbackUrl' =>
+                url('/refund-success/'.$booking->id),
+
+            'billExternalReferenceNo' =>
+                'REFUND-'.$booking->id,
+
+            'billTo' =>
+                $booking->user->name,
+
+            'billEmail' =>
+                $booking->user->email,
+
+            'billPhone' =>
+                '0123456789',
+
+            'billPaymentChannel' => 0,
+
+        ]
+    );
+
+    $billCode = $response->json()[0]['BillCode'];
+
+    $booking->update([
+
+        'refund_bill_code' => $billCode
+
+    ]);
+
+    return redirect(
+        env('TOYYIBPAY_URL').'/'.$billCode
+    );
+
+});
+
+Route::get('/refund-success/{id}', function ($id) {
+
+    $booking = Booking::findOrFail($id);
+
+    $booking->update([
+
+        'refund_status' => 'Refunded',
+
+        'refund_reference' =>
+            $booking->refund_bill_code,
+
+        'refund_date' => now()
+
+    ]);
+
+    FinanceTransaction::create([
+
+        'booking_id' => $booking->id,
+
+        'type' => 'Refund',
+
+        'amount' => $booking->service->price,
+
+        'status' => 'Completed'
+
+    ]);
+
+    return redirect('/admin/bookings')
+        ->with('success',
+            'Refund completed successfully.');
+
+});
 
 Route::middleware('auth')->group(function () {
 
@@ -1068,6 +1322,12 @@ Route::middleware('auth')->group(function () {
 
             'phone' => 'nullable|max:20',
 
+            'bank_name' => 'nullable|max:100',
+
+            'bank_account_name' => 'nullable|max:255',
+
+            'bank_account_number' => 'nullable|max:30',
+
             'gender' => 'nullable',
 
         ]);
@@ -1077,6 +1337,9 @@ Route::middleware('auth')->group(function () {
         $user->name = $request->name;
         $user->email = $request->email;
         $user->phone = $request->phone;
+        $user->bank_name = $request->bank_name;
+        $user->bank_account_name = $request->bank_account_name;
+        $user->bank_account_number = $request->bank_account_number;
         $user->gender = $request->gender;
 
         $user->save();
@@ -1096,12 +1359,9 @@ Route::get('/cleaner/transactions', function () {
             'cleaner_id',
             Auth::id()
         )
+
         ->where(
-            'status',
-            'Completed'
-        )
-        ->where(
-            'payment_status',
+            'payout_status',
             'Paid'
         )
         ->latest()
@@ -1110,10 +1370,6 @@ Route::get('/cleaner/transactions', function () {
     $totalEarnings = Booking::where(
             'cleaner_id',
             Auth::id()
-        )
-        ->where(
-            'status',
-            'Completed'
         )
         ->where(
             'payout_status',
@@ -1155,13 +1411,19 @@ Route::get('/admin/transactions', function () {
         'Cleaner Payout'
     )->sum('amount');
 
+    $netProfit =
+        $totalIncome
+        - $totalRefund
+        - $totalPayout;
+
     return view(
         'admin.transactions',
         compact(
             'transactions',
             'totalIncome',
             'totalRefund',
-            'totalPayout'
+            'totalPayout',
+            'netProfit'
         )
     );
 

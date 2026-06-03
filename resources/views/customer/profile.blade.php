@@ -2,6 +2,41 @@
 
 @section('content')
 
+@php
+
+$profileComplete =
+    auth()->user()->name &&
+    auth()->user()->email &&
+    auth()->user()->phone &&
+    auth()->user()->address_line_1 &&
+    auth()->user()->city &&
+    auth()->user()->state &&
+    auth()->user()->postcode;
+
+@endphp
+
+@if($profileComplete)
+
+    <div class="alert alert-success rounded-4">
+
+        <i class="bi bi-check-circle-fill me-2"></i>
+
+        Your profile is complete.
+
+    </div>
+
+@else
+
+    <div class="alert alert-warning rounded-4">
+
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+
+        Please complete your profile information for a better booking experience.
+
+    </div>
+
+@endif
+
 <div class="container py-4">
 
     <!-- Header -->

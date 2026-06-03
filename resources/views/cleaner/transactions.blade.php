@@ -51,7 +51,6 @@
                             <th>Customer</th>
                             <th>Service</th>
                             <th>Date</th>
-                            <th>Customer Payment</th>
                             <th>Payout Status</th>
                             <th>Reference</th>
                             <th>Amount</th>
@@ -89,16 +88,6 @@
                                     {{ \Carbon\Carbon::parse($booking->booking_time)->format('h:i A') }}
 
                                 </small>
-
-                            </td>
-
-                            <td>
-
-                                <span class="badge bg-success px-3 py-2 rounded-pill">
-
-                                    Paid
-
-                                </span>
 
                             </td>
 
