@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
@@ -41,5 +42,35 @@ class ProfileController extends Controller
         ]));
 
         return back()->with('success', 'Profile updated successfully!');
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required',
+            'new_password' => 'required|min:8|confirmed',
+        ]);
+
+        if (!Hash::check(
+            $request->current_password,
+            Auth::user()->password
+        )) {
+            return back()->with(
+                'error',
+                'Current password is incorrect.'
+            );
+        }
+
+        $user = User::findOrFail(Auth::id());
+        $user->update([
+            'password' => Hash::make(
+                $request->new_password
+            )
+        ]);
+
+        return back()->with(
+            'success',
+            'Password updated successfully.'
+        );
     }
 }

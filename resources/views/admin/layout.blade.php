@@ -163,6 +163,18 @@
 
                 </li>
 
+                <li class="nav-item">
+
+                    <a class="nav-link"
+                       href="/admin/customers">
+
+                        <i class="bi bi-people-fill me-1"></i>
+                        Manage Customers
+
+                    </a>
+
+                </li>
+
                 <a href="/admin/bookings"
                    class="nav-link">
 

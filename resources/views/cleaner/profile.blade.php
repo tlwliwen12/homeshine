@@ -37,6 +37,24 @@ $profileComplete =
 
 @endif
 
+@if ($errors->any())
+
+    <div class="alert alert-danger rounded-4">
+
+        <ul class="mb-0">
+
+            @foreach ($errors->all() as $error)
+
+                <li>{{ $error }}</li>
+
+            @endforeach
+
+        </ul>
+
+    </div>
+
+@endif
+
 <div class="container py-4">
 
     <!-- Header -->
@@ -225,7 +243,7 @@ $profileComplete =
                     </h4>
 
                     <form method="POST"
-                          action="/update-password">
+                          action="/cleaner/update-password">
 
                         @csrf
 

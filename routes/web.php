@@ -35,6 +35,7 @@ use App\Http\Controllers\Admin\RefundController;
 use App\Http\Controllers\Admin\PayoutController;
 use App\Http\Controllers\Admin\CleanerController;
 use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\CustomerManagementController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,6 +52,10 @@ Route::get('/', [HomeController::class, 'index']);
 Route::get('/login', [AuthController::class, 'showLogin'])
     ->name('login');
 Route::post('/login', [AuthController::class, 'login']);
+Route::get('/forgot-password',[AuthController::class, 'showForgotPassword']);
+Route::post('/forgot-password',[AuthController::class, 'sendResetLink']);
+Route::get('/reset-password/{token}',[AuthController::class, 'showResetPassword']);
+Route::post('/reset-password',[AuthController::class, 'resetPassword']);
 
 Route::get('/register', [AuthController::class, 'showRegister']);
 Route::post('/register', [AuthController::class, 'register']);
@@ -145,6 +150,7 @@ Route::middleware(['auth', 'role:customer'])->group(function () {
 
     Route::get('/customer/profile', [CustomerProfileController::class, 'index']);
     Route::post('/customer/profile/update', [CustomerProfileController::class, 'update']);
+    Route::post('/customer/update-password',[CustomerProfileController::class, 'updatePassword']);
 });
 
 /*
@@ -166,6 +172,7 @@ Route::middleware(['auth', 'role:cleaner'])->group(function () {
 
     Route::get('/cleaner/profile', [CleanerProfileController::class, 'index']);
     Route::post('/cleaner/profile/update', [CleanerProfileController::class, 'update']);
+    Route::post('/cleaner/update-password',[CleanerProfileController::class, 'updatePassword']);
 
     Route::get('/cleaner/transactions', [CleanerTransactionController::class, 'index']);
 });
@@ -202,4 +209,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/services/{id}/edit',[ServiceController::class, 'edit']);
     Route::post('/admin/services/{id}/update',[ServiceController::class, 'update']);
     Route::post('/admin/services/{id}/delete',[ServiceController::class, 'destroy']);
+
+    Route::get('/admin/customers',[CustomerManagementController::class, 'index']);
+    Route::post('/admin/customers/{id}/delete',[CustomerManagementController::class, 'destroy']);
+    Route::get('/admin/customers/{id}',[CustomerManagementController::class, 'show']);
 });
