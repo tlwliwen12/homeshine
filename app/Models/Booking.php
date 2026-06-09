@@ -17,7 +17,22 @@ class Booking extends Model
         'payment_status',
         'refund_status',
         'payout_status',
-        'bill_code'
+        'bill_code',
+        'cleaner_id',
+        'cleaner_earning',
+        'company_commission',
+        'refund_reference',
+        'refund_date',
+        'payout_reference',
+        'payout_date',
+        'refund_bill_code',
+        'payout_bill_code',
+    ];
+
+    protected $casts = [
+        'booking_date' => 'date',
+        'refund_date' => 'datetime',
+        'payout_date' => 'datetime',
     ];
 
     public function user()

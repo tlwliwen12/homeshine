@@ -92,10 +92,10 @@
                             <select name="category"
                                     class="form-select">
 
-                                <option value="House Cleaning">House Cleaning</option>
-                                <option value="Office Cleaning">Office Cleaning</option>
-                                <option value="Deep Cleaning">Deep Cleaning</option>
-                                <option value="Sofa Cleaning">Sofa Cleaning</option>
+                                <option value="Residential Cleaning">Residential Cleaning</option>
+                                <option value="Specialized Cleaning">Specialized Cleaning</option>
+                                <option value="Commercial Cleaning">Commercial Cleaning</option>
+                                <option value="Premium Services">Premium Services</option>
 
                             </select>
 
@@ -130,6 +130,8 @@
                             <input type="number"
                                    name="price"
                                    class="form-control"
+                                   step="0.01"
+                                   min="0.01"
                                    placeholder="Enter service price"
                                    required>
 
@@ -148,6 +150,8 @@
                                    name="duration"
                                    class="form-control"
                                    placeholder="Example: 2 Hours"
+                                   step="0.01"
+                                   min="0.01"
                                    required>
 
                             <div class="hint-text mt-1">

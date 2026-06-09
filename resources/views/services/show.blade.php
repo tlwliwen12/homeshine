@@ -59,11 +59,12 @@
                     <hr class="my-4">
 
                     {{-- Customer Buttons --}}
+                    @auth
                     @if(Auth::user()->role == 'customer')
 
                         <div class="d-flex gap-2">
 
-                            <a href="/book-service/{{ $service->id }}"
+                            <a href="/customer/book-service/{{ $service->id }}"
                                class="btn btn-dark px-4">
                                 <i class="bi bi-calendar-check"></i>
                                 Book Now
@@ -77,8 +78,10 @@
                         </div>
 
                     @endif
+                    @endauth
 
                     {{-- Admin Buttons --}}
+                    @auth
                     @if(Auth::user()->role == 'admin')
 
                         <div class="d-flex gap-2">
@@ -97,6 +100,7 @@
                         </div>
 
                     @endif
+                    @endauth
 
                     @php
 

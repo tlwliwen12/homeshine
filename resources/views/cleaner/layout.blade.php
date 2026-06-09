@@ -226,7 +226,7 @@ $profileComplete =
 
     Your profile is incomplete.
 
-    <a href="/customer/profile">
+    <a href="/cleaner/profile">
         Complete Profile
     </a>
 

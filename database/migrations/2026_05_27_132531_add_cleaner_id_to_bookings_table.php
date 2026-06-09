@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::table('bookings', function (Blueprint $table) {
 
-            $table->unsignedBigInteger('cleaner_id')->nullable();
-
+            $table->foreignId('cleaner_id')
+                  ->nullable()
+                  ->constrained('users')
+                  ->nullOnDelete();
         });
     }
 
@@ -24,7 +26,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('bookings', function (Blueprint $table) {
-            //
+            $table->dropColumn('cleaner_id');
         });
     }
 };

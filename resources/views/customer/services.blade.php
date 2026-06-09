@@ -61,10 +61,10 @@
     <div class="mb-4">
 
         <a href="/customer/services" class="btn btn-dark btn-sm">All</a>
-        <a href="/customer/services?category=House Cleaning" class="btn btn-success btn-sm">House Cleaning</a>
-        <a href="/customer/services?category=Office Cleaning" class="btn btn-primary btn-sm">Office Cleaning</a>
-        <a href="/customer/services?category=Deep Cleaning" class="btn btn-warning btn-sm">Deep Cleaning</a>
-        <a href="/customer/services?category=Sofa Cleaning" class="btn btn-secondary btn-sm">Sofa Cleaning</a>
+        <a href="/customer/services?category=Residential Cleaning" class="btn btn-success btn-sm">Residential Cleaning</a>
+        <a href="/customer/services?category=Specialized Cleaning" class="btn btn-primary btn-sm">Specialized Cleaning</a>
+        <a href="/customer/services?category=Commercial Cleaning" class="btn btn-warning btn-sm">Commercial Cleaning</a>
+        <a href="/customer/services?category=Premium Services" class="btn btn-secondary btn-sm">Premium Services</a>
 
     </div>
 
@@ -95,7 +95,7 @@
                         RM {{ $service->price }}
                     </h6>
 
-                    <a href="/services/{{ $service->id }}"
+                    <a href="/customer/services/{{ $service->id }}"
                        class="btn btn-dark w-100 mt-2">
                         View Details
                     </a>

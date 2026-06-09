@@ -93,24 +93,24 @@
                             <select name="category"
                                     class="form-select">
 
-                                <option value="House Cleaning"
-                                    {{ $service->category == 'House Cleaning' ? 'selected' : '' }}>
-                                    House Cleaning
+                                <option value="Residential Cleaning"
+                                    {{ $service->category == 'Residential Cleaning' ? 'selected' : '' }}>
+                                    Residential Cleaning
                                 </option>
 
-                                <option value="Office Cleaning"
-                                    {{ $service->category == 'Office Cleaning' ? 'selected' : '' }}>
-                                    Office Cleaning
+                                <option value="Specialized Cleaning"
+                                    {{ $service->category == 'Specialized Cleaning' ? 'selected' : '' }}>
+                                    Specialized Cleaning
                                 </option>
 
-                                <option value="Deep Cleaning"
-                                    {{ $service->category == 'Deep Cleaning' ? 'selected' : '' }}>
-                                    Deep Cleaning
+                                <option value="Commercial Cleaning"
+                                    {{ $service->category == 'Commercial Cleaning' ? 'selected' : '' }}>
+                                    Commercial Cleaning
                                 </option>
 
-                                <option value="Sofa Cleaning"
-                                    {{ $service->category == 'Sofa Cleaning' ? 'selected' : '' }}>
-                                    Sofa Cleaning
+                                <option value="Premium Services"
+                                    {{ $service->category == 'Premium Services' ? 'selected' : '' }}>
+                                    Premium Services
                                 </option>
 
                             </select>
@@ -138,6 +138,8 @@
                                    name="price"
                                    value="{{ $service->price }}"
                                    class="form-control"
+                                   step="0.01"
+                                   min="0.01"
                                    required>
 
                             <div class="hint-text mt-1">

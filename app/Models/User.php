@@ -25,5 +25,34 @@ class User extends Authenticatable implements MustVerifyEmail
         'bank_name',
         'bank_account_name',
         'bank_account_number',
+        'gender',
     ];
+
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
+    }
+
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function assignedBookings()
+    {
+        return $this->hasMany(Booking::class, 'cleaner_id');
+    }
 }

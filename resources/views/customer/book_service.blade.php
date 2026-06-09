@@ -25,7 +25,7 @@
                     @endif
 
                     <h5>{{ $service->name }}</h5>
-                    <p class="text-success">RM {{ $service->price }}</p>
+                    <p class="text-success">RM {{number_format($service->price, 2)}}</p>
 
                     @if(session('error'))
 
@@ -72,12 +72,13 @@
 
                     @endphp
 
-                    <form method="POST" action="/book-service/{{ $service->id }}">
+                    <form method="POST"
+                          action="{{ route('booking.store', $service->id) }}">
                         @csrf
 
                         <div class="mb-3">
                             <label>Date</label>
-                            <input type="date" name="booking_date" class="form-control" required>
+                            <input type="date" name="booking_date" class="form-control" min="{{ date('Y-m-d') }}" required>
                             @error('booking_date')
                                 <div class="text-danger">
                                     {{ $message }}
@@ -149,7 +150,7 @@
 
                         <div class="mb-3">
                             <label>Notes</label>
-                            <textarea name="notes" class="form-control"></textarea>
+                            <textarea name="notes" class="form-control">{{ old('notes') }}</textarea>
                             @error('notes')
                                 <div class="text-danger">
                                     {{ $message }}

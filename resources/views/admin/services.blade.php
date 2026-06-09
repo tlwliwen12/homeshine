@@ -63,36 +63,6 @@
 
     @endif
 
-    {{-- Empty State --}}
-    @if($services->count() == 0)
-
-        <div class="card border-0 shadow-sm rounded-4 p-5 text-center">
-
-            <div class="mb-3">
-
-                <i class="bi bi-broom fs-1 text-secondary"></i>
-
-            </div>
-
-            <h4 class="fw-bold">
-                No Services Found
-            </h4>
-
-            <p class="text-muted">
-                Start by creating your first cleaning service.
-            </p>
-
-            <a href="/admin/services/create"
-               class="btn btn-primary rounded-pill px-4">
-
-                Add Service
-
-            </a>
-
-        </div>
-
-    @endif
-
     {{-- Search Bar --}}
     <div class="card border-0 shadow-sm rounded-4 mb-4">
 
@@ -154,35 +124,65 @@
 
         </a>
 
-        <a href="/admin/services?category=House Cleaning"
+        <a href="/admin/services?category=Residential Cleaning"
            class="btn btn-success btn-sm rounded-pill">
 
-            House Cleaning
+            Residential Cleaning
 
         </a>
 
-        <a href="/admin/services?category=Office Cleaning"
+        <a href="/admin/services?category=Specialized Cleaning"
            class="btn btn-primary btn-sm rounded-pill">
 
-            Office Cleaning
+            Specialized Cleaning
 
         </a>
 
-        <a href="/admin/services?category=Deep Cleaning"
+        <a href="/admin/services?category=Commercial Cleaning"
            class="btn btn-warning btn-sm rounded-pill">
 
-            Deep Cleaning
+            Commercial Cleaning
 
         </a>
 
-        <a href="/admin/services?category=Sofa Cleaning"
+        <a href="/admin/services?category=Premium Services"
            class="btn btn-secondary btn-sm rounded-pill">
 
-            Sofa Cleaning
+            Premium Services
 
         </a>
 
     </div>
+
+    {{-- Empty State --}}
+    @if($services->count() == 0)
+
+        <div class="card border-0 shadow-sm rounded-4 p-5 text-center">
+
+            <div class="mb-3">
+
+                <i class="bi bi-broom fs-1 text-secondary"></i>
+
+            </div>
+
+            <h4 class="fw-bold">
+                No Services Found
+            </h4>
+
+            <p class="text-muted">
+                Start by creating your first cleaning service.
+            </p>
+
+            <a href="/admin/services/create"
+               class="btn btn-primary rounded-pill px-4">
+
+                Add Service
+
+            </a>
+
+        </div>
+
+    @endif
 
     {{-- Services Grid --}}
     <div class="row g-4">
@@ -229,7 +229,7 @@
                         {{-- Description --}}
                         <p class="text-muted">
 
-                            {{ Str::limit($service->description, 100) }}
+                            {{ \Illuminate\Support\Str::limit($service->description, 100) }}
 
                         </p>
 
@@ -237,7 +237,7 @@
                         <h5 class="text-success fw-bold mb-2">
 
                             <i class="bi bi-cash-stack"></i>
-                            RM {{ $service->price }}
+                            RM {{ number_format($service->price, 2) }}
 
                         </h5>
 

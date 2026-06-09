@@ -17,10 +17,11 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        // Validation
-        $request->validate($this->registerValidation(), $this->registerMessages());
+        $request->validate(
+            $this->registerValidation(),
+            $this->registerMessages()
+        );
 
-        // Save to database
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -32,21 +33,6 @@ class AuthController extends Controller
                 ? 'pending'
                 : 'approved'
         ]);
-
-        if ($user->role == 'cleaner') {
-
-            $admins = User::where(
-                'role',
-                'admin'
-            )->get();
-
-            foreach ($admins as $admin) {
-
-                $admin->notify(
-                    new CleanerRegistrationNotification($user)
-                );
-            }
-        }
 
         Auth::login($user);
 
@@ -62,52 +48,50 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        // Validate
         $request->validate([
-            'email' => [
-                'required',
-                'email',
-                'max:255'
-            ],
-
-           'password' => [
-                'required',
-                'min:8',
-                'max:10'
-            ]
-
-        ], [
-
-            'email.required' => 'Email is required.',
-            'email.email' => 'Please enter a valid email.',
-            'email.max' => 'Email is too long.',
-
-            'password.required' => 'Password is required.',
-            'password.min' => 'Password must be at least 8 characters.',
-            'password.max' => 'Password cannot exceed 10 characters.'
-
+            'email' => ['required', 'email'],
+            'password' => ['required'],
         ]);
 
-        // Attempt login
-        if (Auth::attempt($request->only('email', 'password'))) {
-            $request->session()->regenerate();
+        if (! Auth::attempt([
+            'email' => $request->email,
+            'password' => $request->password
+        ])) {
 
-            $user = Auth::user();
-            if (
-                $user->role === 'cleaner' &&
-                $user->approval_status !== 'approved'
-            ) {
-                Auth::logout();
-                return back()->withErrors([
-                    'email' => 'Your cleaner account is waiting for admin approval.'
-                ]);
-            }
-            return $this->redirectByRole();
+            return back()->withErrors([
+                'email' => 'Invalid email or password.'
+            ]);
         }
 
-        return back()->withErrors([
-            'email' => 'Invalid email or password.',
-        ]);
+        $request->session()->regenerate();
+
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        // CHECK EMAIL VERIFICATION HERE
+        if (! $user->hasVerifiedEmail()) {
+
+            Auth::logout();
+
+            return back()->withErrors([
+                'email' => 'Please verify your email first.'
+            ]);
+        }
+
+        // CHECK CLEANER APPROVAL HERE
+        if (
+            $user->role === 'cleaner' &&
+            $user->approval_status !== 'approved'
+        ) {
+
+            Auth::logout();
+
+            return back()->withErrors([
+                'email' => 'Your cleaner account is pending approval.'
+            ]);
+        }
+
+        return $this->redirectByRole();
     }
 
     public function logout(Request $request)
@@ -129,7 +113,7 @@ class AuthController extends Controller
             'password' => [
                 'required',
                 'min:8',
-                'max:10',
+                'max:64',
                 'regex:/[a-z]/',
                 'regex:/[A-Z]/',
                 'regex:/[0-9]/',

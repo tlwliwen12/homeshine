@@ -198,7 +198,7 @@
 
                         <!-- Approve -->
                         <form method="POST"
-                              action="/cleaner/bookings/{{ $booking->id }}/approve"
+                              action="/cleaner/bookings/{{ $booking->id }}/accept"
                               class="w-50">
 
                             @csrf
@@ -206,7 +206,7 @@
                             <button class="btn btn-success rounded-pill w-100">
 
                                 <i class="bi bi-check-circle me-1"></i>
-                                Approve
+                                Accept
 
                             </button>
 

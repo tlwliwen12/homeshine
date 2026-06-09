@@ -14,7 +14,9 @@ return new class extends Migration
         Schema::create('finance_transactions', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('booking_id');
+            $table->foreignId('booking_id')
+                  ->constrained()
+                  ->cascadeOnDelete();
 
             $table->string('type');
             // Customer Payment

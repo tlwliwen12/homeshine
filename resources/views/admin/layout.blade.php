@@ -154,18 +154,6 @@
                 <li class="nav-item">
 
                     <a class="nav-link"
-                       href="/admin/services/create">
-
-                        <i class="bi bi-plus-circle me-1"></i>
-                        Add Service
-
-                    </a>
-
-                </li>
-
-                <li class="nav-item">
-
-                    <a class="nav-link"
                        href="/admin/cleaners">
 
                         <i class="bi bi-person-badge me-1"></i>

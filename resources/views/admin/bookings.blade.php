@@ -197,21 +197,43 @@
                             $booking->payout_status == 'Pending'
                         )
 
-                            <form method="GET"
-                                  action="/admin/payouts/{{ $booking->id }}/gateway"
-                                  class="mb-3">
+                        <form method="POST"
+                              action="/admin/payouts/{{ $booking->id }}/pay"
+                              class="mb-3">
 
-                                @csrf
+                            @csrf
 
-                                <button class="btn btn-primary rounded-pill w-100">
+                            <div class="mb-2">
 
-                                    <i class="bi bi-cash-stack me-2"></i>
+                                <small class="fw-bold">
 
-                                    Pay Cleaner
+                                    Cleaner Bank
 
-                                </button>
+                                </small>
 
-                            </form>
+                                <br>
+
+                                {{ $booking->cleaner->bank_name ?? '-' }}
+
+                                <br>
+
+                                {{ $booking->cleaner->bank_account_number ?? '-' }}
+
+                            </div>
+
+                            <input type="text"
+                                   name="payout_reference"
+                                   class="form-control mb-2"
+                                   placeholder="Enter bank transfer reference"
+                                   required>
+
+                            <button class="btn btn-primary w-100">
+
+                                Confirm Payout
+
+                            </button>
+
+                        </form>
 
                         @endif
 
@@ -261,20 +283,12 @@
                     <!-- Refund Button -->
                     @if($booking->refund_status == 'Pending')
 
-                        <form method="GET"
-                              action="/admin/refunds/{{ $booking->id }}/pay">
-
-                            @csrf
-
-                            <button class="btn btn-success rounded-pill w-100">
-
-                                <i class="bi bi-cash-coin me-2"></i>
+                        <a href="/admin/refunds/{{ $booking->id }}/pay"
+                               class="btn btn-success w-100">
 
                                 Approve Refund
 
-                            </button>
-
-                        </form>
+                            </a>
 
                     @endif
 

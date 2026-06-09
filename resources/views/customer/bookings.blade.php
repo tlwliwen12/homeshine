@@ -53,6 +53,105 @@
 
     @endif
 
+    <!-- Filters -->
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+        <div class="card-body">
+
+            <form method="GET"
+                  action="/customer/bookings">
+
+                <div class="row g-3">
+
+                    <!-- Status -->
+                    <div class="col-md-4">
+
+                        <label class="form-label">
+                            Status
+                        </label>
+
+                        <select name="status"
+                                class="form-select">
+
+                            <option value="">
+                                All Status
+                            </option>
+
+                            <option value="Pending"
+                                {{ request('status')=='Pending' ? 'selected' : '' }}>
+                                Pending
+                            </option>
+
+                            <option value="Approved"
+                                {{ request('status')=='Approved' ? 'selected' : '' }}>
+                                Approved
+                            </option>
+
+                            <option value="In Progress"
+                                {{ request('status')=='In Progress' ? 'selected' : '' }}>
+                                In Progress
+                            </option>
+
+                            <option value="Completed"
+                                {{ request('status')=='Completed' ? 'selected' : '' }}>
+                                Completed
+                            </option>
+
+                            <option value="Cancelled"
+                                {{ request('status')=='Cancelled' ? 'selected' : '' }}>
+                                Cancelled
+                            </option>
+
+                            <option value="Rejected"
+                                {{ request('status')=='Rejected' ? 'selected' : '' }}>
+                                Rejected
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <!-- Date -->
+                    <div class="col-md-4">
+
+                        <label class="form-label">
+                            Booking Date
+                        </label>
+
+                        <input type="date"
+                               name="booking_date"
+                               class="form-control"
+                               value="{{ request('booking_date') }}">
+
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="col-md-4 d-flex align-items-end">
+
+                        <button class="btn btn-primary me-2">
+
+                            <i class="bi bi-funnel"></i>
+                            Filter
+
+                        </button>
+
+                        <a href="/customer/bookings"
+                           class="btn btn-secondary">
+
+                            Reset
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
     <!-- Booking Cards -->
     <div class="row g-4">
 
@@ -347,7 +446,7 @@
                         $booking->payment_status != 'Paid'
                     )
 
-                        <a href="/payment/{{ $booking->id }}"
+                        <a href="{{ url('/customer/payment/' . $booking->id) }}"
                            class="btn btn-success rounded-pill w-100 mt-3">
 
                             <i class="bi bi-credit-card me-2"></i>
