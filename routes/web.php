@@ -189,7 +189,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/refunds/{id}/success',[RefundController::class, 'refundSuccess']);
     Route::get('/admin/refunds', [RefundController::class, 'index']);
 
-    Route::post('/admin/payouts/{id}/pay', [PayoutController::class, 'pay']);
+    Route::get('/admin/payouts/{id}/pay',[PayoutController::class, 'payPayout']);
+    Route::get('/admin/payouts/{id}/success',[PayoutController::class, 'payoutSuccess']);
 
     Route::get('/admin/cleaners', [CleanerController::class, 'index']);
     Route::post('/admin/cleaners/{id}/approve', [CleanerController::class, 'approve']);

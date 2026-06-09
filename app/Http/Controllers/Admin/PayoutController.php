@@ -6,9 +6,18 @@ use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Services\PayoutService;
 use Illuminate\Http\Request;
-
+use App\Services\ToyyibPayService;
+use Illuminate\Support\Facades\Auth;
+use App\Models\FinanceTransaction;
 class PayoutController extends Controller
 {
+    protected $toyyib;
+
+    public function __construct(ToyyibPayService $toyyib)
+    {
+        $this->toyyib = $toyyib;
+    }
+
     public function pay(Request $request, $id, PayoutService $service)
     {
         $booking = Booking::findOrFail($id);
@@ -29,5 +38,75 @@ class PayoutController extends Controller
                 default => 'Error'
             }
         );
+    }
+
+    public function payPayout($id)
+    {
+        $booking = Booking::findOrFail($id);
+
+        $billCode = $this->toyyib->createBill([
+
+            'userSecretKey' => env('TOYYIBPAY_SECRET_KEY'),
+            'categoryCode' => env('TOYYIBPAY_CATEGORY_CODE'),
+
+            'billName' => 'Cleaner Payout',
+
+            'billDescription' =>
+                'Payout Booking #' . $booking->id,
+
+            'billPriceSetting' => 1,
+            'billPayorInfo' => 1,
+
+            'billAmount' =>
+                ($booking->service->price * 0.8) * 100,
+
+            'billReturnUrl' =>
+                url('/admin/payouts/' .
+                    $booking->id .
+                    '/success'),
+
+            'billCallbackUrl' =>
+                url('/payout/callback'),
+
+            'billExternalReferenceNo' =>
+                'PAYOUT-' . $booking->id,
+
+            'billTo' =>
+                $booking->cleaner->name,
+
+            'billEmail' =>
+                Auth::user()->email,
+
+            'billPhone' =>
+                '0123456789',
+
+            'billPaymentChannel' => 0,
+        ]);
+
+        return redirect(
+            env('TOYYIBPAY_URL') . '/' . $billCode
+        );
+    }
+
+    public function payoutSuccess($id)
+    {
+        $booking = Booking::findOrFail($id);
+
+        $booking->update([
+            'payout_status' => 'Paid'
+        ]);
+
+        FinanceTransaction::create([
+            'booking_id' => $booking->id,
+            'type' => 'Cleaner Payout',
+            'amount' => $booking->service->price * 0.8,
+            'status' => 'Completed'
+        ]);
+
+        return redirect('/admin/bookings')
+            ->with(
+                'success',
+                'Cleaner payout completed.'
+            );
     }
 }

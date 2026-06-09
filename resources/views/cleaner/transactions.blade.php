@@ -121,7 +121,7 @@
 
                             <td class="fw-bold text-success">
 
-                                RM {{ number_format($booking->service->price, 2) }}
+                                RM {{ number_format($booking->service->price * 0.8, 2) }}
 
                             </td>
 

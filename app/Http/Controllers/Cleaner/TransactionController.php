@@ -19,7 +19,7 @@ class TransactionController extends Controller
             ->where('payout_status', 'Paid')
             ->get()
             ->sum(function ($booking) {
-                return $booking->service->price;
+                return $booking->service->price * 0.8;
             });
 
         return view('cleaner.transactions', compact('transactions', 'totalEarnings'));

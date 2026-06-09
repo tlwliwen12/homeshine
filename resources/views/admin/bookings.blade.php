@@ -197,45 +197,11 @@
                             $booking->payout_status == 'Pending'
                         )
 
-                        <form method="POST"
-                              action="/admin/payouts/{{ $booking->id }}/pay"
-                              class="mb-3">
-
-                            @csrf
-
-                            <div class="mb-2">
-
-                                <small class="fw-bold">
-
-                                    Cleaner Bank
-
-                                </small>
-
-                                <br>
-
-                                {{ $booking->cleaner->bank_name ?? '-' }}
-
-                                <br>
-
-                                {{ $booking->cleaner->bank_account_number ?? '-' }}
-
-                            </div>
-
-                            <input type="text"
-                                   name="payout_reference"
-                                   class="form-control mb-2"
-                                   placeholder="Enter bank transfer reference"
-                                   required>
-
-                            <button class="btn btn-primary w-100">
-
-                                Confirm Payout
-
-                            </button>
-
-                        </form>
-
-                        @endif
+                       <a href="/admin/payouts/{{ $booking->id }}/pay"
+                          class="btn btn-success w-100">
+                           Pay Cleaner
+                       </a>
+                    @endif
 
                     <!-- Refund -->
                     <p class="mb-3">
@@ -263,22 +229,6 @@
                         @endif
 
                     </p>
-
-                    @if($booking->refund_reference)
-
-                    <p class="mb-2">
-
-                        <strong>Refund Ref:</strong>
-
-                        <span class="text-primary">
-
-                            {{ $booking->refund_reference }}
-
-                        </span>
-
-                    </p>
-
-                    @endif
 
                     <!-- Refund Button -->
                     @if($booking->refund_status == 'Pending')
