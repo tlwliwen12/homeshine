@@ -187,6 +187,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index']);
 
     Route::get('/admin/bookings', [AdminBookingController::class, 'index']);
+    Route::get('/admin/bookings/{id}',[AdminBookingController::class, 'show']);
 
     Route::get('/admin/transactions', [FinanceController::class, 'index']);
 
