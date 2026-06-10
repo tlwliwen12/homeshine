@@ -23,7 +23,7 @@ use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 
 use App\Http\Controllers\Customer\ServiceController as CustomerServiceController;
 use App\Http\Controllers\Customer\PaymentController;
-use App\Http\Controllers\Customer\ReviewController;
+use App\Http\Controllers\Customer\ReviewController as CustomerReviewController;
 
 use App\Http\Controllers\Customer\ProfileController as CustomerProfileController;
 use App\Http\Controllers\Cleaner\ProfileController as CleanerProfileController;
@@ -36,6 +36,7 @@ use App\Http\Controllers\Admin\PayoutController;
 use App\Http\Controllers\Admin\CleanerController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\CustomerManagementController;
+use App\Http\Controllers\Admin\ReviewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -146,7 +147,7 @@ Route::middleware(['auth', 'role:customer'])->group(function () {
     Route::get('/customer/payment/{id}', [PaymentController::class, 'pay']);
     Route::get('/payment/success/{id}', [PaymentController::class, 'success']);
 
-    Route::post('/customer/review/{id}', [ReviewController::class, 'store']);
+    Route::post('/customer/review/{id}', [CustomerReviewController::class, 'store']);
 
     Route::get('/customer/profile', [CustomerProfileController::class, 'index']);
     Route::post('/customer/profile/update', [CustomerProfileController::class, 'update']);
@@ -220,4 +221,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/admin/customers/{id}/suspend',[CustomerManagementController::class, 'suspend']);
     Route::post('/admin/customers/{id}/activate',[CustomerManagementController::class, 'activate']);
     Route::get('/admin/customer-statistics',[CustomerManagementController::class, 'statistics']);
+
+    Route::get('/admin/reviews',[ReviewController::class, 'index']);
 });

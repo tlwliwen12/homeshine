@@ -212,6 +212,18 @@
 
                 </li>
 
+                <li class="nav-item">
+
+                    <a class="nav-link"
+                       href="/admin/reviews">
+
+                        <i class="bi bi-star-fill me-1"></i>
+                        Reviews & Ratings
+
+                    </a>
+
+                </li>
+
                 <!-- Logout -->
                 <li class="nav-item ms-3">
 
