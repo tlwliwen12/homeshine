@@ -13,5 +13,13 @@ class Service extends Model
     'price',
     'duration',
     'image'
-];
+    ];
+
+    public function bookings()
+    {
+        return $this->hasMany(
+            \App\Models\Booking::class,
+            'service_id'
+        );
+    }
 }

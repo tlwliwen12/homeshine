@@ -393,5 +393,220 @@
     </div>
 
 </div>
+<br><br>
+<div class="row g-4 mb-4">
+
+    <div class="col-md-3">
+
+        <div class="card shadow-sm border-0 rounded-4">
+
+            <div class="card-body text-center">
+
+                <h3 class="fw-bold">
+
+                    {{ $totalBookings }}
+
+                </h3>
+
+                <small>Total Bookings</small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card shadow-sm border-0 rounded-4">
+
+            <div class="card-body text-center">
+
+                <h3 class="fw-bold text-success">
+
+                    RM {{ number_format($totalRevenue,2) }}
+
+                </h3>
+
+                <small>Total Revenue</small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card shadow-sm border-0 rounded-4">
+
+            <div class="card-body text-center">
+
+                <h3 class="fw-bold text-danger">
+
+                    RM {{ number_format($totalRefunds,2) }}
+
+                </h3>
+
+                <small>Total Refunds</small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card shadow-sm border-0 rounded-4">
+
+            <div class="card-body text-center">
+
+                <h3 class="fw-bold text-primary">
+
+                    {{ $completedBookings }}
+
+                </h3>
+
+                <small>Completed Jobs</small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="row g-4 mb-4">
+
+    <div class="col-md-6">
+
+        <div class="card border-0 shadow-sm rounded-4">
+
+            <div class="card-body">
+
+                <h5 class="fw-bold">
+
+                    Most Popular Service
+
+                </h5>
+
+                <hr>
+
+                @if($topService)
+
+                    <h4>
+
+                        {{ $topService->name }}
+
+                    </h4>
+
+                @else
+
+                    No Data
+
+                @endif
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-6">
+
+        <div class="card border-0 shadow-sm rounded-4">
+
+            <div class="card-body">
+
+                <h5 class="fw-bold">
+
+                    Top Cleaner
+
+                </h5>
+
+                <hr>
+
+                @if($topCleaner)
+
+                    <h4>
+
+                        {{ $topCleaner->name }}
+
+                    </h4>
+
+                @else
+
+                    No Data
+
+                @endif
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="card border-0 shadow-sm rounded-4">
+
+    <div class="card-body">
+
+        <h5 class="fw-bold mb-4">
+
+            Monthly Revenue
+
+        </h5>
+
+        <canvas id="revenueChart"></canvas>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+new Chart(
+    document.getElementById('revenueChart'),
+    {
+        type: 'line',
+
+        data: {
+
+            labels: [
+                'Jan',
+                'Feb',
+                'Mar',
+                'Apr',
+                'May',
+                'Jun',
+                'Jul',
+                'Aug',
+                'Sep',
+                'Oct',
+                'Nov',
+                'Dec'
+            ],
+
+            datasets: [
+
+                {
+                    label: 'Revenue',
+
+                    data: @json($monthlyRevenue),
+
+                    tension: 0.4
+                }
+
+            ]
+        }
+    }
+);
+
+</script>
 
 @endsection

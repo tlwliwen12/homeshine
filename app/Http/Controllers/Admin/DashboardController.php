@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\Service;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -39,42 +38,13 @@ class DashboardController extends Controller
             return $booking->service->price;
         });
 
-        $topService = Service::select(
-                'services.*'
-            )
-            ->join(
-                'bookings',
-                'services.id',
-                '=',
-                'bookings.service_id'
-            )
-            ->groupBy(
-                'services.id'
-            )
-            ->orderByRaw(
-                'COUNT(bookings.id) DESC'
-            )
+        $topService = Service::withCount('bookings')
+            ->orderByDesc('bookings_count')
             ->first();
 
-        $topCleaner = User::select(
-                'users.*'
-            )
-            ->join(
-                'bookings',
-                'users.id',
-                '=',
-                'bookings.cleaner_id'
-            )
-            ->where(
-                'users.role',
-                'cleaner'
-            )
-            ->groupBy(
-                'users.id'
-            )
-            ->orderByRaw(
-                'COUNT(bookings.id) DESC'
-            )
+        $topCleaner = User::where('role', 'cleaner')
+            ->withCount('cleanerBookings')
+            ->orderByDesc('cleaner_bookings_count')
             ->first();
 
         $monthlyRevenue = [];
