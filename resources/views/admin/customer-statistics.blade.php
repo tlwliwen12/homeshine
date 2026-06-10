@@ -212,22 +212,6 @@
 
     </div>
 
-    <div class="card border-0 shadow-sm rounded-4">
-
-        <div class="card-body">
-
-            <h5 class="fw-bold mb-3">
-
-                Booking Status Distribution
-
-            </h5>
-
-            <canvas id="bookingChart"></canvas>
-
-        </div>
-
-    </div>
-
 </div>
 
 <script>
@@ -263,24 +247,6 @@ new Chart(
             datasets: [{
                 label: 'Revenue (RM)',
                 data: @json($monthlyRevenue)
-            }]
-        }
-    }
-);
-
-new Chart(
-    document.getElementById('bookingChart'),
-    {
-        type: 'pie',
-        data: {
-            labels: [
-                'Pending',
-                'Approved',
-                'Completed',
-                'Cancelled'
-            ],
-            datasets: [{
-                data: @json($bookingStatuses)
             }]
         }
     }
