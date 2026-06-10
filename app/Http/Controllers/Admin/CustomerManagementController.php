@@ -149,4 +149,112 @@ class CustomerManagementController extends Controller
             'Customer activated.'
         );
     }
+
+    public function statistics()
+    {
+        $totalCustomers = User::where(
+            'role',
+            'customer'
+        )->count();
+
+        $activeCustomers = User::where(
+            'role',
+            'customer'
+        )
+        ->where('status', 'Active')
+        ->count();
+
+        $suspendedCustomers = User::where(
+            'role',
+            'customer'
+        )
+        ->where('status', 'Suspended')
+        ->count();
+
+        $newCustomers = User::where(
+            'role',
+            'customer'
+        )
+        ->whereMonth(
+            'created_at',
+            now()->month
+        )
+        ->count();
+
+        $topCustomers = User::where(
+            'role',
+            'customer'
+        )
+        ->get()
+        ->map(function ($customer) {
+
+            $customer->total_spent =
+                \App\Models\Booking::where(
+                    'user_id',
+                    $customer->id
+                )
+                ->where('payment_status', 'Paid')
+                ->get()
+                ->sum(function ($booking) {
+
+                    return $booking->service->price;
+
+                });
+
+            return $customer;
+
+        })
+        ->sortByDesc('total_spent')
+        ->take(5);
+
+    $monthlyCustomers = [];
+
+    for ($i = 1; $i <= 12; $i++) {
+
+        $monthlyCustomers[] = User::where(
+            'role',
+            'customer'
+        )
+        ->whereMonth('created_at', $i)
+        ->count();
+    }
+
+    $monthlyRevenue = [];
+
+    for ($i = 1; $i <= 12; $i++) {
+
+        $monthlyRevenue[] = Booking::where(
+            'payment_status',
+            'Paid'
+        )
+        ->whereMonth('updated_at', $i)
+        ->get()
+        ->sum(function ($booking) {
+
+            return $booking->service->price;
+
+        });
+    }
+
+    $bookingStatuses = [
+        Booking::where('status', 'Pending')->count(),
+        Booking::where('status', 'Approved')->count(),
+        Booking::where('status', 'Completed')->count(),
+        Booking::where('status', 'Cancelled')->count(),
+    ];
+
+    return view(
+        'admin.customer-statistics',
+        compact(
+            'totalCustomers',
+            'activeCustomers',
+            'suspendedCustomers',
+            'newCustomers',
+            'topCustomers',
+            'monthlyCustomers',
+            'monthlyRevenue',
+            'bookingStatuses'
+        )
+    );
+    }
 }

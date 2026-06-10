@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\PasswordResetNotification;
+use App\Notifications\CleanerRegistrationNotification;
 
 class AuthController extends Controller
 {

@@ -217,4 +217,5 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/admin/customers/{id}/update',[CustomerManagementController::class, 'update']);
     Route::post('/admin/customers/{id}/suspend',[CustomerManagementController::class, 'suspend']);
     Route::post('/admin/customers/{id}/activate',[CustomerManagementController::class, 'activate']);
+    Route::get('/admin/customer-statistics',[CustomerManagementController::class, 'statistics']);
 });

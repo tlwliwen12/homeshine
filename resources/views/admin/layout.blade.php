@@ -98,6 +98,8 @@
 
 </head>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <body>
 
 <!-- Navbar -->
@@ -170,6 +172,19 @@
 
                         <i class="bi bi-people-fill me-1"></i>
                         Manage Customers
+
+                    </a>
+
+                </li>
+
+                <li class="nav-item">
+
+                    <a class="nav-link"
+                       href="/admin/customer-statistics">
+
+                        <i class="bi bi-bar-chart-line-fill me-1"></i>
+
+                        Customer Statistics
 
                     </a>
 

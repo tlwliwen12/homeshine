@@ -67,7 +67,7 @@
 
                     <p class="text-secondary mb-0">
 
-                        Latest booking cancellation updates
+                        Latest updates
 
                     </p>
 
