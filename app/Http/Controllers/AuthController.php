@@ -65,6 +65,16 @@ class AuthController extends Controller
             ]);
         }
 
+        if (Auth::user()->status == 'Suspended') {
+
+            Auth::logout();
+
+            return back()->with(
+                'error',
+                'Your account has been suspended.'
+            );
+        }
+
         $request->session()->regenerate();
 
         /** @var \App\Models\User $user */

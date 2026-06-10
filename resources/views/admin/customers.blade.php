@@ -103,19 +103,37 @@
 
                         <td>
 
-                            <form method="POST"
-                                  action="/admin/customers/{{ $customer->id }}/delete">
+                            <div class="d-flex gap-2">
 
-                                @csrf
+                                <a href="/admin/customers/{{ $customer->id }}"
+                                   class="btn btn-primary btn-sm">
 
-                                <button class="btn btn-danger btn-sm"
-                                    onclick="return confirm('Delete this customer?')">
+                                    View
 
-                                    Delete
+                                </a>
 
-                                </button>
+                                <a href="/admin/customers/{{ $customer->id }}/edit"
+                                   class="btn btn-warning btn-sm">
 
-                            </form>
+                                    Edit
+
+                                </a>
+
+                                <form method="POST"
+                                      action="/admin/customers/{{ $customer->id }}/delete">
+
+                                    @csrf
+
+                                    <button class="btn btn-danger btn-sm"
+                                            onclick="return confirm('Delete this customer?')">
+
+                                        Delete
+
+                                    </button>
+
+                                </form>
+
+                            </div>
 
                         </td>
 

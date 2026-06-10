@@ -213,4 +213,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/customers',[CustomerManagementController::class, 'index']);
     Route::post('/admin/customers/{id}/delete',[CustomerManagementController::class, 'destroy']);
     Route::get('/admin/customers/{id}',[CustomerManagementController::class, 'show']);
+    Route::get('/admin/customers/{id}/edit',[CustomerManagementController::class, 'edit']);
+    Route::post('/admin/customers/{id}/update',[CustomerManagementController::class, 'update']);
+    Route::post('/admin/customers/{id}/suspend',[CustomerManagementController::class, 'suspend']);
+    Route::post('/admin/customers/{id}/activate',[CustomerManagementController::class, 'activate']);
 });
