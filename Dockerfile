@@ -1,5 +1,5 @@
-# Stage 1 - Backend (Laravel + PHP + Composer)
-FROM php:8.2-fpm AS backend
+# Use PHP-FPM base image
+FROM php:8.2-fpm
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -14,9 +14,6 @@ WORKDIR /var/www
 # Copy Laravel app files
 COPY . .
 
-# Copy .env file (for local dev; in production use docker-compose env_file)
-COPY .env .env
-
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
@@ -26,7 +23,7 @@ RUN php artisan config:clear && \
     php artisan view:clear && \
     php artisan config:cache
 
-# Set permissions for storage and cache
+# Set permissions
 RUN chown -R www-data:www-data storage bootstrap/cache
 
 CMD ["php-fpm"]
