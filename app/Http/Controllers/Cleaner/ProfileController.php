@@ -73,6 +73,16 @@ class ProfileController extends Controller
             );
         }
 
+        if (Hash::check(
+            $request->new_password,
+            Auth::user()->password
+        )) {
+            return back()->with(
+                'error',
+                'New password cannot be the same as your current password.'
+            );
+        }
+
         $user = User::findOrFail(Auth::id());
         $user->update([
             'password' => Hash::make(
