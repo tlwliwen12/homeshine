@@ -27,3 +27,6 @@ RUN php artisan config:clear && \
 RUN chown -R www-data:www-data storage bootstrap/cache
 
 CMD ["php-fpm"]
+
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
