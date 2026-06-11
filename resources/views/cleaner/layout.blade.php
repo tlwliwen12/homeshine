@@ -163,6 +163,16 @@ $pendingBookings = Booking::where('status', 'Pending')->count();
 
                     <span class="fw-semibold text-secondary">
 
+                        @if(Auth::user()->profile_image)
+
+                            <img src="{{ asset('storage/' . Auth::user()->profile_image) }}"
+                                 width="35"
+                                 height="35"
+                                 class="rounded-circle me-2"
+                                 style="object-fit:cover;">
+
+                        @endif
+
                         {{ Auth::user()->name }}
 
                     </span>

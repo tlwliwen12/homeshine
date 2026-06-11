@@ -105,9 +105,43 @@ $profileComplete =
         <div class="card-body p-4">
 
             <form method="POST"
-                  action="/cleaner/profile/update">
+                  action="/cleaner/profile/update"
+                  enctype="multipart/form-data">
 
                 @csrf
+
+                <div class="text-center mb-4">
+
+                    @if(Auth::user()->profile_image)
+
+                        <img src="{{ asset('storage/' . Auth::user()->profile_image) }}"
+                             class="rounded-circle shadow"
+                             width="120"
+                             height="120"
+                             style="object-fit:cover;">
+
+                    @else
+
+                        <img src="https://via.placeholder.com/120"
+                             class="rounded-circle shadow">
+
+                    @endif
+
+                </div>
+
+                <div class="mb-4">
+
+                    <label class="form-label fw-semibold">
+
+                        Profile Image
+
+                    </label>
+
+                    <input type="file"
+                           name="profile_image"
+                           class="form-control">
+
+                </div>
 
                 <!-- Name -->
                 <div class="mb-3">

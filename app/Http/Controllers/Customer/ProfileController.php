@@ -29,19 +29,31 @@ class ProfileController extends Controller
             'city' => 'nullable|max:100',
             'state' => 'nullable|max:100',
             'postcode' => 'nullable|max:10',
+            'profile_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         $user = User::find(Auth::id());
-        $user->update($request->only([
-            'name',
-            'email',
-            'phone',
-            'address_line_1',
-            'address_line_2',
-            'city',
-            'state',
-            'postcode',
-        ]));
+
+        if ($request->hasFile('profile_image')) {
+
+            $path = $request->file('profile_image')
+                ->store('profiles', 'public');
+
+            $user->profile_image = $path;
+        }
+
+        $user->fill([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'address_line_1' => $request->address_line_1,
+            'address_line_2' => $request->address_line_2,
+            'city' => $request->city,
+            'state' => $request->state,
+            'postcode' => $request->postcode,
+        ]);
+
+        $user->save();
 
         return back()->with('success', 'Profile updated successfully!');
     }

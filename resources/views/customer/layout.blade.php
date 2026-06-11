@@ -192,7 +192,17 @@ Swal.fire({
                 <li class="nav-item ms-3">
                     <span class="fw-semibold text-secondary">
                         @auth
-                        Hi, {{ Auth::user()->name }}
+                        @if(Auth::user()->profile_image)
+
+                            <img src="{{ asset('storage/' . Auth::user()->profile_image) }}"
+                                 width="35"
+                                 height="35"
+                                 class="rounded-circle me-2"
+                                 style="object-fit:cover;">
+
+                        @endif
+
+                        {{ Auth::user()->name }}
                         @endauth
                     </span>
                 </li>
