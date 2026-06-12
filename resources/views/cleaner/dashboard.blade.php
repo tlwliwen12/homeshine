@@ -2,180 +2,90 @@
 
 @section('content')
 
-<div class="container-fluid">
+<!-- Page Header (same admin style) -->
+<div class="d-flex justify-content-between align-items-center mb-5">
 
-    <!-- Header -->
-    <div class="mb-4">
-
-        <h2 class="fw-bold">
-            Dashboard
-        </h2>
-
-        <p class="text-secondary">
-            Manage customer bookings efficiently
-        </p>
-
+    <div>
+        <h1 class="fw-bold mb-2">
+            Cleaner Dashboard
+        </h1>
     </div>
 
-    <!-- Notifications -->
-    @if(auth()->user()->notifications->count() > 0)
+    <div>
+        <span class="badge bg-primary-subtle text-primary px-4 py-3 rounded-pill">
+            Active Cleaner Panel
+        </span>
+    </div>
 
-    <div class="card custom-card border-0 mb-5">
+</div>
 
-        <div class="card-body p-4">
+<!-- Welcome Card (same admin structure) -->
+<div class="card border-0 shadow-sm rounded-4 mb-5">
 
-            <!-- Header -->
-            <div class="d-flex align-items-center mb-4">
+    <div class="card-body p-5">
 
-                <div style="
-                    width:70px;
-                    height:70px;
-                    border-radius:20px;
-                    background:rgba(245,158,11,0.1);
-                    display:flex;
-                    align-items:center;
-                    justify-content:center;
-                ">
+        <div class="row align-items-center">
 
-                    <i class="bi bi-bell-fill fs-2 text-warning"></i>
+            <div class="col-lg-8">
 
-                </div>
+                <h2 class="fw-bold">
+                    Welcome Back, {{ Auth::user()->name }} 👋
+                </h2>
 
-                <div class="ms-3">
+                <p class="text-secondary mb-0">
 
-                    <h4 class="fw-bold mb-1">
-                        Notifications
-                    </h4>
+                    You have
+                    <strong>{{ $todayJobs }}</strong>
+                    job(s) scheduled today.
 
-                    <p class="text-secondary mb-0">
-                        Latest booking updates
-                    </p>
-
-                </div>
+                </p>
 
             </div>
 
-            <!-- Notification List -->
-            @foreach(auth()->user()->notifications->take(5) as $notification)
+            <div class="col-lg-4 text-center mt-4 mt-lg-0">
 
-            <div class="border rounded-4 p-4 mb-3">
-
-                <div class="d-flex justify-content-between align-items-start">
-
-                    <div>
-
-                        <h6 class="fw-semibold mb-2">
-
-                            {{ $notification->data['message'] }}
-
-                        </h6>
-
-                        @if(isset($notification->data['service']))
-
-                        <p class="text-secondary mb-1">
-
-                            <strong>Service:</strong>
-                            {{ $notification->data['service'] }}
-
-                        </p>
-
-                        @endif
-
-                        @if(isset($notification->data['customer']))
-
-                        <p class="text-secondary mb-0">
-
-                            <strong>Customer:</strong>
-                            {{ $notification->data['customer'] }}
-
-                        </p>
-
-                        @endif
-
-                    </div>
-
-                    <!-- Badge -->
-                    @if(str_contains(strtolower($notification->data['message']), 'cancel'))
-
-                        <span class="badge bg-danger px-3 py-2 rounded-pill">
-                            Cancelled
-                        </span>
-
-                    @elseif(str_contains(strtolower($notification->data['message']), 'reschedule'))
-
-                        <span class="badge bg-warning text-dark px-3 py-2 rounded-pill">
-                            Rescheduled
-                        </span>
-
-                    @elseif(str_contains(strtolower($notification->data['message']), 'created'))
-
-                        <span class="badge bg-primary px-3 py-2 rounded-pill">
-                            New Booking
-                        </span>
-
-                    @elseif(str_contains(strtolower($notification->data['message']), 'approved'))
-
-                        <span class="badge bg-success px-3 py-2 rounded-pill">
-                            Approved
-                        </span>
-
-                    @elseif(str_contains(strtolower($notification->data['message']), 'refund'))
-
-                        <span class="badge bg-info text-dark px-3 py-2 rounded-pill">
-                            Refund
-                        </span>
-
-                    @elseif(str_contains(strtolower($notification->data['message']), 'payment'))
-
-                        <span class="badge bg-success px-3 py-2 rounded-pill">
-                            Payment
-                        </span>
-
-                    @else
-
-                        <span class="badge bg-secondary px-3 py-2 rounded-pill">
-                            Notification
-                        </span>
-
-                    @endif
-
-                </div>
+                <img src="{{ asset('images/logo.png') }}"
+                     class="img-fluid"
+                     style="
+                        max-width:160px;
+                        filter: drop-shadow(0 10px 25px rgba(37,99,235,0.15));
+                        opacity:0.95;
+                     "
+                     alt="HomeShine Logo">
 
             </div>
-
-            @endforeach
 
         </div>
 
     </div>
 
-    @endif
+</div>
 
-    <!-- Statistics -->
-    <div class="row g-4">
+<!-- Stats Cards (converted to ADMIN style grid) -->
+<div class="row g-4 mb-5">
 
-        <!-- Pending -->
-        <div class="col-md-4">
+    <!-- Pending -->
+    <div class="col-md-6 col-xl-3">
 
-            <div class="card custom-card p-4 h-100">
+        <div class="card border-0 shadow-sm rounded-4 h-100">
+
+            <div class="card-body">
 
                 <div class="d-flex justify-content-between align-items-center">
 
                     <div>
 
-                        <h5 class="fw-bold">
-                            Pending Bookings
-                        </h5>
+                        <small class="text-muted">Pending Requests</small>
 
-                        <h2 class="fw-bold text-warning">
-
-                            {{ \App\Models\Booking::where('status','Pending')->count() }}
-
+                        <h2 class="fw-bold text-warning mb-0 mt-2">
+                            {{ $pendingBookings }}
                         </h2>
 
                     </div>
 
-                    <i class="bi bi-hourglass-split fs-1 text-warning"></i>
+                    <div class="bg-warning bg-opacity-10 rounded-4 p-3">
+                        <i class="bi bi-hourglass-split fs-3 text-warning"></i>
+                    </div>
 
                 </div>
 
@@ -183,28 +93,30 @@
 
         </div>
 
-        <!-- Approved -->
-        <div class="col-md-4">
+    </div>
 
-            <div class="card custom-card p-4 h-100">
+    <!-- Accepted -->
+    <div class="col-md-6 col-xl-3">
+
+        <div class="card border-0 shadow-sm rounded-4 h-100">
+
+            <div class="card-body">
 
                 <div class="d-flex justify-content-between align-items-center">
 
                     <div>
 
-                        <h5 class="fw-bold">
-                            Approved
-                        </h5>
+                        <small class="text-muted">Accepted Jobs</small>
 
-                        <h2 class="fw-bold text-success">
-
-                            {{ \App\Models\Booking::where('status','Approved')->count() }}
-
+                        <h2 class="fw-bold text-primary mb-0 mt-2">
+                            {{ $acceptedBookings }}
                         </h2>
 
                     </div>
 
-                    <i class="bi bi-check-circle fs-1 text-success"></i>
+                    <div class="bg-primary bg-opacity-10 rounded-4 p-3">
+                        <i class="bi bi-briefcase-fill fs-3 text-primary"></i>
+                    </div>
 
                 </div>
 
@@ -212,31 +124,105 @@
 
         </div>
 
-        <!-- Rejected -->
-        <div class="col-md-4">
+    </div>
 
-            <div class="card custom-card p-4 h-100">
+    <!-- Completed -->
+    <div class="col-md-6 col-xl-3">
+
+        <div class="card border-0 shadow-sm rounded-4 h-100">
+
+            <div class="card-body">
 
                 <div class="d-flex justify-content-between align-items-center">
 
                     <div>
 
-                        <h5 class="fw-bold">
-                            Rejected
-                        </h5>
+                        <small class="text-muted">Completed Jobs</small>
 
-                        <h2 class="fw-bold text-danger">
-
-                            {{ \App\Models\Booking::where('status','Rejected')->count() }}
-
+                        <h2 class="fw-bold text-success mb-0 mt-2">
+                            {{ $completedBookings }}
                         </h2>
 
                     </div>
 
-                    <i class="bi bi-x-circle fs-1 text-danger"></i>
+                    <div class="bg-success bg-opacity-10 rounded-4 p-3">
+                        <i class="bi bi-check-circle-fill fs-3 text-success"></i>
+                    </div>
 
                 </div>
 
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Today Jobs -->
+    <div class="col-md-6 col-xl-3">
+
+        <div class="card border-0 shadow-sm rounded-4 h-100">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <div>
+
+                        <small class="text-muted">Today's Jobs</small>
+
+                        <h2 class="fw-bold text-info mb-0 mt-2">
+                            {{ $todayJobs }}
+                        </h2>
+
+                    </div>
+
+                    <div class="bg-info bg-opacity-10 rounded-4 p-3">
+                        <i class="bi bi-calendar-event fs-3 text-info"></i>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Quick Actions (converted to admin card style) -->
+<div class="card border-0 shadow-sm rounded-4 mb-5">
+
+    <div class="card-body p-4">
+
+        <h5 class="fw-bold mb-4">
+            Quick Actions
+        </h5>
+
+        <div class="row g-3">
+
+            <div class="col-md-4">
+                <a href="/cleaner/bookings"
+                   class="btn btn-warning w-100 py-3 rounded-4">
+                    <i class="bi bi-calendar-check me-2"></i>
+                    View Requests
+                </a>
+            </div>
+
+            <div class="col-md-4">
+                <a href="/cleaner/jobs"
+                   class="btn btn-primary w-100 py-3 rounded-4">
+                    <i class="bi bi-briefcase-fill me-2"></i>
+                    Accepted Jobs
+                </a>
+            </div>
+
+            <div class="col-md-4">
+                <a href="/cleaner/profile"
+                   class="btn btn-success w-100 py-3 rounded-4">
+                    <i class="bi bi-person-circle me-2"></i>
+                    My Profile
+                </a>
             </div>
 
         </div>
