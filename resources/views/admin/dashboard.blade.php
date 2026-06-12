@@ -13,12 +13,6 @@
 
         </h1>
 
-        <p class="text-secondary mb-0">
-
-            Welcome back, {{ Auth::user()->name }} 👋
-
-        </p>
-
     </div>
 
     <div>
@@ -33,356 +27,205 @@
 
 </div>
 
-<!-- Notifications -->
-@if(auth()->user()->notifications->count() > 0)
-
-    <div class="card custom-card border-0 mb-5">
-
-        <div class="card-body p-4">
-
-            <!-- Notification Header -->
-            <div class="d-flex align-items-center mb-4">
-
-                <div style="
-                    width:70px;
-                    height:70px;
-                    border-radius:20px;
-                    background:rgba(245,158,11,0.1);
-                    display:flex;
-                    align-items:center;
-                    justify-content:center;
-                ">
-
-                    <i class="bi bi-bell-fill fs-2 text-warning"></i>
-
-                </div>
-
-                <div class="ms-3">
-
-                    <h4 class="fw-bold mb-1">
-
-                        Notifications
-
-                    </h4>
-
-                    <p class="text-secondary mb-0">
-
-                        Latest updates
-
-                    </p>
-
-                </div>
-
-            </div>
-
-            <!-- Notification List -->
-            @foreach(auth()->user()->notifications->take(5) as $notification)
-
-                <div class="border rounded-4 p-4 mb-3">
-
-                    <div class="d-flex justify-content-between align-items-start">
-
-                        <div>
-
-                            @if(isset($notification->data['title']))
-                                <h6 class="fw-bold mb-2">
-                                    {{ $notification->data['title'] }}
-                                </h6>
-                            @endif
-
-                            <p class="mb-0">
-                                {{ $notification->data['message'] }}
-                            </p>
-
-                            @if(isset($notification->data['service']))
-
-                                <p class="text-secondary mb-1">
-
-                                    <strong>Service:</strong>
-                                    {{ $notification->data['service'] }}
-
-                                </p>
-
-                            @endif
-
-                            @if(isset($notification->data['customer']))
-
-                                <p class="text-secondary mb-0">
-
-                                    <strong>Customer:</strong>
-                                    {{ $notification->data['customer'] }}
-
-                                </p>
-
-                            @endif
-
-                        </div>
-
-                        @if(str_contains(strtolower($notification->data['message']), 'cancel'))
-
-                            <span class="badge bg-danger px-3 py-2 rounded-pill">
-                                Cancelled
-                            </span>
-
-                        @elseif(str_contains(strtolower($notification->data['message']), 'reschedule'))
-
-                            <span class="badge bg-warning text-dark px-3 py-2 rounded-pill">
-                                Rescheduled
-                            </span>
-
-                        @elseif(str_contains(strtolower($notification->data['message']), 'created'))
-
-                            <span class="badge bg-primary px-3 py-2 rounded-pill">
-                                New Booking
-                            </span>
-
-                        @elseif(str_contains(strtolower($notification->data['message']), 'approved'))
-
-                            <span class="badge bg-success px-3 py-2 rounded-pill">
-                                Approved
-                            </span>
-
-                        @elseif(str_contains(strtolower($notification->data['message']), 'refund'))
-
-                            <span class="badge bg-info text-dark px-3 py-2 rounded-pill">
-                                Refund
-                            </span>
-
-                        @elseif(str_contains(strtolower($notification->data['message']), 'payment'))
-
-                            <span class="badge bg-success px-3 py-2 rounded-pill">
-                                Payment
-                            </span>
-
-                        @elseif(
-                            str_contains(strtolower($notification->data['message']), 'cleaner')
-                            ||
-                            str_contains(strtolower($notification->data['title'] ?? ''), 'cleaner')
-                        )
-
-                            <span class="badge bg-info px-3 py-2 rounded-pill">
-                                New Cleaner
-                            </span>
-
-                        @else
-
-                            <span class="badge bg-secondary px-3 py-2 rounded-pill">
-                                Notification
-                            </span>
-
-                        @endif
-
-                    </div>
-
-                </div>
-
-            @endforeach
-
-        </div>
-
-    </div>
-
-@endif
-
-<!-- Dashboard Cards -->
-<div class="row g-4">
-
-    <!-- Services Card -->
-    <div class="col-md-6 col-lg-4">
-
-        <div class="card custom-card h-100 p-4">
-
-            <div class="d-flex justify-content-between align-items-start">
-
-                <div>
-
-                    <div class="mb-3"
-                         style="
-                            width:70px;
-                            height:70px;
-                            border-radius:20px;
-                            background:rgba(37,99,235,0.1);
-                            display:flex;
-                            align-items:center;
-                            justify-content:center;
-                         ">
-
-                        <i class="bi bi-grid fs-2 text-primary"></i>
-
-                    </div>
-
-                    <h4 class="fw-bold">
-
-                        Services
-
-                    </h4>
-
-                    <p class="text-secondary mt-3 mb-4">
-
-                        Manage all cleaning services
-                        available in HomeShine.
-
-                    </p>
-
-                </div>
-
-            </div>
-
-            <a href="/admin/services"
-               class="btn btn-primary rounded-pill px-4">
-
-                View Services
-
-            </a>
-
-        </div>
-
-    </div>
-
-    <!-- Add Service -->
-    <div class="col-md-6 col-lg-4">
-
-        <div class="card custom-card h-100 p-4">
-
-            <div class="d-flex justify-content-between align-items-start">
-
-                <div>
-
-                    <div class="mb-3"
-                         style="
-                            width:70px;
-                            height:70px;
-                            border-radius:20px;
-                            background:rgba(16,185,129,0.1);
-                            display:flex;
-                            align-items:center;
-                            justify-content:center;
-                         ">
-
-                        <i class="bi bi-plus-circle fs-2 text-success"></i>
-
-                    </div>
-
-                    <h4 class="fw-bold">
-
-                        Add Service
-
-                    </h4>
-
-                    <p class="text-secondary mt-3 mb-4">
-
-                        Create new cleaning services
-                        for customers.
-
-                    </p>
-
-                </div>
-
-            </div>
-
-            <a href="/admin/services/create"
-               class="btn btn-success rounded-pill px-4">
-
-                Add Service
-
-            </a>
-
-        </div>
-
-    </div>
-
-    <!-- System Status -->
-    <div class="col-md-6 col-lg-4">
-
-        <div class="card custom-card h-100 p-4">
-
-            <div class="d-flex justify-content-between align-items-start">
-
-                <div>
-
-                    <div class="mb-3"
-                         style="
-                            width:70px;
-                            height:70px;
-                            border-radius:20px;
-                            background:rgba(245,158,11,0.1);
-                            display:flex;
-                            align-items:center;
-                            justify-content:center;
-                         ">
-
-                        <i class="bi bi-check-circle fs-2 text-warning"></i>
-
-                    </div>
-
-                    <h4 class="fw-bold">
-
-                        System Status
-
-                    </h4>
-
-                    <p class="text-secondary mt-3 mb-4">
-
-                        HomeShine platform is operating
-                        normally.
-
-                    </p>
-
-                </div>
-
-            </div>
-
-            <button class="btn btn-warning text-white rounded-pill px-4"
-                    disabled>
-
-                Running
-
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-<!-- Information Section -->
-<div class="card custom-card border-0 mt-5">
+<div class="card border-0 shadow-sm rounded-4 mb-5">
 
     <div class="card-body p-5">
 
         <div class="row align-items-center">
 
-            <!-- Left -->
             <div class="col-lg-8">
 
-                <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill mb-3">
+                <h2 class="fw-bold">
 
-                    HomeShine Management
+                    Welcome Back,
+                    {{ Auth::user()->name }} 👋
 
-                </span>
+               </h2>
 
-                <h3 class="fw-bold mb-3">
+                <p class="text-secondary mb-0">
 
-                    Manage Your Cleaning Service Platform Easily
+                    HomeShine currently has
 
-                </h3>
+                    <strong>{{ $totalBookings }}</strong>
 
-                <p class="text-secondary mb-0"
-                   style="line-height:1.8;">
+                    bookings and
 
-                    Use the admin dashboard to manage cleaning services,
-                    maintain system operations, and improve customer experience.
+                    <strong>{{ $completedBookings }}</strong>
+
+                    completed jobs.
 
                 </p>
 
-            </div>
+           </div>
 
-            <!-- Right -->
             <div class="col-lg-4 text-center mt-4 mt-lg-0">
 
-                <div style="font-size:90px;">
+                <img src="{{ asset('images/logo.png') }}"
+                     class="img-fluid"
+                     style="
+                        max-width:180px;
+                        filter: drop-shadow(0 10px 25px rgba(37,99,235,0.15));
+                        opacity:0.95;
+                     "
+                     alt="HomeShine Logo">
 
-                    🧹
+           </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="row g-4 mb-5">
+
+    <!-- Total Bookings -->
+    <div class="col-md-6 col-xl-3">
+
+        <div class="card shadow-sm border-0 rounded-4 h-100">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <div>
+
+                        <small class="text-muted">
+
+                            Total Bookings
+
+                        </small>
+
+                        <h2 class="fw-bold mb-0 mt-2">
+
+                            {{ $totalBookings }}
+
+                        </h2>
+
+                    </div>
+
+                    <div class="bg-primary bg-opacity-10 rounded-4 p-3">
+
+                        <i class="bi bi-calendar-check fs-3 text-primary"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Revenue -->
+    <div class="col-md-6 col-xl-3">
+
+        <div class="card shadow-sm border-0 rounded-4 h-100">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <div>
+
+                        <small class="text-muted">
+
+                            Total Revenue
+
+                        </small>
+
+                        <h2 class="fw-bold text-success mb-0 mt-2">
+
+                            RM {{ number_format($totalRevenue,2) }}
+
+                        </h2>
+
+                    </div>
+
+                    <div class="bg-success bg-opacity-10 rounded-4 p-3">
+
+                        <i class="bi bi-cash-stack fs-3 text-success"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Refunds -->
+    <div class="col-md-6 col-xl-3">
+
+        <div class="card shadow-sm border-0 rounded-4 h-100">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <div>
+
+                        <small class="text-muted">
+
+                            Total Refunds
+
+                        </small>
+
+                        <h2 class="fw-bold text-danger mb-0 mt-2">
+
+                            RM {{ number_format($totalRefunds,2) }}
+
+                        </h2>
+
+                    </div>
+
+                    <div class="bg-danger bg-opacity-10 rounded-4 p-3">
+
+                        <i class="bi bi-arrow-counterclockwise fs-3 text-danger"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Completed Jobs -->
+    <div class="col-md-6 col-xl-3">
+
+        <div class="card shadow-sm border-0 rounded-4 h-100">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <div>
+
+                        <small class="text-muted">
+
+                            Completed Jobs
+
+                        </small>
+
+                        <h2 class="fw-bold text-info mb-0 mt-2">
+
+                            {{ $completedBookings }}
+
+                        </h2>
+
+                    </div>
+
+                    <div class="bg-info bg-opacity-10 rounded-4 p-3">
+
+                        <i class="bi bi-check-circle fs-3 text-info"></i>
+
+                    </div>
 
                 </div>
 
@@ -393,22 +236,67 @@
     </div>
 
 </div>
-<br><br>
-<div class="row g-4 mb-4">
 
-    <div class="col-md-3">
+<div class="row g-4 mb-5">
 
-        <div class="card shadow-sm border-0 rounded-4">
+    <!-- Popular Service -->
+    <div class="col-lg-6">
 
-            <div class="card-body text-center">
+        <div class="card custom-card border-0 h-100">
 
-                <h3 class="fw-bold">
+            <div class="card-body p-4">
 
-                    {{ $totalBookings }}
+                <div class="d-flex justify-content-between align-items-center">
 
-                </h3>
+                    <div>
 
-                <small>Total Bookings</small>
+                        <small class="text-secondary">
+
+                            Most Popular Service
+
+                        </small>
+
+                        <h3 class="fw-bold mt-2 text-primary">
+
+                            {{ $topService->name ?? 'No Data' }}
+
+                        </h3>
+
+                    </div>
+
+                    <div
+                        class="d-flex align-items-center justify-content-center"
+                        style="
+                            width:70px;
+                            height:70px;
+                            border-radius:20px;
+                            background:rgba(37,99,235,0.1);
+                        "
+                    >
+
+                        <i class="bi bi-stars fs-2 text-primary"></i>
+
+                    </div>
+
+                </div>
+
+                <hr>
+
+                <div class="d-flex justify-content-between">
+
+                    <span class="text-secondary">
+
+                        Ranking
+
+                    </span>
+
+                    <span class="badge bg-primary rounded-pill px-3 py-2">
+
+                        #1 Service
+
+                    </span>
+
+                </div>
 
             </div>
 
@@ -416,59 +304,64 @@
 
     </div>
 
-    <div class="col-md-3">
+    <!-- Top Cleaner -->
+    <div class="col-lg-6">
 
-        <div class="card shadow-sm border-0 rounded-4">
+        <div class="card custom-card border-0 h-100">
 
-            <div class="card-body text-center">
+            <div class="card-body p-4">
 
-                <h3 class="fw-bold text-success">
+                <div class="d-flex justify-content-between align-items-center">
 
-                    RM {{ number_format($totalRevenue,2) }}
+                    <div>
 
-                </h3>
+                        <small class="text-secondary">
 
-                <small>Total Revenue</small>
+                            Top Cleaner
 
-            </div>
+                        </small>
 
-        </div>
+                        <h3 class="fw-bold mt-2 text-success">
 
-    </div>
+                            {{ $topCleaner->name ?? 'No Data' }}
 
-    <div class="col-md-3">
+                        </h3>
 
-        <div class="card shadow-sm border-0 rounded-4">
+                    </div>
 
-            <div class="card-body text-center">
+                    <div
+                        class="d-flex align-items-center justify-content-center"
+                        style="
+                            width:70px;
+                            height:70px;
+                            border-radius:20px;
+                            background:rgba(16,185,129,0.1);
+                        "
+                    >
 
-                <h3 class="fw-bold text-danger">
+                        <i class="bi bi-trophy-fill fs-2 text-success"></i>
 
-                    RM {{ number_format($totalRefunds,2) }}
+                    </div>
 
-                </h3>
+                </div>
 
-                <small>Total Refunds</small>
+                <hr>
 
-            </div>
+                <div class="d-flex justify-content-between">
 
-        </div>
+                    <span class="text-secondary">
 
-    </div>
+                        Performance
 
-    <div class="col-md-3">
+                    </span>
 
-        <div class="card shadow-sm border-0 rounded-4">
+                    <span class="badge bg-success rounded-pill px-3 py-2">
 
-            <div class="card-body text-center">
+                        Top Rated
 
-                <h3 class="fw-bold text-primary">
+                    </span>
 
-                    {{ $completedBookings }}
-
-                </h3>
-
-                <small>Completed Jobs</small>
+                </div>
 
             </div>
 
@@ -478,76 +371,45 @@
 
 </div>
 
-<div class="row g-4 mb-4">
+<div class="card border-0 shadow-sm rounded-4 mb-5">
 
-    <div class="col-md-6">
+    <div class="card-body">
 
-        <div class="card border-0 shadow-sm rounded-4">
+        <h5 class="fw-bold mb-4">
 
-            <div class="card-body">
+            Revenue Overview
 
-                <h5 class="fw-bold">
+        </h5>
 
-                    Most Popular Service
-
-                </h5>
-
-                <hr>
-
-                @if($topService)
-
-                    <h4>
-
-                        {{ $topService->name }}
-
-                    </h4>
-
-                @else
-
-                    No Data
-
-                @endif
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="col-md-6">
-
-        <div class="card border-0 shadow-sm rounded-4">
-
-            <div class="card-body">
-
-                <h5 class="fw-bold">
-
-                    Top Cleaner
-
-                </h5>
-
-                <hr>
-
-                @if($topCleaner)
-
-                    <h4>
-
-                        {{ $topCleaner->name }}
-
-                    </h4>
-
-                @else
-
-                    No Data
-
-                @endif
-
-            </div>
-
-        </div>
+        <canvas id="revenueChart"></canvas>
 
     </div>
 
 </div>
+<script>
+
+new Chart(
+    document.getElementById('revenueChart'),
+    {
+        type:'line',
+        data:{
+            labels:[
+                'Jan','Feb','Mar',
+                'Apr','May','Jun',
+                'Jul','Aug','Sep',
+                'Oct','Nov','Dec'
+            ],
+            datasets:[{
+                label:'Revenue (RM)',
+                data:@json($monthlyRevenue),
+                borderWidth:3,
+                tension:0.4,
+                fill:true
+            }]
+        }
+    }
+);
+
+</script>
 
 @endsection

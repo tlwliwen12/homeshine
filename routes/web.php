@@ -223,4 +223,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/customer-statistics',[CustomerManagementController::class, 'statistics']);
 
     Route::get('/admin/reviews',[ReviewController::class, 'index']);
+
+    Route::post('/admin/notifications/read',[App\Http\Controllers\Admin\NotificationController::class,
+    'markRead'])->name('admin.notifications.read');
 });
