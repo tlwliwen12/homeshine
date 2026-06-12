@@ -2,6 +2,8 @@
 
 @section('content')
 
+<div class="container px-lg-4 px-md-4 px-3 main-content">
+
 <!-- Page Header -->
 <div class="d-flex justify-content-between align-items-center mb-5">
 
@@ -411,5 +413,7 @@ new Chart(
 );
 
 </script>
+
+</div> <!-- END container -->
 
 @endsection

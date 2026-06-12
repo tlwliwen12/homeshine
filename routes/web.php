@@ -152,6 +152,14 @@ Route::middleware(['auth', 'role:customer'])->group(function () {
     Route::get('/customer/profile', [CustomerProfileController::class, 'index']);
     Route::post('/customer/profile/update', [CustomerProfileController::class, 'update']);
     Route::post('/customer/update-password',[CustomerProfileController::class, 'updatePassword']);
+
+    Route::post('/customer/notifications/read', function () {
+
+    Auth::user()->unreadNotifications->markAsRead();
+
+    return response()->json(['status' => 'success']);
+
+})->name('customer.notifications.read');
 });
 
 /*

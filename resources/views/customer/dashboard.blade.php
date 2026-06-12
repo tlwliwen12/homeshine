@@ -2,106 +2,32 @@
 
 @section('content')
 
-<!-- Dashboard Header -->
-<div class="mb-4">
+<!-- Page Header (MATCH ADMIN STYLE) -->
+<div class="d-flex justify-content-between align-items-center mb-5">
 
-    <h1 class="page-title">
-        Customer Dashboard
-    </h1>
+    <div>
+        <h1 class="fw-bold mb-2">
+            Customer Dashboard
+        </h1>
 
-    <p class="text-secondary mt-2">
-        Welcome back, {{ Auth::user()->name }} 👋
-    </p>
+        <p class="text-secondary mb-0">
+            Welcome back, {{ Auth::user()->name }} 👋
+        </p>
+    </div>
 
-</div>
-
-@if(auth()->user()->notifications->count() > 0)
-
-<div class="card custom-card border-0 mb-4">
-
-    <div class="card-body p-4">
-
-        <div class="d-flex align-items-center mb-3">
-
-            <div class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
-                 style="width:60px;height:60px;">
-
-                <i class="bi bi-bell-fill text-primary fs-4"></i>
-
-            </div>
-
-            <div class="ms-3">
-
-                <h4 class="fw-bold mb-0">
-                    Notifications
-                </h4>
-
-                <small class="text-secondary">
-                    Latest updates on your bookings
-                </small>
-
-            </div>
-
-        </div>
-
-        @foreach(auth()->user()->notifications->take(5) as $notification)
-
-            <div class="border rounded-4 p-3 mb-3">
-
-                <div class="d-flex justify-content-between align-items-start">
-
-                    <div>
-
-                        <h6 class="fw-bold mb-1">
-
-                            {{ $notification->data['title'] ?? 'Notification' }}
-
-                        </h6>
-
-                        <p class="mb-0 text-secondary">
-
-                            {{ $notification->data['message'] }}
-
-                        </p>
-
-                    </div>
-
-                    @if(isset($notification->data['status']))
-
-                        @if($notification->data['status'] == 'In Progress')
-
-                            <span class="badge bg-info text-dark px-3 py-2 rounded-pill">
-                                In Progress
-                            </span>
-
-                        @elseif($notification->data['status'] == 'Completed')
-
-                            <span class="badge bg-success px-3 py-2 rounded-pill">
-                                Completed
-                            </span>
-
-                        @endif
-
-                    @endif
-
-                </div>
-
-            </div>
-
-        @endforeach
-
+    <div>
+        <span class="badge bg-primary-subtle text-primary px-4 py-3 rounded-pill">
+            Customer Panel Active
+        </span>
     </div>
 
 </div>
 
-@endif
-
-<!-- Hero Section -->
-<div class="card custom-card border-0 overflow-hidden mb-5">
+<!-- HERO SECTION (IMPROVED SPACING + STYLE) -->
+<div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-5">
 
     <div class="row align-items-center g-0">
 
-        <!-- Left Content -->
         <div class="col-lg-7 p-5">
 
             <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill mb-3">
@@ -109,18 +35,12 @@
             </span>
 
             <h2 class="fw-bold display-6 mb-3">
-
                 Professional Cleaning Services
-                For Your Comfort
-
             </h2>
 
             <p class="text-secondary mb-4" style="line-height:1.8;">
-
-                Easily book trusted cleaning services,
-                manage appointments, and enjoy a cleaner,
-                healthier home with HomeShine.
-
+                Book trusted cleaning services, manage appointments,
+                and enjoy a cleaner home experience.
             </p>
 
             <div class="d-flex gap-3 flex-wrap">
@@ -145,13 +65,12 @@
 
         </div>
 
-        <!-- Right Image -->
         <div class="col-lg-5 text-center p-4">
 
             <img src="{{ asset('images/logo.png') }}"
                  class="img-fluid"
-                 style="max-width:320px;"
-                 alt="Cleaning Service">
+                 style="max-width:280px; opacity:0.95;"
+                 alt="HomeShine">
 
         </div>
 
@@ -159,117 +78,84 @@
 
 </div>
 
-<!-- Dashboard Cards -->
+<!-- FEATURE CARDS (ADMIN STYLE UNIFIED) -->
 <div class="row g-4">
 
-    <!-- Services Card -->
+    <!-- Services -->
     <div class="col-md-6 col-lg-4">
 
-        <div class="card custom-card h-100 border-0 p-4 text-center">
+        <div class="card border-0 shadow-sm rounded-4 h-100 text-center p-4">
 
-            <div class="mb-3">
+            <div class="bg-primary bg-opacity-10 rounded-4 d-inline-flex align-items-center justify-content-center mb-3"
+                 style="width:70px;height:70px;">
 
-                <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center"
-                     style="width:70px; height:70px;">
-
-                    <i class="bi bi-grid text-primary fs-2"></i>
-
-                </div>
+                <i class="bi bi-grid text-primary fs-2"></i>
 
             </div>
 
-            <h4 class="fw-bold">
-                Services
-            </h4>
+            <h4 class="fw-bold">Services</h4>
 
             <p class="text-secondary mt-3">
-
-                Browse professional cleaning services
-                tailored for your needs.
-
+                Browse professional cleaning services tailored for you.
             </p>
 
             <a href="/customer/services"
                class="btn btn-outline-primary rounded-pill mt-2">
-
                 View Services
-
             </a>
 
         </div>
 
     </div>
 
-    <!-- Bookings Card -->
+    <!-- Bookings -->
     <div class="col-md-6 col-lg-4">
 
-        <div class="card custom-card h-100 border-0 p-4 text-center">
+        <div class="card border-0 shadow-sm rounded-4 h-100 text-center p-4">
 
-            <div class="mb-3">
+            <div class="bg-success bg-opacity-10 rounded-4 d-inline-flex align-items-center justify-content-center mb-3"
+                 style="width:70px;height:70px;">
 
-                <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center"
-                     style="width:70px; height:70px;">
-
-                    <i class="bi bi-calendar-check text-success fs-2"></i>
-
-                </div>
+                <i class="bi bi-calendar-check text-success fs-2"></i>
 
             </div>
 
-            <h4 class="fw-bold">
-                My Bookings
-            </h4>
+            <h4 class="fw-bold">My Bookings</h4>
 
             <p class="text-secondary mt-3">
-
-                View your booking history
-                and upcoming cleaning schedules.
-
+                Track your cleaning schedules and history.
             </p>
 
             <a href="/customer/bookings"
                class="btn btn-outline-success rounded-pill mt-2">
-
                 View Bookings
-
             </a>
 
         </div>
 
     </div>
 
-    <!-- Quality Card -->
+    <!-- Quality -->
     <div class="col-md-6 col-lg-4">
 
-        <div class="card custom-card h-100 border-0 p-4 text-center">
+        <div class="card border-0 shadow-sm rounded-4 h-100 text-center p-4">
 
-            <div class="mb-3">
+            <div class="bg-warning bg-opacity-10 rounded-4 d-inline-flex align-items-center justify-content-center mb-3"
+                 style="width:70px;height:70px;">
 
-                <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center"
-                     style="width:70px; height:70px;">
-
-                    <i class="bi bi-stars text-warning fs-2"></i>
-
-                </div>
+                <i class="bi bi-stars text-warning fs-2"></i>
 
             </div>
 
-            <h4 class="fw-bold">
-                Quality Service
-            </h4>
+            <h4 class="fw-bold">Quality Service</h4>
 
             <p class="text-secondary mt-3">
-
-                Trusted and reliable cleaning professionals
-                ready to help anytime.
-
+                Trusted professionals ensuring best service quality.
             </p>
 
             <a href="/customer/services"
                class="btn btn-outline-warning rounded-pill mt-2">
-
                 Book Now
-
             </a>
 
         </div>
