@@ -176,6 +176,9 @@ Route::middleware(['auth', 'role:cleaner'])->group(function () {
     Route::post('/cleaner/update-password',[CleanerProfileController::class, 'updatePassword']);
 
     Route::get('/cleaner/transactions', [CleanerTransactionController::class, 'index']);
+
+    Route::post('/cleaner/notifications/read',[App\Http\Controllers\Cleaner\NotificationController::class,
+    'markRead'])->name('cleaner.notifications.read');
 });
 
 /*
