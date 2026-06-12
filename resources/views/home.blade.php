@@ -125,6 +125,105 @@
             background: white;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* fade-in animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== RESPONSIVE SYSTEM ===== */
+
+/* smooth scaling base */
+html {
+    font-size: 16px;
+}
+
+/* tablets */
+@media (max-width: 991px) {
+
+    .hero-title {
+        font-size: 42px;
+        text-align: center;
+    }
+
+    .hero-text {
+        text-align: center;
+    }
+
+    .hero-section {
+        text-align: center;
+        padding: 60px 0;
+    }
+
+    .container {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .navbar-nav {
+        text-align: center;
+        padding-top: 15px;
+    }
+
+    .nav-item {
+        margin-bottom: 8px;
+    }
+
+    .ms-2, .ms-3 {
+        margin-left: 0 !important;
+    }
+
+}
+
+/* phones */
+@media (max-width: 576px) {
+    html { font-size: 14px; }
+
+    .hero-title {
+        font-size: 32px;
+        line-height: 1.3;
+    }
+
+    .hero-text {
+        font-size: 16px;
+    }
+
+    .navbar-brand {
+        font-size: 24px;
+    }
+
+    .nav-link {
+        margin-left: 0;
+        padding: 10px 12px !important;
+    }
+
+    .feature-card {
+        margin-bottom: 15px;
+        text-align: center;
+        padding: 25px;
+    }
+
+    .btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .feature-card {
+        margin-bottom: 20px;
+    }
+}
+
     </style>
 
 </head>
@@ -151,27 +250,19 @@
             <ul class="navbar-nav ms-auto align-items-center">
 
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->is('/') ? 'active text-primary fw-semibold' : '' }}" href="/">
-                        Home
-                    </a>
+                    <a class="nav-link" href="#home">Home</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        Services
-                    </a>
+                    <a class="nav-link" href="#services">Services</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        About
-                    </a>
+                    <a class="nav-link" href="#about">About</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        Contact
-                    </a>
+                    <a class="nav-link" href="#contact">Contact</a>
                 </li>
 
                 @guest
@@ -236,11 +327,11 @@
 </nav>
 
 <!-- Hero -->
-<section class="hero-section">
+<section id="home" class="hero-section">
 
     <div class="container">
 
-        <div class="row align-items-center">
+        <div class="row align-items-center flex-column-reverse flex-lg-row">
 
             <!-- Left -->
             <div class="col-lg-6">
@@ -259,13 +350,17 @@
 
                 @guest
 
-                    <a href="/register" class="btn btn-primary btn-lg px-5 py-3 rounded-pill shadow-sm me-2">
-                        Get Started
-                    </a>
+                   <div class="d-flex flex-column flex-sm-row gap-2 justify-content-center justify-content-lg-start">
 
-                    <a href="/login" class="btn btn-outline-primary btn-lg px-5 py-3 rounded-pill shadow-sm">
-                        Login
-                    </a>
+                       <a href="/register" class="btn btn-primary btn-lg px-5 py-3 rounded-pill shadow-sm">
+                           Get Started
+                       </a>
+
+                       <a href="/login" class="btn btn-outline-primary btn-lg px-5 py-3 rounded-pill shadow-sm">
+                           Login
+                       </a>
+
+                   </div>
 
                 @endguest
 
@@ -293,8 +388,8 @@
             <div class="col-lg-6 text-center mt-5 mt-lg-0">
 
                 <img src="{{ asset('images/logo.png') }}"
-                     class="img-fluid"
-                     style="max-width:500px; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1));"
+                     class="img-fluid mx-auto d-block"
+                     style="max-width:500px; width:100%;"
                      alt="Cleaning Service">
 
             </div>
@@ -378,6 +473,314 @@
 
 </section>
 
+<section id="services" class="py-5 bg-white">
+
+    <div class="container">
+
+        <div class="text-center mb-5">
+
+            <h2 class="fw-bold" style="font-size:40px;">
+                Our Services
+            </h2>
+
+            <p class="text-secondary">
+                Professional cleaning solutions for every home
+            </p>
+
+        </div>
+
+        <div class="row g-4">
+
+            <div class="col-md-4">
+
+                <div class="card feature-card p-4 text-center h-100">
+
+                    <div class="feature-icon mb-3">🏠</div>
+
+                    <h4 class="fw-bold">Home Cleaning</h4>
+
+                    <p class="text-secondary mt-3">
+                        Full house cleaning service including rooms, kitchen, and living area.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="card feature-card p-4 text-center h-100">
+
+                    <div class="feature-icon mb-3">🧽</div>
+
+                    <h4 class="fw-bold">Deep Cleaning</h4>
+
+                    <p class="text-secondary mt-3">
+                        Intensive cleaning for stubborn dirt and deep hygiene.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="card feature-card p-4 text-center h-100">
+
+                    <div class="feature-icon mb-3">🪟</div>
+
+                    <h4 class="fw-bold">Window Cleaning</h4>
+
+                    <p class="text-secondary mt-3">
+                        Crystal clear window cleaning for a brighter home.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="py-5 bg-white">
+
+    <div class="container">
+
+        <div class="text-center mb-5 reveal">
+
+            <h2 class="fw-bold" style="font-size:40px;">
+                Simple Pricing
+            </h2>
+
+            <p class="text-secondary">
+                Transparent and affordable rates
+            </p>
+
+        </div>
+
+        <div class="row g-4 justify-content-center">
+
+            <!-- Basic -->
+            <div class="col-md-4 reveal">
+
+                <div class="card feature-card p-4 text-center h-100">
+
+                    <h4 class="fw-bold">Basic Clean</h4>
+
+                    <h2 class="text-primary fw-bold my-3">RM 50</h2>
+
+                    <p class="text-secondary">Standard home cleaning service</p>
+
+                    <a href="/register" class="btn btn-outline-primary rounded-pill mt-3">
+                        Book Now
+                    </a>
+
+                </div>
+
+            </div>
+
+            <!-- Deep -->
+            <div class="col-md-4 reveal">
+
+                <div class="card feature-card p-4 text-center h-100 border border-primary">
+
+                    <h4 class="fw-bold">Deep Clean</h4>
+
+                    <h2 class="text-primary fw-bold my-3">RM 120</h2>
+
+                    <p class="text-secondary">Full deep cleaning service</p>
+
+                    <a href="/register" class="btn btn-primary rounded-pill mt-3">
+                        Book Now
+                    </a>
+
+                </div>
+
+            </div>
+
+            <!-- Premium -->
+            <div class="col-md-4 reveal">
+
+                <div class="card feature-card p-4 text-center h-100">
+
+                    <h4 class="fw-bold">Premium</h4>
+
+                    <h2 class="text-primary fw-bold my-3">RM 200</h2>
+
+                    <p class="text-secondary">Full house + windows + kitchen</p>
+
+                    <a href="/register" class="btn btn-outline-primary rounded-pill mt-3">
+                        Book Now
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section id="about" class="py-5">
+
+    <div class="container">
+
+        <div class="row align-items-center">
+
+            <div class="col-lg-6">
+
+                <h2 class="fw-bold mb-4" style="font-size:40px;">
+                    About HomeShine
+                </h2>
+
+                <p class="text-secondary" style="line-height:1.8;">
+                    HomeShine is a professional cleaning service platform designed to connect customers
+                    with trusted cleaners. We focus on quality, reliability, and convenience to make home
+                    cleaning easier than ever.
+                </p>
+
+                <p class="text-secondary">
+                    Our mission is to ensure every home stays clean, fresh, and comfortable.
+                </p>
+
+            </div>
+
+            <div class="col-lg-6 text-center">
+
+                <img src="{{ asset('images/logo.png') }}"
+                     class="img-fluid"
+                     style="max-width:300px; opacity:0.9;">
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="py-5">
+
+    <div class="container">
+
+        <div class="text-center mb-5 reveal">
+
+            <h2 class="fw-bold" style="font-size:40px;">
+                What Customers Say
+            </h2>
+
+            <p class="text-secondary">
+                Real feedback from our users
+            </p>
+
+        </div>
+
+        <div class="row g-4">
+
+            <div class="col-md-4 reveal">
+
+                <div class="card feature-card p-4 h-100">
+
+                    <p class="text-secondary">
+                        “Very professional service. My house has never been this clean before.”
+                    </p>
+
+                    <div class="fw-bold mt-3">— Aina, Customer</div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4 reveal">
+
+                <div class="card feature-card p-4 h-100">
+
+                    <p class="text-secondary">
+                        “Easy booking system and reliable cleaners. Highly recommended!”
+                    </p>
+
+                    <div class="fw-bold mt-3">— Daniel, Customer</div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4 reveal">
+
+                <div class="card feature-card p-4 h-100">
+
+                    <p class="text-secondary">
+                        “As a cleaner, I get jobs easily and manage everything in one place.”
+                    </p>
+
+                    <div class="fw-bold mt-3">— Siti, Cleaner</div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section id="contact" class="py-5 bg-white">
+
+    <div class="container">
+
+        <div class="text-center mb-5">
+
+            <h2 class="fw-bold" style="font-size:40px;">
+                Contact Us
+            </h2>
+
+            <p class="text-secondary">
+                Get in touch with us anytime
+            </p>
+
+        </div>
+
+        <div class="row justify-content-center">
+
+            <div class="col-lg-6">
+
+                <div class="card feature-card p-4">
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Name</label>
+                        <input type="text" class="form-control rounded-3">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Email</label>
+                        <input type="email" class="form-control rounded-3">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Message</label>
+                        <textarea class="form-control rounded-3" rows="4"></textarea>
+                    </div>
+
+                    <button class="btn btn-primary rounded-pill px-4">
+                        Send Message
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
 <!-- Footer -->
 <footer class="border-top py-4">
 
@@ -389,6 +792,23 @@
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+function revealOnScroll() {
+    const elements = document.querySelectorAll('.reveal');
+
+    elements.forEach(el => {
+        const windowHeight = window.innerHeight;
+        const elementTop = el.getBoundingClientRect().top;
+
+        if (elementTop < windowHeight - 100) {
+            el.classList.add('active');
+        }
+    });
+}
+
+window.addEventListener('scroll', revealOnScroll);
+</script>
 
 </body>
 </html>
