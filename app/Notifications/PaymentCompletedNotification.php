@@ -22,42 +22,31 @@ class PaymentCompletedNotification extends Notification
         return ['mail', 'database'];
     }
 
-    public function toMail($notifiable): MailMessage
-    {
-        return (new MailMessage)
-
-            ->subject('Payment Completed')
-
-            ->greeting('Hello '.$notifiable->name.',')
-
-            ->line(
-                'Payment completed for booking #'.$this->booking->id
-            )
-
-            ->line(
-                'Service: '.$this->booking->service->name
-            )
-
-            ->line(
-                'Customer: '.$this->booking->user->name
-            )
-
-            ->line('Thank you.');
-    }
+    public function toMail($notifiable): \Illuminate\Notifications\Messages\MailMessage
+{
+    return (new \Illuminate\Notifications\Messages\MailMessage)
+        ->markdown('mail.notification', [
+            'title' => '💳 Payment Completed',
+            'name' => $notifiable->name,
+            'message' => 'Payment has been successfully completed for a booking.',
+            'details' => [
+                'Booking ID' => $this->booking->id,
+                'Service' => $this->booking->service->name,
+                'Customer' => $this->booking->user->name,
+                'Amount Status' => 'Paid',
+            ],
+            'url' => url('/admin/bookings')
+        ]);
+}
 
     public function toArray($notifiable): array
-    {
-        return [
-
-            'message' =>
-                'Payment completed for booking #'.$this->booking->id,
-
-            'service' =>
-                $this->booking->service->name,
-
-            'customer' =>
-                $this->booking->user->name,
-
-        ];
-    }
+{
+    return [
+        'title' => 'Payment Completed',
+        'message' => 'Payment completed for booking #' . $this->booking->id,
+        'booking_id' => $this->booking->id,
+        'status' => 'Paid',
+        'customer' => $this->booking->user->name,
+    ];
+}
 }

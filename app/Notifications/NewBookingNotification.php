@@ -24,24 +24,31 @@ class NewBookingNotification extends Notification
     }
 
     public function toMail($notifiable)
-    {
-        return (new MailMessage)
-            ->subject('New Booking Received')
-            ->line('A new booking has been created.')
-            ->line('Booking ID: #' . $this->booking->id)
-            ->action(
-                'View Booking',
-                url('/admin/bookings')
-            );
-    }
-
+{
+    return (new \Illuminate\Notifications\Messages\MailMessage)
+        ->markdown('mail.notification', [
+            'title' => '🆕 New Booking Received',
+            'name' => 'Admin',
+            'message' => 'A new booking has been created in the system.',
+            'details' => [
+                'Booking ID' => $this->booking->id,
+                'Customer' => $this->booking->user->name,
+                'Service' => $this->booking->service->name,
+                'Date' => $this->booking->booking_date,
+                'Time' => $this->booking->booking_time,
+                'Status' => $this->booking->status,
+            ],
+            'url' => url('/admin/bookings')
+        ]);
+}
     public function toArray($notifiable)
-    {
-        return [
-            'message' =>
-                'New booking #' . $this->booking->id,
-            'booking_id' =>
-                $this->booking->id
-        ];
-    }
+{
+    return [
+        'title' => 'New Booking',
+        'message' => 'New booking #' . $this->booking->id . ' created.',
+        'booking_id' => $this->booking->id,
+        'status' => $this->booking->status,
+        'customer' => $this->booking->user->name,
+    ];
+}
 }

@@ -16,34 +16,25 @@ class PasswordUpdatedNotification extends Notification
     }
 
     public function toMail($notifiable)
-    {
-        return (new MailMessage)
-
-            ->subject('Password Updated Successfully')
-
-            ->greeting('Hello ' . $notifiable->name . ',')
-
-            ->line('Your HomeShine account password has been updated successfully.')
-
-            ->line('If you did not perform this action, please contact support immediately.')
-
-            ->action(
-                'Login Now',
-                url('/login')
-            )
-
-            ->line('Thank you for using HomeShine!');
-    }
+{
+    return (new \Illuminate\Notifications\Messages\MailMessage)
+        ->markdown('mail.notification', [
+            'title' => '🔐 Password Updated',
+            'name' => $notifiable->name,
+            'message' => 'Your HomeShine account password has been successfully updated.',
+            'details' => [
+                'Security Notice' => 'If this was not you, please contact support immediately.',
+            ],
+            'url' => url('/login')
+        ]);
+}
 
     public function toArray($notifiable)
-    {
-        return [
-
-            'title' => 'Password Updated',
-
-            'message' =>
-                'Your account password was updated successfully.'
-
-        ];
-    }
+{
+    return [
+        'title' => 'Password Updated',
+        'message' => 'Password was updated successfully.',
+        'status' => 'Security',
+    ];
+}
 }

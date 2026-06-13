@@ -25,53 +25,39 @@ class BookingCancelledNotification extends Notification
 
     // Email notification
     public function toMail($notifiable)
-    {
-        return (new MailMessage)
+{
+    $booking = $this->booking;
 
-            ->subject('Booking Cancelled')
-
-            ->greeting('Hello '.$notifiable->name.',')
-
-            ->line('A booking has been cancelled.')
-
-            ->line('Booking ID: #'.$this->booking->id)
-
-            ->line('Customer: '.$this->booking->user->name)
-
-            ->line('Service: '.$this->booking->service->name)
-
-            ->line('Date: '.$this->booking->booking_date)
-
-            ->line('Time: '.$this->booking->booking_time)
-
-            ->line(
-                $this->booking->payment_status == 'Paid'
-                ? 'Refund request is pending.'
-                : 'No payment was made.'
-            )
-
-            ->action(
-                'View Dashboard',
-                url('/login')
-            )
-
-            ->line('Thank you for using HomeShine.');
-    }
+    return (new \Illuminate\Notifications\Messages\MailMessage)
+        ->markdown('mail.notification', [
+            'title' => '❌ Booking Cancelled',
+            'name' => $notifiable->name,
+            'message' => 'A booking has been cancelled by the customer.',
+            'details' => [
+                'Booking ID' => $booking->id,
+                'Service' => $booking->service->name,
+                'Customer' => $booking->user->name,
+                'Date' => $booking->booking_date,
+                'Time' => $booking->booking_time,
+                'Payment Status' => $booking->payment_status,
+                'Note' => $booking->payment_status == 'Paid'
+                    ? 'Refund request is pending.'
+                    : 'No payment was made.',
+            ],
+            'url' => url('/login')
+        ]);
+}
 
     // Database notification
     public function toArray($notifiable): array
-    {
-        return [
-
-            'message' =>
-                'Booking #'.$this->booking->id.' has been cancelled by customer.',
-
-            'service' =>
-                $this->booking->service->name,
-
-            'customer' =>
-                $this->booking->user->name,
-
-        ];
-    }
+{
+    return [
+        'title' => 'Booking Cancelled',
+        'message' => 'Booking #' . $this->booking->id . ' cancelled by customer.',
+        'booking_id' => $this->booking->id,
+        'service' => $this->booking->service->name,
+        'customer' => $this->booking->user->name,
+        'status' => 'Cancelled',
+    ];
+}
 }

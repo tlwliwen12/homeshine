@@ -23,34 +23,33 @@ class BookingApprovedNotification extends Notification
     }
 
     public function toMail($notifiable)
-    {
-        $booking = $this->booking;
+{
+    $booking = $this->booking;
 
-            $cleanerName = $booking->cleaner ? $booking->cleaner->name : 'Not Assigned';
-            $cleanerPhone = $booking->cleaner ? $booking->cleaner->phone : '-';
-            $cleanerGender = $booking->cleaner ? $booking->cleaner->gender : '-';
-
-        return (new MailMessage)
-            ->subject('Booking Approved')
-            ->greeting('Hello ' . $notifiable->name . ',')
-            ->line('A booking has been approved.')
-            ->line('Customer Name: ' . $this->booking->user->name)
-            ->line('Service: ' . $this->booking->service->name)
-            ->line('Date: ' . $this->booking->booking_date)
-            ->line('Time: ' . $this->booking->booking_time)
-            ->line('Cleaner Assigned: ' . $cleanerName)
-            ->line('Cleaner Gender: ' . $cleanerGender)
-            ->line('Cleaner Phone: ' . $cleanerPhone)
-            ->action('View Booking', url('/customer/bookings'))
-            ->line('Thank you for using HomeShine!');
-    }
+    return (new \Illuminate\Notifications\Messages\MailMessage)
+        ->markdown('mail.notification', [
+            'title' => '📌 Booking Approved',
+            'name' => $notifiable->name,
+            'message' => 'Your booking has been approved successfully.',
+            'details' => [
+                'Service' => $booking->service->name,
+                'Date' => $booking->booking_date,
+                'Time' => $booking->booking_time,
+                'Cleaner' => $booking->cleaner->name ?? 'Not Assigned',
+                'Cleaner Phone' => $booking->cleaner->phone ?? '-',
+                'Cleaner Gender' => $booking->cleaner->gender ?? '-',
+            ],
+            'url' => url('/customer/bookings')
+        ]);
+}
 
     public function toArray($notifiable)
-    {
-        return [
-            'message' =>
-                'Booking #' . $this->booking->id .
-                ' has been approved.'
-        ];
-    }
+{
+    return [
+        'title' => 'Booking Approved',
+        'message' => 'Your booking #' . $this->booking->id . ' has been approved.',
+        'booking_id' => $this->booking->id,
+        'status' => 'Approved',
+    ];
+}
 }

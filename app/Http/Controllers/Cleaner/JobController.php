@@ -79,12 +79,47 @@ class JobController extends Controller
             'status' => $request->status
         ]);
 
-        $booking->user->notify(
-            new JobStatusUpdatedNotification($booking)
-        );
+        /*
+        |--------------------------------------
+        | CUSTOMER NOTIFICATION
+        |--------------------------------------
+        */
 
-        return back()->with('success', 'Status updated successfully');
-    }
+        if ($request->status === 'In Progress') {
+
+            // job started
+            $booking->user->notify(
+                new JobStatusUpdatedNotification($booking)
+            );
+        }
+
+        if ($request->status === 'Completed') {
+
+            // job completed
+            $booking->user->notify(
+                new \App\Notifications\JobCompletedNotification($booking)
+            );
+        }
+
+        /*
+        |--------------------------------------
+        | ADMIN NOTIFICATION (COMPLETED ONLY)
+        |--------------------------------------
+        */
+        if ($request->status === 'Completed') {
+
+            $admins = User::where('role', 'admin')->get();
+
+            foreach ($admins as $admin) {
+
+                $admin->notify(
+                    new \App\Notifications\AdminJobCompletedNotification($booking)
+                );
+            }
+        }
+
+    return back()->with('success', 'Status updated successfully');
+}
 
     /*
     |-----------------------------------

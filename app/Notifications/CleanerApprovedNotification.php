@@ -16,21 +16,26 @@ class CleanerApprovedNotification extends Notification
     }
 
     public function toMail($notifiable)
-    {
-        return (new MailMessage)
-            ->subject('Cleaner Account Approved')
-            ->greeting('Hello ' . $notifiable->name . '!')
-            ->line('Your cleaner account has been approved by the HomeShine administrator.')
-            ->line('You can now log in and access the cleaner dashboard.')
-            ->action('Login Now', url('/login'))
-            ->line('Thank you for joining HomeShine!');
-    }
+{
+    return (new \Illuminate\Notifications\Messages\MailMessage)
+        ->markdown('mail.notification', [
+            'title' => '🎉 Cleaner Account Approved',
+            'name' => $notifiable->name,
+            'message' => 'Your cleaner account has been approved by the HomeShine administrator.',
+            'details' => [
+                'Status' => 'Approved',
+                'Access' => 'You can now log in to the cleaner dashboard',
+            ],
+            'url' => url('/login')
+        ]);
+}
 
     public function toArray($notifiable)
-    {
-        return [
-            'title' => 'Cleaner Account Approved',
-            'message' => 'Your cleaner account has been approved. You can now log in.'
-        ];
-    }
+{
+    return [
+        'title' => 'Cleaner Approved',
+        'message' => 'Your cleaner account has been approved.',
+        'status' => 'Approved',
+    ];
+}
 }

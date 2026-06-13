@@ -23,43 +23,30 @@ class CleanerPayoutNotification extends Notification
     }
 
     public function toArray($notifiable)
-    {
-        return [
-
-            'message' =>
-                'Company has paid your earnings for Booking #'
-                . $this->booking->id
-
-        ];
-    }
+{
+    return [
+        'title' => 'Payout Completed',
+        'message' => 'Earnings for Booking #' . $this->booking->id . ' have been paid.',
+        'booking_id' => $this->booking->id,
+        'status' => 'Paid',
+    ];
+}
 
     public function toMail($notifiable)
-    {
-        return (new MailMessage)
+{
+    $booking = $this->booking;
 
-            ->subject('Cleaner Payout Completed')
-
-            ->greeting('Hello ' . $notifiable->name . ',')
-
-            ->line(
-                'Your payment for completed cleaning service has been processed.'
-            )
-
-            ->line(
-                'Booking ID: #' . $this->booking->id
-            )
-
-            ->line(
-                'Service: ' . $this->booking->service->name
-            )
-
-            ->action(
-                'View Transactions',
-                url('/cleaner/transactions')
-            )
-
-            ->line(
-                'Thank you for working with HomeShine.'
-            );
-    }
+    return (new \Illuminate\Notifications\Messages\MailMessage)
+        ->markdown('mail.notification', [
+            'title' => '💰 Payout Completed',
+            'name' => $notifiable->name,
+            'message' => 'Your earnings for a completed cleaning job have been processed successfully.',
+            'details' => [
+                'Booking ID' => $booking->id,
+                'Service' => $booking->service->name,
+                'Amount Status' => 'Paid',
+            ],
+            'url' => url('/cleaner/transactions')
+        ]);
+}
 }

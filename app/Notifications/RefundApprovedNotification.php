@@ -22,31 +22,29 @@ class RefundApprovedNotification extends Notification
         return ['database', 'mail'];
     }
 
-    public function toMail($notifiable)
-    {
-        return (new MailMessage)
-            ->subject('Refund Approved')
-            ->greeting('Hello ' . $notifiable->name . ',')
-            ->line('Your refund request has been approved.')
-            ->line('Booking ID: #' . $this->booking->id)
-            ->line('Service: ' . $this->booking->service->name)
-            ->line('Refund Status: Refunded')
-            ->action(
-                'View Booking',
-                url('/customer/bookings')
-            )
-            ->line('Thank you for using HomeShine!');
-    }
+    public function toMail($notifiable): \Illuminate\Notifications\Messages\MailMessage
+{
+    return (new \Illuminate\Notifications\Messages\MailMessage)
+        ->markdown('mail.notification', [
+            'title' => '💸 Refund Approved',
+            'name' => $notifiable->name,
+            'message' => 'Your refund request has been approved successfully.',
+            'details' => [
+                'Booking ID' => $this->booking->id,
+                'Service' => $this->booking->service->name,
+                'Refund Status' => 'Processed',
+            ],
+            'url' => url('/customer/bookings')
+        ]);
+}
 
-    public function toArray($notifiable)
+    public function toArray($notifiable): array
 {
     return [
-
-        'message' =>
-            'Your refund for booking #'
-            . $this->booking->id .
-            ' has been approved.'
-
+        'title' => 'Refund Approved',
+        'message' => 'Refund approved for booking #' . $this->booking->id,
+        'booking_id' => $this->booking->id,
+        'status' => 'Refunded',
     ];
 }
 }

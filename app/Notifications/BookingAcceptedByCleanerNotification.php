@@ -24,38 +24,29 @@ class BookingAcceptedByCleanerNotification extends Notification
     }
 
     public function toMail($notifiable)
-    {
-        return (new MailMessage)
-            ->subject('Booking Accepted By Cleaner')
-            ->greeting('Hello Admin,')
-            ->line(
-                'Booking #' . $this->booking->id .
-                ' has been accepted by a cleaner.'
-            )
-            ->line(
-                'Cleaner: ' .
-                ($this->booking->cleaner->name ?? 'N/A')
-            )
-            ->line(
-                'Customer: ' .
-                $this->booking->user->name
-            )
-            ->action(
-                'View Booking',
-                url('/admin/bookings')
-            )
-            ->line('Thank you for using HomeShine.');
-    }
+{
+    return (new \Illuminate\Notifications\Messages\MailMessage)
+        ->markdown('mail.notification', [
+            'title' => '📌 Booking Accepted',
+            'name' => 'Admin',
+            'message' => 'A booking has been accepted by a cleaner.',
+            'details' => [
+                'Booking ID' => $this->booking->id,
+                'Cleaner' => $this->booking->cleaner->name ?? 'N/A',
+                'Customer' => $this->booking->user->name,
+            ],
+            'url' => url('/admin/bookings')
+        ]);
+}
 
     public function toArray($notifiable)
-    {
-        return [
-            'booking_id' => $this->booking->id,
-            'message' =>
-                'Booking #' .
-                $this->booking->id .
-                ' accepted by cleaner ' .
-                ($this->booking->cleaner->name ?? 'Unknown')
-        ];
-    }
+{
+    return [
+        'title' => 'Booking Accepted',
+        'message' => 'Booking #' . $this->booking->id . ' accepted by cleaner.',
+        'booking_id' => $this->booking->id,
+        'cleaner' => $this->booking->cleaner->name ?? null,
+        'customer' => $this->booking->user->name,
+    ];
+}
 }

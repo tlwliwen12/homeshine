@@ -3,10 +3,10 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Notifications\Messages\MailMessage;
 
-class JobStatusUpdatedNotification extends Notification
+class JobCompletedNotification extends Notification
 {
     use Queueable;
 
@@ -24,19 +24,17 @@ class JobStatusUpdatedNotification extends Notification
 
     public function toMail($notifiable)
 {
-    $booking = $this->booking;
-
     return (new \Illuminate\Notifications\Messages\MailMessage)
         ->markdown('mail.notification', [
-            'title' => '🔔 Job Status Updated',
+            'title' => '🎉 Job Completed',
             'name' => $notifiable->name,
-            'message' => 'Your booking status has been updated to ' . $booking->status . '.',
+            'message' => 'Great news! Your cleaning service has been completed successfully.',
             'details' => [
-                'Service' => $booking->service->name,
-                'Status' => $booking->status,
-                'Date' => $booking->booking_date,
-                'Time' => $booking->booking_time,
-                'Cleaner' => $booking->cleaner->name ?? 'Not Assigned',
+                'Service' => $this->booking->service->name,
+                'Cleaner' => $this->booking->cleaner->name ?? 'Not Assigned',
+                'Date' => $this->booking->booking_date,
+                'Time' => $this->booking->booking_time,
+                'Status' => 'Completed',
             ],
             'url' => url('/customer/bookings')
         ]);
@@ -45,10 +43,10 @@ class JobStatusUpdatedNotification extends Notification
     public function toArray($notifiable)
 {
     return [
-        'title' => 'Job Status Updated',
-        'message' => 'Booking is now ' . $this->booking->status,
+        'title' => 'Job Completed',
+        'message' => 'Your cleaning job has been completed successfully.',
         'booking_id' => $this->booking->id,
-        'status' => $this->booking->status,
+        'status' => 'Completed',
     ];
 }
 }

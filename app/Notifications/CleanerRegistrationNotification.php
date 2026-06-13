@@ -23,37 +23,27 @@ class CleanerRegistrationNotification extends Notification
     }
 
     public function toMail($notifiable)
-    {
-        return (new MailMessage)
-            ->subject('New Cleaner Registration')
-            ->greeting('Hello Admin!')
-            ->line(
-                $this->cleaner->name .
-                ' has registered as a cleaner.'
-            )
-            ->line(
-                'The account is waiting for approval.'
-            )
-            ->action(
-                'Review Cleaner',
-                url('/admin/cleaners')
-            );
-    }
+{
+    return (new \Illuminate\Notifications\Messages\MailMessage)
+        ->markdown('mail.notification', [
+            'title' => '🆕 New Cleaner Registration',
+            'name' => 'Admin',
+            'message' => $this->cleaner->name . ' has registered as a cleaner and is waiting for approval.',
+            'details' => [
+                'Cleaner Name' => $this->cleaner->name,
+                'Status' => 'Pending Approval',
+            ],
+            'url' => url('/admin/cleaners')
+        ]);
+}
 
     public function toArray($notifiable)
-    {
-        return [
-
-            'title' =>
-                'New Cleaner Registration',
-
-            'message' =>
-                $this->cleaner->name .
-                ' has registered as a cleaner and is waiting for approval.',
-
-            'cleaner_id' =>
-                $this->cleaner->id
-
-        ];
-    }
+{
+    return [
+        'title' => 'New Cleaner Registration',
+        'message' => $this->cleaner->name . ' registered as a cleaner.',
+        'cleaner_id' => $this->cleaner->id,
+        'status' => 'Pending Approval',
+    ];
+}
 }
