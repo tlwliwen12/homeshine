@@ -236,6 +236,9 @@
     <div class="row g-4">
 
         @forelse($bookings as $booking)
+        @php
+            $isCancelled = $booking->status === 'Cancelled';
+        @endphp
 
         <div class="col-md-6 col-lg-4">
 
@@ -375,18 +378,20 @@
 
                         <strong>Payout:</strong>
 
-                        @if($booking->payout_status == 'Paid')
-
-                            <span class="badge bg-success">
-                                Paid to Cleaner
+                        @if($isCancelled)
+                            <span class="badge bg-danger">
+                                Refund Required
                             </span>
-
                         @else
-
-                            <span class="badge bg-warning text-dark">
-                                Pending
-                            </span>
-
+                            @if($booking->payout_status == 'Paid')
+                                <span class="badge bg-success">
+                                    Paid to Cleaner
+                                </span>
+                            @else
+                                <span class="badge bg-warning text-dark">
+                                    Pending
+                                </span>
+                            @endif
                         @endif
 
                     </p>
@@ -401,31 +406,23 @@
                     </a>
 
                     <!-- Pay Cleaner -->
-                    @if(
+                    @if(!$isCancelled &&
                         $booking->status == 'Completed' &&
                         $booking->payment_status == 'Paid' &&
                         $booking->payout_status == 'Pending'
                     )
-
                         <a href="/admin/payouts/{{ $booking->id }}/pay"
                            class="btn btn-success w-100 mb-2">
-
                             Pay Cleaner
-
                         </a>
-
                     @endif
 
                     <!-- Refund -->
-                    @if($booking->refund_status == 'Pending')
-
+                    @if($isCancelled && $booking->refund_status == 'Pending')
                         <a href="/admin/refunds/{{ $booking->id }}/pay"
                            class="btn btn-warning w-100">
-
-                            Approve Refund
-
+                            Process Refund
                         </a>
-
                     @endif
 
                 </div>

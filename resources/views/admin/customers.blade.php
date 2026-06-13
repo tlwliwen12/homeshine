@@ -112,13 +112,6 @@
 
                                 </a>
 
-                                <a href="/admin/customers/{{ $customer->id }}/edit"
-                                   class="btn btn-warning btn-sm">
-
-                                    Edit
-
-                                </a>
-
                                 <form method="POST"
                                       action="/admin/customers/{{ $customer->id }}/delete">
 

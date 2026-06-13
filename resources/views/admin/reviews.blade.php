@@ -60,12 +60,9 @@
 
                 <div class="card-body">
 
-                    <h6>5-Star Reviews</h6>
-
+                    <h6>High Ratings</h6>
                     <h3 class="text-success">
-
-                        {{ $fiveStars }}
-
+                        {{ $highRatings }}
                     </h3>
 
                 </div>

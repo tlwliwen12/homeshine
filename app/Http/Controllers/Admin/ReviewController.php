@@ -81,15 +81,9 @@ class ReviewController extends Controller
                     1
                 ),
 
-                'fiveStars' => Review::where(
-                    'rating',
-                    5
-                )->count(),
+                'highRatings' => Review::whereBetween('rating', [4, 5])->count(),
 
-                'lowRatings' => Review::whereIn(
-                    'rating',
-                    [1,2]
-                )->count(),
+                'lowRatings' => Review::whereBetween('rating', [1, 3])->count(),
             ]
         );
     }

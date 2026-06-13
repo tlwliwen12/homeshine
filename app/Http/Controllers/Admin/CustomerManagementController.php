@@ -89,39 +89,6 @@ class CustomerManagementController extends Controller
         );
     }
 
-    public function edit($id)
-    {
-        $customer = User::findOrFail($id);
-
-        return view(
-            'admin.customer-edit',
-            compact('customer')
-        );
-    }
-
-    public function update(Request $request, $id)
-    {
-        $customer = User::findOrFail($id);
-
-        $request->validate([
-            'name' => 'required|max:255',
-            'email' => 'required|email',
-            'phone' => 'nullable|max:20',
-        ]);
-
-        $customer->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-        ]);
-
-        return redirect('/admin/customers/'.$id)
-            ->with(
-                'success',
-                'Customer updated successfully.'
-            );
-    }
-
     public function suspend($id)
     {
         $customer = User::findOrFail($id);

@@ -6,6 +6,7 @@ use App\Models\Booking;
 use App\Models\FinanceTransaction;
 use App\Models\User;
 use App\Notifications\PaymentCompletedNotification;
+use App\Notifications\CleanerJobPaidNotification;
 
 class PaymentService
 {
@@ -32,17 +33,23 @@ class PaymentService
             'status' => 'Completed'
         ]);
 
+        /*
+        |-----------------------------------
+        | NOTIFY CLEANER
+        |-----------------------------------
+        */
+        if ($booking->cleaner_id) {
+
+            $booking->cleaner->notify(
+                new CleanerJobPaidNotification($booking)
+            );
+        }
+
         // notify admin + cleaner
         $admins = User::where('role', 'admin')->get();
 
         foreach ($admins as $admin) {
             $admin->notify(
-                new PaymentCompletedNotification($booking)
-            );
-        }
-
-        if ($booking->cleaner) {
-            $booking->cleaner->notify(
                 new PaymentCompletedNotification($booking)
             );
         }
