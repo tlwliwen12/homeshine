@@ -542,7 +542,7 @@ $pendingBookings = Booking::where('status','Pending')->count();
                        href="/cleaner/profile">
 
                         <i class="bi bi-person-circle me-1"></i>
-                        My Profile
+                        Profile
 
                     </a>
                 </li>
@@ -550,9 +550,10 @@ $pendingBookings = Booking::where('status','Pending')->count();
                 <!-- LOGOUT -->
                 <li class="nav-item ms-3">
 
-                    <form method="POST" action="/logout">
+                    <form method="POST" action="{{ route('logout') }}" class="d-inline">
                         @csrf
-                        <button class="btn btn-danger px-4 rounded-pill">
+
+                        <button type="submit" class="btn btn-danger px-4 rounded-pill">
                             Logout
                         </button>
                     </form>

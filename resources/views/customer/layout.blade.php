@@ -47,7 +47,7 @@ body{
 }
 
 .navbar-brand{
-    font-size:24px;
+    font-size:28px;
     font-weight:700;
     color:#2563EB !important;
 }
@@ -88,7 +88,7 @@ body{
 }
 
 .page-title{
-    font-size:1.75rem;
+    font-size:2rem;
     font-weight:700;
     color:#111827;
 }
@@ -104,15 +104,15 @@ body{
 
 .ui-card{
     background:#fff;
-    border:1px solid rgba(0,0,0,0.04);
-    border-radius:16px;
-    box-shadow:0 4px 14px rgba(0,0,0,0.05);
-    transition:.2s ease;
+    border:none;
+    border-radius:20px;
+    box-shadow:0 4px 20px rgba(0,0,0,.06);
+    transition:.3s;
 }
 
 .ui-card:hover{
-    transform:translateY(-2px);
-    box-shadow:0 10px 24px rgba(0,0,0,0.08);
+    transform:translateY(-4px);
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
 }
 
 /* ========================================
@@ -140,19 +140,50 @@ body{
 ======================================== */
 
 .action-card{
-    background:#fff;
-    border-radius:16px;
-    padding:1.1rem;
+    background:white;
+    border-radius:20px;
+    padding:1.25rem;
     text-decoration:none;
     color:#111827;
     display:block;
-    transition:.2s ease;
-    box-shadow:0 4px 12px rgba(0,0,0,.05);
+    transition:.3s;
+    box-shadow:0 4px 20px rgba(0,0,0,.05);
 }
 
 .action-card:hover{
-    transform:translateY(-3px);
+    transform:translateY(-4px);
     color:#2563EB;
+}
+
+.stat-card{
+    transition:.3s;
+}
+
+.stat-card:hover{
+    transform:translateY(-5px);
+}
+
+.icon-box{
+    width:70px;
+    height:70px;
+    border-radius:18px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.action-icon{
+    width:55px;
+    height:55px;
+    border-radius:15px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+}
+
+.action-card{
+    height:100%;
 }
 
 /* ========================================
@@ -182,6 +213,19 @@ body{
 
 .table td{
     vertical-align:middle;
+}
+
+.section-card{
+    background:#fff;
+    border:none;
+    border-radius:20px;
+    box-shadow:0 4px 20px rgba(0,0,0,.06);
+    transition:.3s;
+}
+
+.section-card:hover{
+    transform:translateY(-3px);
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
 }
 
 /* ========================================

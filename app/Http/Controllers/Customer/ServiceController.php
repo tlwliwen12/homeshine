@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Customer;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Service;
+use App\Models\Review;
 
 class ServiceController extends Controller
 {
@@ -31,6 +32,10 @@ class ServiceController extends Controller
     {
         $service = Service::findOrFail($id);
 
-        return view('services.show', compact('service'));
+        $reviews = Review::where('service_id', $id)
+            ->latest()
+            ->get();
+
+        return view('services.show', compact('service', 'reviews'));
     }
 }
