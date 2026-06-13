@@ -22,17 +22,10 @@ class JobController extends Controller
     {
         $query = Booking::where('cleaner_id', Auth::id());
 
-        /*
-        |--------------------------------------------------------------------------
-        | JOB STATUS FILTER
-        |--------------------------------------------------------------------------
-        */
+        // STATUS FILTER
         if ($request->filter === 'upcoming') {
 
-            $query->whereIn('status', [
-                'Approved',
-                'In Progress'
-            ]);
+            $query->whereIn('status', ['Approved', 'In Progress']);
 
         } elseif ($request->filter === 'completed') {
 
@@ -40,37 +33,25 @@ class JobController extends Controller
 
         } else {
 
-            $query->whereNotIn('status', [
-                'Cancelled',
-                'Rejected'
-            ]);
+            $query->whereNotIn('status', ['Cancelled', 'Rejected']);
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | PAYMENT FILTER
-        |--------------------------------------------------------------------------
-        */
+        // PAYMENT FILTER
         if ($request->payment === 'paid') {
 
             $query->where('payment_status', 'Paid');
 
-        } elseif ($request->payment === 'unpaid') {
+       } elseif ($request->payment === 'unpaid') {
 
             $query->where(function ($q) {
-
                 $q->where('payment_status', 'Unpaid')
                   ->orWhereNull('payment_status');
-
             });
         }
 
         $bookings = $query->latest()->get();
 
-        return view(
-            'cleaner.jobs',
-            compact('bookings')
-        );
+        return view('cleaner.jobs', compact('bookings'));
     }
 
     /*
@@ -162,37 +143,61 @@ class JobController extends Controller
         );
     }
 
-    public function bookingRequests()
+    public function bookingRequests(Request $request)
     {
-        $bookings = Booking::whereNull('cleaner_id')
-            ->where('status', 'Pending')
-            ->latest()
-            ->get();
+        $query = Booking::whereNull('cleaner_id')
+            ->where('status', 'Pending');
 
-        return view(
-            'cleaner.bookings',
-            compact('bookings')
-        );
+        // SEARCH (booking id, customer name, service name)
+        if ($request->filled('search')) {
+
+            $query->where(function ($q) use ($request) {
+
+                $q->where('id', 'like', '%' . $request->search . '%')
+                  ->orWhereHas('user', function ($u) use ($request) {
+                      $u->where('name', 'like', '%' . $request->search . '%');
+                  })
+                  ->orWhereHas('service', function ($s) use ($request) {
+                      $s->where('name', 'like', '%' . $request->search . '%');
+                  });
+
+            });
+
+        }
+
+        // DATE FILTER
+        if ($request->filled('date')) {
+            $query->whereDate('booking_date', $request->date);
+        }
+
+        // TIME FILTER
+        if ($request->filled('booking_time')) {
+            $query->where('booking_time', $request->booking_time);
+        }
+
+        $bookings = $query->latest()->get();
+
+        return view('cleaner.bookings', compact('bookings'));
     }
 
     public function reject($id)
     {
         $booking = Booking::findOrFail($id);
 
+        // only pending allowed
         if ($booking->status !== 'Pending') {
-            return back()->with(
-                'error',
-                'Booking is no longer available.'
-            );
+            return back()->with('error', 'Booking is no longer available.');
+        }
+
+        // optional safety check
+        if ($booking->cleaner_id && $booking->cleaner_id !== Auth::id()) {
+            return back()->with('error', 'Not authorized.');
         }
 
         $booking->update([
             'status' => 'Rejected'
         ]);
 
-        return back()->with(
-            'success',
-            'Booking rejected.'
-        );
+        return back()->with('success', 'Booking rejected.');
     }
 }

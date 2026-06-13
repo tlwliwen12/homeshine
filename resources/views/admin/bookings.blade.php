@@ -243,17 +243,31 @@
 
                 <div class="card-body p-4">
 
-                    <h5 class="fw-bold mb-1">
+                    <div class="d-flex align-items-center mb-3">
 
-                        {{ $booking->service->name }}
+                        <div class="icon-box bg-primary bg-opacity-10 text-primary me-3">
 
-                    </h5>
+                            <i class="bi bi-house-check-fill"></i>
 
-                    <small class="text-secondary">
+                        </div>
 
-                        Booking #{{ $booking->id }}
+                        <div>
 
-                    </small>
+                            <h5 class="fw-bold mb-1">
+
+                                {{ $booking->service->name }}
+
+                            </h5>
+
+                            <small class="text-secondary">
+
+                                Booking #{{ $booking->id }}
+
+                            </small>
+
+                        </div>
+
+                    </div>
 
                     <hr>
 
@@ -335,14 +349,22 @@
 
                         @if($booking->payment_status == 'Paid')
 
-                            <span class="badge bg-success">
+                            <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill">
+
+                                <i class="bi bi-check-circle-fill me-1"></i>
+
                                 Paid
+
                             </span>
 
                         @else
 
-                            <span class="badge bg-danger">
+                            <span class="badge bg-danger-subtle text-danger px-3 py-2 rounded-pill">
+
+                                <i class="bi bi-x-circle-fill me-1"></i>
+
                                 Unpaid
+
                             </span>
 
                         @endif

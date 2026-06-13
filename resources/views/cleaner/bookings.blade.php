@@ -2,19 +2,34 @@
 
 @section('content')
 
-<div class="container-fluid">
+<div class="container">
 
-    <div class="mb-4">
+    <div class="page-header">
 
-        <h2 class="fw-bold">
-            Manage Bookings
-        </h2>
+    <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3">
 
-        <p class="text-secondary">
-            Approve or reject customer bookings
-        </p>
+        <div>
+
+            <h2 class="page-title">
+                Booking Requests
+            </h2>
+
+            <p class="page-subtitle mb-0">
+                Review and manage incoming customer bookings.
+            </p>
+
+        </div>
+
+        <span class="badge bg-warning-subtle text-warning px-4 py-3 rounded-pill">
+
+            {{ $bookings->where('status','Pending')->count() }}
+            Pending Requests
+
+        </span>
 
     </div>
+
+</div>
 
     @if(session('success'))
 
@@ -50,13 +65,128 @@
 
     @endif
 
+    <!-- Search & Filter -->
+<div class="section-card mb-4">
+
+    <div class="card-body p-4">
+
+        <form method="GET"
+              action="/cleaner/bookings">
+
+            <div class="row g-3 align-items-end">
+
+                <!-- Search -->
+                <div class="col-md-4">
+
+                    <label class="form-label fw-semibold">
+
+                        Search
+
+                    </label>
+
+                    <input type="text"
+                           name="search"
+                           class="form-control rounded-3"
+                           placeholder="Booking ID, Customer or Service"
+                           value="{{ request('search') }}">
+
+                </div>
+
+                <!-- Booking Date -->
+                <div class="col-md-3">
+
+                    <label class="form-label fw-semibold">
+
+                        Booking Date
+
+                    </label>
+
+                    <input type="date"
+                           name="date"
+                           class="form-control rounded-3"
+                           value="{{ request('date') }}">
+
+                </div>
+
+                <!-- Booking Time -->
+                <div class="col-md-3">
+
+                    <label class="form-label fw-semibold">
+
+                        Booking Time
+
+                    </label>
+
+                    <select name="booking_time"
+                                    class="form-select">
+
+                                <option value="">
+                                    Select Time Slot
+                                </option>
+
+                                <option value="08:00:00"
+                                    {{ request('booking_time') == '08:00:00' ? 'selected' : '' }}>
+                                    08:00 AM
+                                </option>
+
+                                <option value="10:00:00"
+                                    {{ request('booking_time') == '10:00:00' ? 'selected' : '' }}>
+                                    10:00 AM
+                                </option>
+
+                                <option value="14:00:00"
+                                    {{ request('booking_time') == '14:00:00' ? 'selected' : '' }}>
+                                    02:00 PM
+                                </option>
+
+                                <option value="16:00:00"
+                                    {{ request('booking_time') == '16:00:00' ? 'selected' : '' }}>
+                                    04:00 PM
+                                </option>
+
+                            </select>
+
+                </div>
+
+                <!-- Buttons -->
+                <div class="col-lg-2 col-md-12">
+
+                    <div class="d-grid gap-2">
+
+                        <button type="submit"
+                                class="btn btn-primary rounded-pill">
+
+                            <i class="bi bi-search me-1"></i>
+                            Search
+
+                        </button>
+
+                        <a href="/cleaner/bookings"
+                           class="btn btn-outline-secondary rounded-pill">
+
+                            Reset
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
     <div class="row g-4">
 
         @forelse($bookings as $booking)
 
         <div class="col-md-6 col-lg-4">
 
-            <div class="card custom-card h-100">
+            <div class="section-card h-100">
 
                 <div class="card-body p-4">
 
@@ -75,94 +205,67 @@
 
                     </div>
 
-                    <!-- Customer -->
-                    <p class="mb-2">
+                    <div class="border-top border-bottom py-3 mb-3">
 
-                        <i class="bi bi-person me-2 text-primary"></i>
+                        <p class="mb-2">
 
-                        <strong>Customer:</strong>
-                        {{ $booking->user->name }}
+                            <i class="bi bi-person-fill text-primary me-2"></i>
 
-                    </p>
+                            {{ $booking->user->name }}
 
-                    <!-- Date -->
-                    <p class="mb-2">
+                        </p>
 
-                        <i class="bi bi-calendar-event me-2 text-primary"></i>
+                        <p class="mb-2">
 
-                        <strong>Date:</strong>
-                        {{ $booking->booking_date }}
+                            <i class="bi bi-calendar-event text-primary me-2"></i>
 
-                    </p>
+                            {{ $booking->booking_date->format('d M Y') }}
 
-                    <!-- Time -->
-                    <p class="mb-2">
+                        </p>
 
-                        <i class="bi bi-clock me-2 text-primary"></i>
+                        <p class="mb-2">
 
-                        <strong>Time:</strong>
-                        {{ $booking->booking_time }}
+                            <i class="bi bi-clock text-primary me-2"></i>
 
-                    </p>
+                            {{ $booking->booking_time }}
 
-                    <!-- Address -->
-                    <p class="mb-4">
+                        </p>
 
-                        <i class="bi bi-geo-alt me-2 text-primary"></i>
+                        <p class="mb-0">
 
-                        <strong>Address:</strong>
-                        {{ $booking->address }}
+                            <i class="bi bi-geo-alt text-primary me-2"></i>
 
-                    </p>
+                            {{ $booking->address }}
+
+                        </p>
+
+                    </div>
 
                     <!-- Status -->
                     <div class="mb-3">
 
                         <strong>Status:</strong>
 
-                        @if($booking->status == 'Pending')
+                        <span class="status-badge
 
-                            <span class="badge bg-warning text-dark px-3 py-2 rounded-pill">
-                                Pending
-                            </span>
+                        @if($booking->status == 'Pending')
+                        status-pending
 
                         @elseif($booking->status == 'Approved')
-
-                            <span class="badge bg-primary px-3 py-2 rounded-pill">
-                                Approved
-                            </span>
-
-                        @elseif($booking->status == 'In Progress')
-
-                            <span class="badge bg-info text-dark px-3 py-2 rounded-pill">
-                                In Progress
-                            </span>
+                        status-accepted
 
                         @elseif($booking->status == 'Completed')
+                        status-completed
 
-                            <span class="badge bg-success px-3 py-2 rounded-pill">
-                                Completed
-                            </span>
-
-                        @elseif($booking->status == 'Cancelled')
-
-                            <span class="badge bg-secondary px-3 py-2 rounded-pill">
-                                Cancelled
-                            </span>
-
-                        @elseif($booking->status == 'Refunded')
-
-                            <span class="badge bg-info px-3 py-2 rounded-pill">
-                                Refunded
-                            </span>
-
-                        @elseif($booking->status == 'Rejected')
-
-                            <span class="badge bg-danger px-3 py-2 rounded-pill">
-                                Rejected
-                            </span>
-
+                        @else
+                        bg-light
                         @endif
+
+                        ">
+
+                        {{ $booking->status }}
+
+                        </span>
 
                     </div>
 
@@ -242,11 +345,11 @@
 
         <div class="col-12">
 
-            <div class="card custom-card">
+            <div class="section-card">
 
                 <div class="card-body text-center py-5">
 
-                    <i class="bi bi-calendar-x fs-1 text-secondary"></i>
+                    <i class="bi bi-inbox fs-1 text-primary"></i>
 
                     <h4 class="fw-bold mt-3">
                         No Bookings Found

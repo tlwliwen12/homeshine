@@ -570,7 +570,7 @@ html {
 
                     <h4 class="fw-bold">Basic Clean</h4>
 
-                    <h2 class="text-primary fw-bold my-3">RM 50</h2>
+                    <h2 class="text-primary fw-bold my-3">RM 60</h2>
 
                     <p class="text-secondary">Standard home cleaning service</p>
 
@@ -608,7 +608,7 @@ html {
 
                     <h4 class="fw-bold">Premium</h4>
 
-                    <h2 class="text-primary fw-bold my-3">RM 200</h2>
+                    <h2 class="text-primary fw-bold my-3">RM 180</h2>
 
                     <p class="text-secondary">Full house + windows + kitchen</p>
 

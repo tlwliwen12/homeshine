@@ -50,6 +50,12 @@
         font-size:24px;
     }
 
+    .cleaner-avatar{
+    width:35px;
+    height:35px;
+    object-fit:cover;
+}
+
     /* NAVBAR (COPY ADMIN STYLE) */
     .navbar{
         background:#fff;
@@ -86,10 +92,11 @@
 
     /* NOTIFICATION (same admin) */
     .notification-menu{
-        width:380px;
-        max-height:450px;
-        overflow-y:auto;
-    }
+    width:380px;
+    max-width:95vw;
+    max-height:450px;
+    overflow-y:auto;
+}
 
     .notification-item{
         border-radius:12px;
@@ -128,6 +135,102 @@
         display:inline-block;
     }
 
+    .stat-card{
+        transition:.3s;
+    }
+
+    .stat-card:hover{
+        transform:translateY(-5px);
+    }
+
+    /* ========================================
+       GLOBAL DESIGN SYSTEM
+    ======================================== */
+
+    .page-header{
+        margin-bottom:2rem;
+    }
+
+    .page-title{
+        font-size:2rem;
+        font-weight:700;
+        color:#111827;
+    }
+
+    .page-subtitle{
+        color:#6B7280;
+        font-size:.95rem;
+    }
+
+    /* Reusable Card */
+    .section-card{
+        background:#fff;
+        border:none;
+        border-radius:20px;
+        box-shadow:0 4px 20px rgba(0,0,0,.06);
+        transition:.3s;
+    }
+
+    .section-card:hover{
+        transform:translateY(-3px);
+        box-shadow:0 10px 30px rgba(0,0,0,.08);
+    }
+
+    /* Status Badge */
+    .status-badge{
+        padding:.55rem .9rem;
+        border-radius:999px;
+        font-size:.75rem;
+        font-weight:600;
+    }
+
+    .status-pending{
+        background:#FEF3C7;
+        color:#92400E;
+    }
+
+    .status-accepted{
+        background:#DBEAFE;
+        color:#1E40AF;
+    }
+
+    .status-completed{
+        background:#DCFCE7;
+        color:#166534;
+    }
+
+    .status-cancelled{
+        background:#FEE2E2;
+        color:#991B1B;
+    }
+
+    /* Action Cards */
+    .action-card{
+        background:white;
+        border-radius:20px;
+        padding:1.25rem;
+        text-decoration:none;
+        color:#111827;
+        display:block;
+        transition:.3s;
+        box-shadow:0 4px 20px rgba(0,0,0,.05);
+    }
+
+    .action-card:hover{
+        transform:translateY(-4px);
+        color:#2563EB;
+    }
+
+    .action-icon{
+        width:55px;
+        height:55px;
+        border-radius:15px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        font-size:22px;
+    }
+
     /* MAIN CONTENT SAME AS ADMIN */
     .main-content{
         padding-top:40px;
@@ -139,6 +242,7 @@
 
         .navbar-nav{
             padding-top:15px;
+            align-items:start !important;
         }
 
         .nav-item{
@@ -147,6 +251,13 @@
 
         .nav-link{
             margin-bottom:5px;
+        }
+
+        .profile-nav{
+            margin:10px 0;
+            padding:10px;
+            background:#F8FAFC;
+            border-radius:12px;
         }
 
     }
@@ -170,6 +281,25 @@
         h1{font-size:26px;}
         h2{font-size:24px;}
         h3{font-size:20px;}
+
+        .notification-menu{
+            width:95vw;
+            max-width:350px;
+        }
+    }
+
+    .table-responsive{
+        border-radius:16px;
+    }
+
+    .table thead th{
+        border-bottom:2px solid #E5E7EB;
+        font-weight:600;
+        color:#374151;
+    }
+
+    .table td{
+        vertical-align:middle;
     }
 
     </style>
@@ -244,21 +374,23 @@ $pendingBookings = Booking::where('status','Pending')->count();
 
                         @if(Auth::user()->profile_image)
                             <img src="{{ asset('storage/' . Auth::user()->profile_image) }}"
-                                 width="35"
-                                 height="35"
-                                 class="rounded-circle me-2"
+                                 class="rounded-circle me-2 cleaner-avatar"
                                  style="object-fit:cover;">
                         @else
                             <i class="bi bi-person-circle fs-4 me-2"></i>
                         @endif
 
-                        {{ Auth::user()->name }}
+                        <span class="text-truncate"
+                              style="max-width:120px;display:inline-block;">
+
+                            {{ Auth::user()->name }}
+
+                        </span>
 
                     </span>
 
                 </li>
 
-                <!-- NOTIFICATION (same admin style) -->
                 <li class="nav-item dropdown me-3">
 
                     <a class="nav-link position-relative"
@@ -269,55 +401,140 @@ $pendingBookings = Booking::where('status','Pending')->count();
                         <i class="bi bi-bell-fill fs-5"></i>
 
                         @if(Auth::user()->unreadNotifications->count())
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                {{ Auth::user()->unreadNotifications->count() }}
-                            </span>
+
+                            <span class="unread-dot position-absolute top-0 start-100 translate-middle"></span>
+
                         @endif
 
                     </a>
 
-                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4 p-2 notification-menu">
+                <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4 p-2 notification-menu">
 
-                        <li class="px-3 py-2 border-bottom">
-                            <strong>Notifications</strong>
-                        </li>
+                    <li class="px-3 py-2 border-bottom">
 
-                        @forelse(Auth::user()->notifications->take(8) as $notification)
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            <strong class="fs-6">
+                                Notifications
+                            </strong>
+
+                            <small class="text-muted">
+                                {{ Auth::user()->notifications->count() }}
+                            </small>
+
+                        </div>
+
+                    </li>
+
+                    @forelse(Auth::user()->notifications->take(8) as $notification)
+
+                        @php
+
+                            $message = strtolower($notification->data['message']);
+
+                            $icon = 'bi-bell';
+                            $bg = 'bg-secondary-subtle';
+                            $color = 'text-secondary';
+                            $title = 'Notification';
+
+                            if(str_contains($message,'payment')){
+                                $icon = 'bi-cash-stack';
+                                $bg = 'bg-success-subtle';
+                                $color = 'text-success';
+                                $title = 'Customer Payment';
+                            }
+
+                            elseif(str_contains($message,'booking')){
+                                $icon = 'bi-calendar-check';
+                                $bg = 'bg-warning-subtle';
+                                $color = 'text-warning';
+                                $title = 'New Booking';
+                            }
+
+                            elseif(str_contains($message,'cancel')){
+                                $icon = 'bi-x-circle';
+                                $bg = 'bg-danger-subtle';
+                                $color = 'text-danger';
+                                $title = 'Booking Cancelled';
+                            }
+
+                            elseif(
+                                str_contains($message,'account approved') ||
+                                str_contains($message,'approved your account')
+                            ){
+
+                                $icon = 'bi-patch-check-fill';
+                                $bg = 'bg-success-subtle';
+                                $color = 'text-success';
+                                $title = 'Account Approved';
+                            }
+
+                            elseif(str_contains($message,'payout')){
+                                $icon = 'bi-wallet2';
+                                $bg = 'bg-success-subtle';
+                                $color = 'text-success';
+                                $title = 'Payout Received';
+                            }
+
+
+                        @endphp
 
                         <li>
-                            <a href="#" class="dropdown-item notification-item p-3">
+
+                            <a href="#"
+                               class="dropdown-item notification-item p-3">
 
                                 <div class="d-flex">
 
-                                    <div class="notification-icon bg-secondary-subtle">
-                                        <i class="bi bi-bell text-secondary"></i>
+                                    <div class="notification-icon {{ $bg }}">
+
+                                        <i class="bi {{ $icon }} {{ $color }}"></i>
+
                                     </div>
 
                                     <div class="ms-3 flex-grow-1">
-                                        <div class="fw-semibold">Notification</div>
+
+                                        <div class="fw-semibold">
+                                            {{ $title }}
+                                        </div>
+
                                         <div class="notification-message">
                                             {{ $notification->data['message'] }}
                                         </div>
-                                        <div class="notification-time">
+
+                                        <div class="notification-time mt-1">
                                             {{ $notification->created_at->diffForHumans() }}
                                         </div>
+
                                     </div>
 
                                     @if(is_null($notification->read_at))
-                                        <span class="unread-dot mt-2"></span>
+                                        <div class="d-flex align-items-center">
+                                            <span class="unread-dot"></span>
+                                        </div>
                                     @endif
 
                                 </div>
 
                             </a>
+
                         </li>
 
-                        @empty
-                        <li class="text-center py-3 text-muted">No notifications</li>
-                        @endforelse
+                    @empty
 
-                    </ul>
+                        <li>
 
+                            <div class="text-center py-4 text-muted">
+
+                                No notifications
+
+                            </div>
+
+                        </li>
+
+                    @endforelse
+
+                </ul>
                 </li>
 
                 <li class="nav-item">
@@ -379,7 +596,7 @@ $profileComplete =
 @endif
 
 <!-- CONTENT -->
-<div class="container-fluid px-lg-5 px-md-4 px-3 main-content">
+<div class="container-fluid px-xl-5 px-lg-4 px-md-3 px-2 main-content">
 
     @yield('content')
 
