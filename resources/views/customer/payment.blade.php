@@ -2,81 +2,104 @@
 
 @section('content')
 
-<div class="container py-5">
+<div class="container py-4">
+
+    <!-- Header -->
+    <div class="page-header mb-4 text-center">
+
+        <h2 class="page-title mb-1">
+            Payment Summary
+        </h2>
+
+        <p class="page-subtitle">
+            Review your booking details before payment
+        </p>
+
+    </div>
 
     <div class="row justify-content-center">
 
-        <div class="col-md-6">
+        <div class="col-md-7 col-lg-6">
 
-            <div class="card shadow border-0 rounded-4">
+            <div class="ui-card">
 
                 <div class="card-body p-4">
 
-                    <h2 class="fw-bold mb-4 text-center">
-                        Payment Summary
-                    </h2>
-
-                    {{-- Service --}}
+                    <!-- Service -->
                     <div class="mb-3">
 
-                        <strong>Service:</strong>
+                        <label class="form-label text-secondary fw-semibold">
+                            Service
+                        </label>
 
-                        <p>
+                        <div class="fw-bold">
                             {{ $booking->service->name }}
-                        </p>
+                        </div>
 
                     </div>
 
-                    {{-- Date --}}
+                    <!-- Date -->
                     <div class="mb-3">
 
-                        <strong>Booking Date:</strong>
+                        <label class="form-label text-secondary fw-semibold">
+                            Booking Date
+                        </label>
 
-                        <p>
-                            {{ $booking->booking_date }}
-                        </p>
+                        <div>
+                            {{ \Carbon\Carbon::parse($booking->booking_date)->format('d M Y') }}
+                        </div>
 
                     </div>
 
-                    {{-- Time --}}
+                    <!-- Time -->
                     <div class="mb-3">
 
-                        <strong>Booking Time:</strong>
+                        <label class="form-label text-secondary fw-semibold">
+                            Booking Time
+                        </label>
 
-                        <p>
-                            {{ $booking->booking_time }}
-                        </p>
+                        <div>
+                            {{ \Carbon\Carbon::parse($booking->booking_time)->format('h:i A') }}
+                        </div>
 
                     </div>
 
-                    {{-- Address --}}
+                    <!-- Address -->
                     <div class="mb-3">
 
-                        <strong>Address:</strong>
+                        <label class="form-label text-secondary fw-semibold">
+                            Address
+                        </label>
 
-                        <p>
+                        <div>
                             {{ $booking->address }}
-                        </p>
+                        </div>
 
                     </div>
 
-                    {{-- Amount --}}
-                    <div class="mb-4">
+                    <!-- Divider -->
+                    <div class="border-top my-3"></div>
 
-                        <strong>Total Amount:</strong>
+                    <!-- Amount -->
+                    <div class="text-center mb-4">
 
-                        <h4 class="text-success">
+                        <label class="form-label text-secondary fw-semibold">
+                            Total Amount
+                        </label>
+
+                        <h3 class="fw-bold text-success mb-0">
                             RM {{ number_format($booking->service->price, 2) }}
-                        </h4>
+                        </h3>
 
                     </div>
 
-                    {{-- Payment Button --}}
+                    <!-- Button -->
                     <div class="d-grid">
 
                         <a href="/payment/{{ $booking->id }}"
-                           class="btn btn-dark btn-lg">
+                           class="btn btn-primary btn-lg">
 
+                            <i class="bi bi-credit-card me-2"></i>
                             Proceed to Payment
 
                         </a>

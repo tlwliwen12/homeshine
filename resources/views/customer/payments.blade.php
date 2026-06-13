@@ -4,72 +4,85 @@
 
 <div class="container py-4">
 
-    <h2 class="mb-4 fw-bold">
-        Payment History
-    </h2>
+    <!-- Header -->
+    <div class="page-header mb-4">
 
-    <div class="row g-3">
+        <h2 class="page-title mb-1">
+            Payment History
+        </h2>
+
+        <p class="page-subtitle">
+            View all your payments and transactions
+        </p>
+
+    </div>
+
+    <!-- PAYMENT CARDS -->
+    <div class="row g-4">
 
         @forelse($payments as $payment)
 
         <div class="col-md-4">
 
-            <div class="card shadow-sm border-0 rounded-4">
+            <div class="ui-card h-100">
 
-                <div class="card-body">
+                <div class="card-body p-4">
 
-                    {{-- Service --}}
-                    <h5 class="fw-bold">
+                    <!-- Service -->
+                    <h5 class="fw-bold mb-2">
                         {{ $payment->service->name }}
                     </h5>
 
-                    <hr>
+                    <hr class="my-3">
 
-                    {{-- Amount --}}
-                    <p>
-                        <strong>Amount:</strong>
-                        RM {{ number_format($payment->service->price, 2) }}
-                    </p>
+                    <!-- Amount (HIGHLIGHT) -->
+                    <div class="text-center mb-3">
 
-                    {{-- Booking Date --}}
-                    <p>
-                        <strong>Booking Date:</strong>
-                        {{ $payment->booking_date }}
-                    </p>
+                        <div class="text-secondary small">
+                            Total Amount
+                        </div>
 
-                    {{-- Payment Status --}}
-                    <p>
+                        <div class="fw-bold text-success fs-4">
+                            RM {{ number_format($payment->service->price, 2) }}
+                        </div>
 
-                        <strong>Payment:</strong>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="mb-3 text-center">
 
                         @if($payment->payment_status == 'Paid')
 
-                            <span class="badge bg-success">
+                            <span class="status-badge status-completed">
                                 Paid
                             </span>
 
                         @else
 
-                            <span class="badge bg-danger">
+                            <span class="status-badge status-cancelled">
                                 Unpaid
                             </span>
 
                         @endif
 
-                    </p>
+                    </div>
 
-                    {{-- Bill Code --}}
-                    <p>
+                    <hr class="my-3">
 
-                        <strong>Bill Code:</strong>
+                    <!-- Details -->
+                    <div class="small text-secondary">
 
-                        <br>
+                        <div class="mb-1">
+                            <strong class="text-dark">Booking Date:</strong>
+                            {{ \Carbon\Carbon::parse($payment->booking_date)->format('d M Y') }}
+                        </div>
 
-                        <small>
+                        <div>
+                            <strong class="text-dark">Bill Code:</strong>
                             {{ $payment->bill_code }}
-                        </small>
+                        </div>
 
-                    </p>
+                    </div>
 
                 </div>
 
@@ -81,9 +94,21 @@
 
         <div class="col-12">
 
-            <div class="alert alert-info">
+            <div class="ui-card">
 
-                No payment history found.
+                <div class="card-body text-center py-5">
+
+                    <i class="bi bi-receipt fs-1 text-secondary"></i>
+
+                    <h5 class="mt-3 fw-bold">
+                        No Payment History
+                    </h5>
+
+                    <p class="text-secondary">
+                        You haven’t made any payments yet.
+                    </p>
+
+                </div>
 
             </div>
 
@@ -93,119 +118,104 @@
 
     </div>
 
-</div>
+    <!-- TRANSACTIONS -->
+    <div class="mt-5">
 
-<hr class="my-5">
+        <div class="page-header mb-3">
 
-<h3 class="fw-bold mb-3">
+            <h3 class="page-title">
+                Transaction History
+            </h3>
 
-    Transaction History
+        </div>
 
-</h3>
+        <div class="ui-card">
 
-<div class="card shadow-sm border-0 rounded-4">
+            <div class="table-responsive">
 
-    <div class="card-body">
+                <table class="table align-middle mb-0">
 
-        <table class="table align-middle">
+                    <thead>
 
-            <thead>
+                        <tr>
 
-                <tr>
+                            <th>Date</th>
+                            <th>Booking</th>
+                            <th>Type</th>
+                            <th>Amount</th>
+                            <th>Status</th>
 
-                    <th>Date</th>
+                        </tr>
 
-                    <th>Booking</th>
+                    </thead>
 
-                    <th>Type</th>
+                    <tbody>
 
-                    <th>Amount</th>
+                        @forelse($transactions as $transaction)
 
-                    <th>Status</th>
+                        <tr>
 
-                </tr>
+                            <td>
+                                {{ $transaction->created_at->format('d M Y') }}
+                            </td>
 
-            </thead>
+                            <td>
+                                #{{ $transaction->booking_id }}
+                            </td>
 
-            <tbody>
+                            <td>
+                                {{ $transaction->type }}
+                            </td>
 
-                @forelse($transactions as $transaction)
+                            <td>
+                                RM {{ number_format($transaction->amount, 2) }}
+                            </td>
 
-                <tr>
+                            <td>
 
-                    <td>
+                                @if($transaction->type == 'Refund')
 
-                        {{ $transaction->created_at->format('d M Y') }}
+                                    <span class="status-badge status-confirmed">
+                                        Refunded
+                                    </span>
 
-                    </td>
+                                @elseif($transaction->type == 'Customer Payment')
 
-                    <td>
+                                    <span class="status-badge status-completed">
+                                        Paid
+                                    </span>
 
-                        #{{ $transaction->booking_id }}
+                                @else
 
-                    </td>
+                                    <span class="status-badge status-pending">
+                                        {{ $transaction->status }}
+                                    </span>
 
-                    <td>
+                                @endif
 
-                        {{ $transaction->type }}
+                            </td>
 
-                    </td>
+                        </tr>
 
-                    <td>
+                        @empty
 
-                        RM {{ number_format($transaction->amount, 2) }}
+                        <tr>
 
-                    </td>
+                            <td colspan="5" class="text-center text-muted py-4">
+                                No transaction records found.
+                            </td>
 
-                    <td>
+                        </tr>
 
-                        @if($transaction->type == 'Refund')
+                        @endforelse
 
-                            <span class="badge bg-info">
+                    </tbody>
 
-                                Refunded
+                </table>
 
-                            </span>
+            </div>
 
-                        @elseif($transaction->type == 'Customer Payment')
-
-                            <span class="badge bg-success">
-
-                                Paid
-
-                            </span>
-
-                        @else
-
-                            <span class="badge bg-secondary">
-
-                                {{ $transaction->status }}
-
-                            </span>
-
-                        @endif
-
-                    </td>
-
-                </tr>
-
-                @empty
-
-                <tr>
-
-                    <td colspan="5" class="text-center text-muted">
-
-                        No transaction records found.
-
-                    </td>
-
-                </tr>
-
-                @endforelse
-
-            </tbody>
-
-        </table>
+        </div>
 
     </div>
 

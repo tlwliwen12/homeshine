@@ -5,19 +5,15 @@
 <div class="container py-4">
 
     <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="page-header">
 
-        <div>
+        <h2 class="page-title mb-1">
+            My Bookings
+        </h2>
 
-            <h2 class="fw-bold mb-1">
-                My Bookings
-            </h2>
-
-            <p class="text-secondary mb-0">
-                View and manage your bookings
-            </p>
-
-        </div>
+        <p class="page-subtitle">
+            View and manage your bookings
+        </p>
 
     </div>
 
@@ -54,103 +50,83 @@
     @endif
 
     <!-- Filters -->
-    <div class="card border-0 shadow-sm rounded-4 mb-4">
+<div class="ui-card mb-4 p-4">
 
-        <div class="card-body">
+    <form method="GET" action="/customer/bookings">
 
-            <form method="GET"
-                  action="/customer/bookings">
+        <div class="row g-3 align-items-end">
 
-                <div class="row g-3">
+            <!-- Status -->
+            <div class="col-md-4">
 
-                    <!-- Status -->
-                    <div class="col-md-4">
+                <label class="form-label fw-semibold text-secondary mb-2">
+                    Status
+                </label>
 
-                        <label class="form-label">
-                            Status
-                        </label>
+                <select name="status" class="form-select">
+                    <option value="">All Status</option>
 
-                        <select name="status"
-                                class="form-select">
+                    <option value="Pending" {{ request('status')=='Pending' ? 'selected' : '' }}>
+                        Pending
+                    </option>
 
-                            <option value="">
-                                All Status
-                            </option>
+                    <option value="Approved" {{ request('status')=='Approved' ? 'selected' : '' }}>
+                        Approved
+                    </option>
 
-                            <option value="Pending"
-                                {{ request('status')=='Pending' ? 'selected' : '' }}>
-                                Pending
-                            </option>
+                    <option value="In Progress" {{ request('status')=='In Progress' ? 'selected' : '' }}>
+                        In Progress
+                    </option>
 
-                            <option value="Approved"
-                                {{ request('status')=='Approved' ? 'selected' : '' }}>
-                                Approved
-                            </option>
+                    <option value="Completed" {{ request('status')=='Completed' ? 'selected' : '' }}>
+                        Completed
+                    </option>
 
-                            <option value="In Progress"
-                                {{ request('status')=='In Progress' ? 'selected' : '' }}>
-                                In Progress
-                            </option>
+                    <option value="Cancelled" {{ request('status')=='Cancelled' ? 'selected' : '' }}>
+                        Cancelled
+                    </option>
+                </select>
 
-                            <option value="Completed"
-                                {{ request('status')=='Completed' ? 'selected' : '' }}>
-                                Completed
-                            </option>
+            </div>
 
-                            <option value="Cancelled"
-                                {{ request('status')=='Cancelled' ? 'selected' : '' }}>
-                                Cancelled
-                            </option>
+            <!-- Date -->
+            <div class="col-md-4">
 
-                            <option value="Rejected"
-                                {{ request('status')=='Rejected' ? 'selected' : '' }}>
-                                Rejected
-                            </option>
+                <label class="form-label fw-semibold text-secondary mb-2">
+                    Booking Date
+                </label>
 
-                        </select>
+                <input type="date"
+                       name="booking_date"
+                       class="form-control"
+                       value="{{ request('booking_date') }}">
 
-                    </div>
+            </div>
 
-                    <!-- Date -->
-                    <div class="col-md-4">
+            <!-- Buttons -->
+            <div class="col-md-4">
 
-                        <label class="form-label">
-                            Booking Date
-                        </label>
+                <div class="d-flex gap-2">
 
-                        <input type="date"
-                               name="booking_date"
-                               class="form-control"
-                               value="{{ request('booking_date') }}">
+                    <button class="btn btn-primary w-100">
+                        <i class="bi bi-funnel me-1"></i>
+                        Filter
+                    </button>
 
-                    </div>
-
-                    <!-- Buttons -->
-                    <div class="col-md-4 d-flex align-items-end">
-
-                        <button class="btn btn-primary me-2">
-
-                            <i class="bi bi-funnel"></i>
-                            Filter
-
-                        </button>
-
-                        <a href="/customer/bookings"
-                           class="btn btn-secondary">
-
-                            Reset
-
-                        </a>
-
-                    </div>
+                    <a href="/customer/bookings"
+                       class="btn btn-outline-secondary w-100">
+                        Reset
+                    </a>
 
                 </div>
 
-            </form>
+            </div>
 
         </div>
 
-    </div>
+    </form>
+
+</div>
 
     <!-- Booking Cards -->
     <div class="row g-4">
@@ -159,7 +135,7 @@
 
         <div class="col-md-6 col-lg-4">
 
-            <div class="card border-0 shadow-sm rounded-4 h-100">
+            <div class="ui-card h-100">
 
                 <div class="card-body p-4">
 
@@ -182,37 +158,31 @@
 
                             @if($booking->status == 'Pending')
 
-                                <span class="badge bg-warning text-dark px-3 py-2 rounded-pill">
+                                <span class="status-badge status-pending">
                                     Pending
                                 </span>
 
                             @elseif($booking->status == 'Approved')
 
-                                <span class="badge bg-primary px-3 py-2 rounded-pill">
+                                <span class="status-badge status-confirmed">
                                     Approved
                                 </span>
 
                             @elseif($booking->status == 'In Progress')
 
-                                <span class="badge bg-info text-dark px-3 py-2 rounded-pill">
+                                <span class="status-badge status-confirmed">
                                     In Progress
                                 </span>
 
                             @elseif($booking->status == 'Completed')
 
-                                <span class="badge bg-success px-3 py-2 rounded-pill">
+                                <span class="status-badge status-completed">
                                     Completed
-                                </span>
-
-                            @elseif($booking->status == 'Rejected')
-
-                                <span class="badge bg-danger px-3 py-2 rounded-pill">
-                                    Rejected
                                 </span>
 
                             @elseif($booking->status == 'Cancelled')
 
-                                <span class="badge bg-secondary px-3 py-2 rounded-pill">
+                                <span class="status-badge status-cancelled">
                                     Cancelled
                                 </span>
 
@@ -230,7 +200,7 @@
                             <i class="bi bi-calendar-event me-2 text-primary"></i>
 
                             <strong>Date:</strong>
-                            {{ $booking->booking_date }}
+                            {{ \Carbon\Carbon::parse($booking->booking_date)->format('d M Y') }}
 
                         </p>
 
@@ -300,13 +270,13 @@
 
                         @if($booking->payment_status == 'Paid')
 
-                            <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill ms-2">
+                            <span class="status-badge status-completed ms-2">
                                 Paid
                             </span>
 
                         @else
 
-                            <span class="badge bg-danger-subtle text-danger px-3 py-2 rounded-pill ms-2">
+                            <span class="status-badge status-cancelled ms-2">
                                 Unpaid
                             </span>
 
@@ -323,13 +293,13 @@
 
                         @if($booking->refund_status == 'Pending')
 
-                            <span class="badge bg-warning text-dark">
+                            <<span class="status-badge status-pending">
                                 Pending
                             </span>
 
                         @elseif($booking->refund_status == 'Refunded')
 
-                            <span class="badge bg-success">
+                            <span class="status-badge status-completed">
                                 Refunded
                             </span>
 
@@ -369,7 +339,7 @@
                         <div class="d-grid gap-2">
 
                             <!-- Reschedule -->
-                            <button class="btn btn-warning text-white rounded-pill"
+                            <button class="btn btn-primary"
                                     data-bs-toggle="modal"
                                     data-bs-target="#rescheduleModal{{ $booking->id }}">
 
@@ -379,7 +349,7 @@
                             </button>
 
                             <!-- Cancel -->
-                            <button class="btn btn-danger rounded-pill"
+                            <button class="btn btn-danger"
                                     data-bs-toggle="modal"
                                     data-bs-target="#cancelModal{{ $booking->id }}">
 
@@ -392,7 +362,7 @@
 
                     @elseif($booking->status == 'Approved')
 
-                        <button class="btn btn-danger rounded-pill w-100"
+                        <button class="btn btn-danger"
                                 data-bs-toggle="modal"
                                 data-bs-target="#cancelModal{{ $booking->id }}">
 
@@ -689,7 +659,7 @@
 
         <div class="col-12">
 
-            <div class="card border-0 shadow-sm rounded-4">
+            <div class="ui-card">
 
                 <div class="card-body text-center py-5">
 
