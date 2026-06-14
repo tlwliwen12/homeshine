@@ -10,6 +10,7 @@ use App\Notifications\BookingAcceptedByCleanerNotification;
 use App\Notifications\BookingApprovedNotification;
 use App\Notifications\JobStatusUpdatedNotification;
 use Illuminate\Support\Facades\Auth;
+use App\Models\BookingCleanerStatus;
 
 class JobController extends Controller
 {
@@ -130,58 +131,44 @@ class JobController extends Controller
     {
         $booking = Booking::findOrFail($id);
 
+        // already taken check
         if ($booking->cleaner_id !== null) {
-            return back()->with(
-                'error',
-                'Another cleaner has already accepted this booking.'
-            );
+            return back()->with('error', 'Already taken by another cleaner.');
         }
 
         if ($booking->status !== 'Pending') {
-            return back()->with(
-                'error',
-                'Booking is no longer available.'
-            );
+            return back()->with('error', 'Booking is no longer available.');
         }
 
         $booking->update([
             'cleaner_id' => Auth::id(),
-            'status'     => 'Approved'
+            'status'     => 'Assigned' // 🔥 CHANGE THIS
         ]);
 
-        /*
-        |--------------------------------------------------------------------------
-        | NOTIFY CUSTOMER
-        |--------------------------------------------------------------------------
-        */
         $booking->user->notify(
             new BookingApprovedNotification($booking)
         );
 
-        /*
-        |--------------------------------------------------------------------------
-        | NOTIFY ADMINS
-        |--------------------------------------------------------------------------
-        */
         $admins = User::where('role', 'admin')->get();
-
         foreach ($admins as $admin) {
+            $admin->notify( new BookingAcceptedByCleanerNotification($booking) );
+            }
 
-            $admin->notify(
-                new BookingAcceptedByCleanerNotification($booking)
-            );
-        }
-
-        return back()->with(
-            'success',
-            'Booking accepted successfully.'
-        );
+        return back()->with('success', 'Booking accepted successfully.');
     }
 
     public function bookingRequests(Request $request)
     {
-        $query = Booking::whereNull('cleaner_id')
-            ->where('status', 'Pending');
+        $query = Booking::where('status', 'Pending')
+            ->whereNull('cleaner_id')
+            ->whereDoesntHave('cleanerStatuses', function ($q) {
+                $q->where('cleaner_id', Auth::id())
+                  ->where('status', 'rejected');
+            });
+
+        $rejected = session()->get('rejected_bookings', []);
+
+        $query->whereNotIn('id', $rejected);
 
         // SEARCH (booking id, customer name, service name)
         if ($request->filled('search')) {
@@ -219,20 +206,20 @@ class JobController extends Controller
     {
         $booking = Booking::findOrFail($id);
 
-        // only pending allowed
         if ($booking->status !== 'Pending') {
             return back()->with('error', 'Booking is no longer available.');
         }
 
-        // optional safety check
-        if ($booking->cleaner_id && $booking->cleaner_id !== Auth::id()) {
-            return back()->with('error', 'Not authorized.');
-        }
+        BookingCleanerStatus::updateOrCreate(
+            [
+                'booking_id' => $id,
+                'cleaner_id' => Auth::id(),
+            ],
+            [
+                'status' => 'rejected'
+            ]
+        );
 
-        $booking->update([
-            'status' => 'Rejected'
-        ]);
-
-        return back()->with('success', 'Booking rejected.');
+        return back()->with('success', 'Booking hidden from your list.');
     }
 }

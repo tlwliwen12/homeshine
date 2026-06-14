@@ -25,19 +25,28 @@ class BookingService
 
         $booking->status = 'Cancelled';
 
+        // Cancel cleaner payout
+        $booking->payout_status = 'Cancelled';
+
+        // Only create refund if customer already paid
         if ($booking->payment_status === 'Paid') {
             $booking->refund_status = 'Pending';
         }
 
         $booking->save();
 
-        // notify admin
+       // notify admin
         $admins = User::where('role', 'admin')->get();
-        Notification::send($admins, new BookingCancelledNotification($booking));
+        Notification::send(
+            $admins,
+            new BookingCancelledNotification($booking)
+        );
 
         // notify cleaner
         if ($booking->cleaner) {
-            $booking->cleaner->notify(new BookingCancelledNotification($booking));
+            $booking->cleaner->notify(
+                new BookingCancelledNotification($booking)
+            );
         }
 
         return 'success';

@@ -23,7 +23,8 @@ class RefundController extends Controller
 
         $booking->update([
             'refund_status' => 'Completed',
-            'status' => 'Cancelled'
+            'status' => 'Cancelled',
+            'payout_status' => 'Cancelled'
         ]);
 
         FinanceTransaction::create([
@@ -111,7 +112,8 @@ class RefundController extends Controller
 
         $booking->update([
             'refund_status' => 'Refunded',
-            'status' => 'Cancelled'
+            'status' => 'Cancelled',
+            'payout_status' => 'Cancelled'
         ]);
 
         FinanceTransaction::create([

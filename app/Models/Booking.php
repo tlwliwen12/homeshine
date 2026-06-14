@@ -49,4 +49,9 @@ class Booking extends Model
     {
         return $this->belongsTo(User::class, 'cleaner_id');
     }
+
+    public function cleanerStatuses()
+    {
+        return $this->hasMany(BookingCleanerStatus::class);
+    }
 }

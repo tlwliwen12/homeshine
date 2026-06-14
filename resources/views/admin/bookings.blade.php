@@ -320,11 +320,31 @@
 
                     @if($booking->status == 'Cancelled')
 
-                        <span class="badge bg-danger">
+                        @if($booking->refund_status == 'Refunded')
 
-                            Refund Required
+                            <span class="badge bg-info">
 
-                        </span>
+                                Refunded
+
+                            </span>
+
+                       @elseif($booking->refund_status == 'Pending')
+
+                            <span class="badge bg-danger">
+
+                                Refund Required
+
+                            </span>
+
+                        @else
+
+                            <span class="badge bg-secondary">
+
+                                Refund Processing
+
+                            </span>
+
+                        @endif
 
                     @elseif($booking->payout_status == 'Paid')
 
