@@ -19,208 +19,176 @@
 
     <style>
 
-        body{
-            font-family: 'Poppins', sans-serif;
-            background-color: #F8FAFC;
-            color: #1F2937;
-        }
-
-        /* Navbar */
-        .navbar{
-            background: white;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.04);
-            position: sticky;
-            top: 0;
-            z-index: 999;
-        }
-
-        .navbar-brand{
-            font-size: 30px;
-            font-weight: 700;
-            color: #2563EB !important;
-        }
-
-        .nav-link{
-            color: #1F2937 !important;
-            font-weight: 500;
-            margin-left: 10px;
-            transition: 0.3s;
-            border-radius: 10px;
-            padding: 8px 14px !important;
-        }
-
-        .nav-link:hover{
-            color: #2563EB !important;
-            background: #EFF6FF;
-        }
-
-        /* Hero */
-        .hero-section{
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            background: linear-gradient(to right, #F8FAFC, #EFF6FF);
-        }
-
-        .hero-title{
-            font-size: 58px;
-            font-weight: 700;
-            line-height: 1.2;
-        }
-
-        .hero-text{
-            font-size: 18px;
-            line-height: 1.8;
-            color: #6B7280;
-        }
-
-        .badge-custom{
-            background: rgba(16,185,129,0.12);
-            color: #10B981;
-            padding: 10px 18px;
-            border-radius: 50px;
-            font-weight: 500;
-            display: inline-block;
-        }
-
-        /* Buttons */
-        .btn-primary{
-            background-color: #2563EB;
-            border: none;
-        }
-
-        .btn-primary:hover{
-            background-color: #1D4ED8;
-        }
-
-        .btn-outline-primary{
-            border-color: #2563EB;
-            color: #2563EB;
-        }
-
-        .btn-outline-primary:hover{
-            background-color: #2563EB;
-            color: white;
-        }
-
-        /* Feature Cards */
-        .feature-card{
-            border: none;
-            border-radius: 24px;
-            background: white;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
-            transition: 0.3s ease;
-        }
-
-        .feature-card:hover{
-            transform: translateY(-10px);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.08);
-        }
-
-        .feature-icon{
-            font-size: 55px;
-        }
-
-        footer{
-            background: white;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        /* fade-in animation */
-        .reveal {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.6s ease;
-        }
-
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* ===== RESPONSIVE SYSTEM ===== */
-
-/* smooth scaling base */
-html {
-    font-size: 16px;
+body{
+    font-family: 'Poppins', sans-serif;
+    background-color: #F8FAFC;
+    color: #1F2937;
 }
 
-/* tablets */
-@media (max-width: 991px) {
+/* ===== NAVBAR (cleaner + softer) ===== */
+.navbar{
+    background: rgba(255,255,255,0.9);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 18px rgba(0,0,0,0.04);
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
 
-    .hero-title {
+.navbar-brand{
+    font-size: 28px;
+    font-weight: 700;
+    color: #2563EB !important;
+}
+
+.nav-link{
+    color: #1F2937 !important;
+    font-weight: 500;
+    margin-left: 10px;
+    border-radius: 12px;
+    padding: 8px 14px !important;
+    transition: 0.25s;
+}
+
+.nav-link:hover{
+    background: #EFF6FF;
+    color: #2563EB !important;
+}
+
+/* ===== HERO ===== */
+.hero-section{
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    background: linear-gradient(135deg, #F8FAFC 0%, #EFF6FF 100%);
+}
+
+.hero-title{
+    font-size: 56px;
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.5px;
+}
+
+.hero-text{
+    font-size: 18px;
+    line-height: 1.7;
+    color: #6B7280;
+}
+
+/* badge */
+.badge-custom{
+    background: rgba(37,99,235,0.1);
+    color: #2563EB;
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-weight: 500;
+    display: inline-block;
+}
+
+/* ===== BUTTONS ===== */
+.btn-primary{
+    background-color: #2563EB;
+    border: none;
+    box-shadow: 0 6px 18px rgba(37,99,235,0.25);
+}
+
+.btn-primary:hover{
+    background-color: #1D4ED8;
+    transform: translateY(-1px);
+}
+
+.btn-outline-primary{
+    border-color: #2563EB;
+    color: #2563EB;
+}
+
+.btn-outline-primary:hover{
+    background-color: #2563EB;
+    color: white;
+}
+
+/* ===== CARDS ===== */
+.feature-card{
+    border: 1px solid rgba(0,0,0,0.05);
+    border-radius: 20px;
+    background: white;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.04);
+    transition: 0.3s ease;
+}
+
+.feature-card:hover{
+    transform: translateY(-8px);
+    box-shadow: 0 14px 35px rgba(0,0,0,0.08);
+}
+
+.feature-icon{
+    font-size: 48px;
+}
+
+/* ===== SECTIONS SPACING ===== */
+section{
+    padding: 80px 0;
+}
+
+/* ===== TITLES ===== */
+h2{
+    letter-spacing: -0.3px;
+}
+
+/* ===== FOOTER ===== */
+footer{
+    background: white;
+    padding: 25px 0;
+    border-top: 1px solid #eee;
+}
+
+/* ===== ANIMATION ===== */
+.reveal{
+    opacity: 0;
+    transform: translateY(18px);
+    transition: all 0.6s ease;
+}
+
+.reveal.active{
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 991px){
+
+    .hero-title{
         font-size: 42px;
         text-align: center;
     }
 
-    .hero-text {
+    .hero-text{
         text-align: center;
     }
 
-    .hero-section {
+    .hero-section{
         text-align: center;
         padding: 60px 0;
     }
-
-    .container {
-        padding-left: 20px;
-        padding-right: 20px;
-    }
-
-    .navbar-nav {
-        text-align: center;
-        padding-top: 15px;
-    }
-
-    .nav-item {
-        margin-bottom: 8px;
-    }
-
-    .ms-2, .ms-3 {
-        margin-left: 0 !important;
-    }
-
 }
 
-/* phones */
-@media (max-width: 576px) {
-    html { font-size: 14px; }
+@media (max-width: 576px){
 
-    .hero-title {
+    .hero-title{
         font-size: 32px;
-        line-height: 1.3;
     }
 
-    .hero-text {
+    .hero-text{
         font-size: 16px;
     }
 
-    .navbar-brand {
-        font-size: 24px;
-    }
-
-    .nav-link {
-        margin-left: 0;
-        padding: 10px 12px !important;
-    }
-
-    .feature-card {
-        margin-bottom: 15px;
-        text-align: center;
-        padding: 25px;
-    }
-
-    .btn {
+    .btn{
         width: 100%;
     }
-}
 
-@media (max-width: 768px) {
-    .feature-card {
-        margin-bottom: 20px;
+    section{
+        padding: 60px 0;
     }
 }
 
@@ -389,7 +357,7 @@ html {
 
                 <img src="{{ asset('images/logo.png') }}"
                      class="img-fluid mx-auto d-block"
-                     style="max-width:500px; width:100%;"
+                     style="max-width:480px; width:100%; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.08));"
                      alt="Cleaning Service">
 
             </div>
@@ -750,25 +718,34 @@ html {
             <div class="col-lg-6">
 
                 <div class="card feature-card p-4">
+                    @if(session('success'))
+                        <div class="alert alert-success rounded-3 border-0 shadow-sm">
+                            {{ session('success') }}
+                        </div>
+                    @endif
 
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold">Name</label>
-                        <input type="text" class="form-control rounded-3">
-                    </div>
+                    <form method="POST" action="/contact/send">
+                        @csrf
 
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold">Email</label>
-                        <input type="email" class="form-control rounded-3">
-                    </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Name</label>
+                            <input type="text" name="name" class="form-control rounded-3" required>
+                        </div>
 
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold">Message</label>
-                        <textarea class="form-control rounded-3" rows="4"></textarea>
-                    </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Email</label>
+                            <input type="email" name="email" class="form-control rounded-3" required>
+                        </div>
 
-                    <button class="btn btn-primary rounded-pill px-4">
-                        Send Message
-                    </button>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Message</label>
+                            <textarea name="message" class="form-control rounded-3" rows="4" required></textarea>
+                        </div>
+
+                        <button class="btn btn-primary rounded-pill px-4">
+                            Send Message
+                        </button>
+                    </form>
 
                 </div>
 

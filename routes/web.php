@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 */
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ContactController;
 
 use App\Http\Controllers\Customer\DashboardController as CustomerDashboardController;
 use App\Http\Controllers\Cleaner\DashboardController as CleanerDashboardController;
@@ -44,6 +45,7 @@ use App\Http\Controllers\Admin\ReviewController;
 |--------------------------------------------------------------------------
 */
 Route::get('/', [HomeController::class, 'index']);
+Route::post('/contact/send', [ContactController::class, 'send']);
 
 /*
 |--------------------------------------------------------------------------
