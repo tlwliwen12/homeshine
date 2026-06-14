@@ -2,31 +2,55 @@
 
 @section('content')
 
-<div class="container-fluid">
+<div class="container px-lg-4 px-3">
 
-    <h2 class="fw-bold mb-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-5">
 
-        Reviews & Ratings
+        <div>
 
-    </h2>
+            <h2 class="fw-bold mb-1">
+                Reviews & Ratings
+            </h2>
+
+            <p class="text-secondary mb-0">
+                Monitor customer feedback and service quality.
+            </p>
+
+        </div>
+
+    </div>
 
     <!-- Statistics -->
+    <div class="row g-4 mb-5">
 
-    <div class="row g-3 mb-4">
+        <div class="col-md-6 col-xl-3">
 
-        <div class="col-md-3">
-
-            <div class="card shadow-sm">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
 
                 <div class="card-body">
 
-                    <h6>Total Reviews</h6>
+                    <div class="d-flex justify-content-between align-items-center">
 
-                    <h3>
+                        <div>
 
-                        {{ $totalReviews }}
+                            <small class="text-muted">
+                                Total Reviews
+                            </small>
 
-                    </h3>
+                            <h2 class="fw-bold mt-2 mb-0">
+                                {{ $totalReviews }}
+                            </h2>
+
+                        </div>
+
+                        <div class="bg-primary bg-opacity-10 rounded-4 p-3">
+
+                            <i class="bi bi-chat-left-text fs-3 text-primary"></i>
+
+                        </div>
+
+                    </div>
 
                 </div>
 
@@ -34,19 +58,33 @@
 
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-6 col-xl-3">
 
-            <div class="card shadow-sm">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
 
                 <div class="card-body">
 
-                    <h6>Average Rating</h6>
+                    <div class="d-flex justify-content-between align-items-center">
 
-                    <h3 class="text-warning">
+                        <div>
 
-                        ⭐ {{ $averageRating }}
+                            <small class="text-muted">
+                                Average Rating
+                            </small>
 
-                    </h3>
+                            <h2 class="fw-bold text-warning mt-2 mb-0">
+                                ⭐ {{ $averageRating }}
+                            </h2>
+
+                        </div>
+
+                        <div class="bg-warning bg-opacity-10 rounded-4 p-3">
+
+                            <i class="bi bi-star-fill fs-3 text-warning"></i>
+
+                        </div>
+
+                    </div>
 
                 </div>
 
@@ -54,16 +92,33 @@
 
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-6 col-xl-3">
 
-            <div class="card shadow-sm">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
 
                 <div class="card-body">
 
-                    <h6>High Ratings</h6>
-                    <h3 class="text-success">
-                        {{ $highRatings }}
-                    </h3>
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <small class="text-muted">
+                                High Ratings
+                            </small>
+
+                            <h2 class="fw-bold text-success mt-2 mb-0">
+                                {{ $highRatings }}
+                            </h2>
+
+                        </div>
+
+                        <div class="bg-success bg-opacity-10 rounded-4 p-3">
+
+                            <i class="bi bi-hand-thumbs-up-fill fs-3 text-success"></i>
+
+                        </div>
+
+                    </div>
 
                 </div>
 
@@ -71,19 +126,33 @@
 
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-6 col-xl-3">
 
-            <div class="card shadow-sm">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
 
                 <div class="card-body">
 
-                    <h6>Low Ratings</h6>
+                    <div class="d-flex justify-content-between align-items-center">
 
-                    <h3 class="text-danger">
+                        <div>
 
-                        {{ $lowRatings }}
+                            <small class="text-muted">
+                                Low Ratings
+                            </small>
 
-                    </h3>
+                            <h2 class="fw-bold text-danger mt-2 mb-0">
+                                {{ $lowRatings }}
+                            </h2>
+
+                        </div>
+
+                        <div class="bg-danger bg-opacity-10 rounded-4 p-3">
+
+                            <i class="bi bi-hand-thumbs-down-fill fs-3 text-danger"></i>
+
+                        </div>
+
+                    </div>
 
                 </div>
 
@@ -93,37 +162,80 @@
 
     </div>
 
-    <div class="col-md-6">
+    <!-- Best & Worst Service -->
+    <div class="row g-4 mb-5">
 
-        <div class="card shadow-sm border-0 h-100">
+        <div class="col-lg-6">
 
-            <div class="card-body">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
 
-                <h6 class="text-success">
+                <div class="card-body p-4">
 
-                    Best Rated Service
+                    <small class="text-success">
+                        Best Rated Service
+                    </small>
 
-                </h6>
+                    @if($bestService)
 
-                @if($bestService)
+                        <h4 class="fw-bold mt-2">
 
-                    <h5 class="fw-bold">
+                            {{ $bestService->service->name }}
 
-                        {{ $bestService->service->name }}
+                        </h4>
 
-                    </h5>
+                        <h3 class="text-warning">
 
-                    <h4 class="text-warning">
+                            ⭐ {{ number_format($bestService->average_rating,1) }}
 
-                        ⭐ {{ number_format($bestService->average_rating, 1) }}
+                        </h3>
 
-                    </h4>
+                    @else
 
-                @else
+                        <p class="text-secondary mb-0">
+                            No review data available.
+                        </p>
 
-                    <p>No review data.</p>
+                    @endif
 
-                @endif
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-6">
+
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                <div class="card-body p-4">
+
+                    <small class="text-danger">
+                        Lowest Rated Service
+                    </small>
+
+                    @if($worstService)
+
+                        <h4 class="fw-bold mt-2">
+
+                            {{ $worstService->service->name }}
+
+                        </h4>
+
+                        <h3 class="text-warning">
+
+                            ⭐ {{ number_format($worstService->average_rating,1) }}
+
+                        </h3>
+
+                    @else
+
+                        <p class="text-secondary mb-0">
+                            No review data available.
+                        </p>
+
+                    @endif
+
+                </div>
 
             </div>
 
@@ -131,51 +243,8 @@
 
     </div>
 
-    <br>
-
-    <div class="col-md-6">
-
-        <div class="card shadow-sm border-0 h-100">
-
-            <div class="card-body">
-
-                <h6 class="text-danger">
-
-                    Lowest Rated Service
-
-                </h6>
-
-                @if($worstService)
-
-                    <h5 class="fw-bold">
-
-                        {{ $worstService->service->name }}
-
-                    </h5>
-
-                    <h4 class="text-warning">
-
-                        ⭐ {{ number_format($worstService->average_rating, 1) }}
-
-                    </h4>
-
-                @else
-
-                    <p>No review data.</p>
-
-                @endif
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <br><br>
-
-    <!-- Filter -->
-
-    <div class="card shadow-sm mb-4">
+    <!-- Filters -->
+    <div class="card border-0 shadow-sm rounded-4 mb-5">
 
         <div class="card-body">
 
@@ -183,18 +252,18 @@
 
                 <div class="row g-3">
 
-                    <div class="col-md-6">
+                    <div class="col-lg-6">
 
                         <input
                             type="text"
                             name="search"
                             class="form-control"
-                            placeholder="Search Customer"
+                            placeholder="Search customer..."
                             value="{{ request('search') }}">
 
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-lg-4">
 
                         <select
                             name="rating"
@@ -220,10 +289,9 @@
 
                     </div>
 
-                    <div class="col-md-2">
+                    <div class="col-lg-2">
 
-                        <button
-                            class="btn btn-dark w-100">
+                        <button class="btn btn-dark w-100">
 
                             Filter
 
@@ -239,96 +307,138 @@
 
     </div>
 
-    <!-- Table -->
+    <!-- Reviews Table -->
+    <div class="card border-0 shadow-sm rounded-4">
 
-    <div class="card shadow-sm">
+        <div class="card-body p-4">
 
-        <div class="card-body">
+            <div class="table-responsive">
 
-            <table class="table align-middle">
+                <table class="table align-middle">
 
-                <thead>
+                    <thead>
 
-                    <tr>
+                        <tr>
 
-                        <th>ID</th>
-                        <th>Customer</th>
-                        <th>Service</th>
-                        <th>Booking</th>
-                        <th>Rating</th>
-                        <th>Review</th>
-                        <th>Date</th>
+                            <th>ID</th>
+                            <th>Customer</th>
+                            <th>Service</th>
+                            <th>Booking</th>
+                            <th>Rating</th>
+                            <th>Review</th>
+                            <th>Date</th>
 
-                    </tr>
+                        </tr>
 
-                </thead>
+                    </thead>
 
-                <tbody>
+                    <tbody>
 
-                    @forelse($reviews as $review)
+                        @forelse($reviews as $review)
 
-                    <tr>
+                        <tr>
 
-                        <td>
-                            {{ $review->id }}
-                        </td>
+                            <td>
+                                #{{ $review->id }}
+                            </td>
 
-                        <td>
-                            {{ $review->user->name }}
-                        </td>
+                            <td>
 
-                        <td>
-                            {{ $review->service->name }}
-                        </td>
+                                <div class="fw-semibold">
 
-                        <td>
-                            #{{ $review->booking_id }}
-                        </td>
+                                    {{ $review->user->name }}
 
-                        <td>
+                                </div>
 
-                            @for($i=1;$i<=$review->rating;$i++)
+                            </td>
 
-                                ⭐
+                            <td>
 
-                            @endfor
+                                {{ $review->service->name }}
 
-                        </td>
+                            </td>
 
-                        <td>
+                            <td>
 
-                            {{ $review->review ?: '-' }}
+                                #{{ $review->booking_id }}
 
-                        </td>
+                            </td>
 
-                        <td>
+                            <td>
 
-                            {{ $review->created_at->format('d M Y') }}
+                                @if($review->rating >= 4)
 
-                        </td>
+                                    <span class="badge bg-success">
 
-                    </tr>
+                                        ⭐ {{ $review->rating }}/5
 
-                    @empty
+                                    </span>
 
-                    <tr>
+                                @elseif($review->rating == 3)
 
-                        <td colspan="7"
-                            class="text-center">
+                                    <span class="badge bg-warning text-dark">
 
-                            No Reviews Found
+                                        ⭐ {{ $review->rating }}/5
 
-                        </td>
+                                    </span>
 
-                    </tr>
+                                @else
 
-                    @endforelse
+                                    <span class="badge bg-danger">
 
-                </tbody>
+                                        ⭐ {{ $review->rating }}/5
 
-            </table>
+                                    </span>
 
-            <div class="mt-3">
+                                @endif
+
+                            </td>
+
+                            <td style="max-width:300px;">
+
+                                {{ $review->review ?: '-' }}
+
+                            </td>
+
+                            <td>
+
+                                {{ $review->created_at->format('d M Y') }}
+
+                            </td>
+
+                        </tr>
+
+                        @empty
+
+                        <tr>
+
+                            <td colspan="7" class="text-center py-5">
+
+                                <div>
+
+                                    <i class="bi bi-chat-left-text fs-1 text-secondary"></i>
+
+                                    <h5 class="fw-bold mt-3">
+
+                                        No Reviews Found
+
+                                    </h5>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                        @endforelse
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div class="mt-4">
 
                 {{ $reviews->links() }}
 

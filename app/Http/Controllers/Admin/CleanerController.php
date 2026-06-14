@@ -9,11 +9,71 @@ use App\Notifications\CleanerApprovedNotification;
 
 class CleanerController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $cleaners = User::where('role', 'cleaner')->get();
+        $query = User::where('role', 'cleaner');
 
-        return view('admin.cleaners', compact('cleaners'));
+        if ($request->filled('search')) {
+
+            $query->where(function ($q) use ($request) {
+
+                $q->where('name', 'like', '%' . $request->search . '%')
+                  ->orWhere('email', 'like', '%' . $request->search . '%');
+
+            });
+        }
+
+        if ($request->filled('status')) {
+
+            $query->where(
+                'approval_status',
+            $request->status
+            );
+        }
+
+        $cleaners = $query
+            ->latest()
+            ->get();
+
+        $totalCleaners = User::where(
+            'role',
+            'cleaner'
+        )->count();
+
+        $approvedCleaners = User::where(
+            'role',
+            'cleaner'
+        )->where(
+            'approval_status',
+            'approved'
+        )->count();
+
+        $pendingCleaners = User::where(
+            'role',
+            'cleaner'
+        )->where(
+            'approval_status',
+            'pending'
+        )->count();
+
+        $rejectedCleaners = User::where(
+            'role',
+            'cleaner'
+        )->where(
+            'approval_status',
+            'rejected'
+        )->count();
+
+        return view(
+            'admin.cleaners',
+            compact(
+                'cleaners',
+                'totalCleaners',
+                'approvedCleaners',
+                'pendingCleaners',
+                'rejectedCleaners'
+            )
+        );
     }
 
     public function approve($id)

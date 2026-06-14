@@ -49,6 +49,37 @@ class DashboardController extends Controller
 
         $monthlyRevenue = [];
 
+        $totalCustomers = User::where(
+            'role',
+            'customer'
+        )->count();
+
+        $totalCleaners = User::where(
+            'role',
+            'cleaner'
+        )->count();
+
+        $pendingBookings = Booking::where(
+            'status',
+            'Pending'
+        )->count();
+
+        $acceptedBookings = Booking::where(
+            'status',
+            'Accepted'
+        )->count();
+
+        $inProgressBookings = Booking::where(
+            'status',
+            'In Progress'
+        )->count();
+
+        $cancelledBookings = Booking::where(
+            'status',
+            'Cancelled'
+        )->count();
+
+
         for ($month = 1; $month <= 12; $month++) {
 
             $revenue = Booking::whereMonth(
@@ -73,6 +104,12 @@ class DashboardController extends Controller
             compact(
                 'totalBookings',
                 'completedBookings',
+                'pendingBookings',
+                'acceptedBookings',
+                'inProgressBookings',
+                'cancelledBookings',
+                'totalCustomers',
+                'totalCleaners',
                 'totalRevenue',
                 'totalRefunds',
                 'topService',

@@ -2,510 +2,473 @@
 
 @section('content')
 
-<div class="container-fluid">
+<div class="container px-lg-4 px-3">
 
-    <div class="mb-4">
+    <!-- PAGE HEADER -->
+    <div class="custom-card p-4 mb-4">
 
-        <h2 class="fw-bold">
+        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3">
 
-            Booking #{{ $booking->id }}
+            <div>
 
-        </h2>
+                <h1 class="fw-bold mb-2">
 
-        <p class="text-secondary">
+                    Booking #{{ $booking->id }}
 
-            Complete booking information
+                </h1>
+
+                <p class="text-secondary mb-0">
+
+                    Complete booking information and transaction records.
+
+                </p>
+
+            </div>
+
+            <div class="d-flex flex-wrap gap-2">
+
+                <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill">
+
+                    {{ $booking->service->name }}
+
+                </span>
+
+                <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill">
+
+                    {{ $booking->payment_status }}
+
+                </span>
+
+                <span class="badge bg-light text-dark px-3 py-2 rounded-pill">
+
+                    {{ $booking->status }}
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- BOOKING + FINANCIAL -->
+    <div class="row g-4 mb-4">
+
+        <div class="col-lg-6">
+
+            <div class="custom-card p-4 h-100">
+
+                <h5 class="fw-bold mb-4">
+
+                    Booking Information
+
+                </h5>
+
+                <div class="row g-3">
+
+                    <div class="col-6">
+
+                        <small class="text-secondary">
+                            Service
+                        </small>
+
+                        <div class="fw-semibold">
+                            {{ $booking->service->name }}
+                        </div>
+
+                    </div>
+
+                    <div class="col-6">
+
+                        <small class="text-secondary">
+                            Price
+                        </small>
+
+                        <div class="fw-semibold text-success">
+                            RM {{ number_format($booking->service->price,2) }}
+                        </div>
+
+                    </div>
+
+                    <div class="col-6">
+
+                        <small class="text-secondary">
+                            Date
+                        </small>
+
+                        <div class="fw-semibold">
+                            {{ $booking->booking_date }}
+                        </div>
+
+                    </div>
+
+                    <div class="col-6">
+
+                        <small class="text-secondary">
+                            Time
+                        </small>
+
+                        <div class="fw-semibold">
+                            {{ $booking->booking_time }}
+                        </div>
+
+                    </div>
+
+                    <div class="col-6">
+
+                        <small class="text-secondary">
+                            Status
+                        </small>
+
+                        <div class="fw-semibold">
+                            {{ $booking->status }}
+                        </div>
+
+                    </div>
+
+                    <div class="col-6">
+
+                        <small class="text-secondary">
+                            Payment
+                        </small>
+
+                        <div class="fw-semibold">
+                            {{ $booking->payment_status }}
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-6">
+
+            <div class="custom-card p-4 h-100">
+
+                <h5 class="fw-bold mb-4">
+
+                    Financial Summary
+
+                </h5>
+
+                <div class="row g-3">
+
+                    <div class="col-6">
+
+                        <small class="text-secondary">
+                            Service Price
+                        </small>
+
+                        <div class="fw-bold text-success">
+                            RM {{ number_format($booking->service->price,2) }}
+                        </div>
+
+                    </div>
+
+                    <div class="col-6">
+
+                        <small class="text-secondary">
+                            Cleaner Earning
+                        </small>
+
+                        <div class="fw-semibold">
+                            RM {{ number_format($booking->cleaner_earning ?? 0,2) }}
+                        </div>
+
+                    </div>
+
+                    <div class="col-6">
+
+                        <small class="text-secondary">
+                            Commission
+                        </small>
+
+                        <div class="fw-semibold">
+                            RM {{ number_format($booking->company_commission ?? 0,2) }}
+                        </div>
+
+                    </div>
+
+                    <div class="col-6">
+
+                        <small class="text-secondary">
+                            Payout Status
+                        </small>
+
+                        <div class="fw-semibold">
+                            {{ $booking->payout_status ?? 'Pending' }}
+                        </div>
+
+                    </div>
+
+                    <div class="col-12">
+
+                        <small class="text-secondary">
+                            Refund Status
+                        </small>
+
+                        <div class="fw-semibold">
+                            {{ $booking->refund_status ?? 'None' }}
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- CUSTOMER + CLEANER -->
+    <div class="row g-4 mb-4">
+
+        <div class="col-lg-6">
+
+            <div class="custom-card p-4 h-100">
+
+                <h5 class="fw-bold mb-4">
+
+                    Customer Information
+
+                </h5>
+
+                <p>
+
+                    <strong>Name:</strong>
+                    {{ $booking->user->name }}
+
+                </p>
+
+                <p>
+
+                    <strong>Email:</strong>
+                    {{ $booking->user->email }}
+
+                </p>
+
+                <p class="mb-0">
+
+                    <strong>Phone:</strong>
+                    {{ $booking->user->phone ?? '-' }}
+
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-6">
+
+            <div class="custom-card p-4 h-100">
+
+                <h5 class="fw-bold mb-4">
+
+                    Cleaner Information
+
+                </h5>
+
+                @if($booking->cleaner)
+
+                    <p>
+
+                        <strong>Name:</strong>
+                        {{ $booking->cleaner->name }}
+
+                    </p>
+
+                    <p>
+
+                        <strong>Email:</strong>
+                        {{ $booking->cleaner->email }}
+
+                    </p>
+
+                    <p>
+
+                        <strong>Bank:</strong>
+                        {{ $booking->cleaner->bank_name }}
+
+                    </p>
+
+                    <p>
+
+                        <strong>Account Holder:</strong>
+                        {{ $booking->cleaner->bank_account_name }}
+
+                    </p>
+
+                    <p class="mb-0">
+
+                        <strong>Account Number:</strong>
+                        {{ $booking->cleaner->bank_account_number }}
+
+                    </p>
+
+                @else
+
+                    <p class="text-secondary mb-0">
+
+                        Cleaner not assigned.
+
+                    </p>
+
+                @endif
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- TIMELINE -->
+    <div class="custom-card p-4 mb-4">
+
+        <h5 class="fw-bold mb-4">
+
+            Booking Timeline
+
+        </h5>
+
+        <ul class="list-group list-group-flush">
+
+            <li class="list-group-item">
+                ✅ Booking Created
+            </li>
+
+            <li class="list-group-item">
+                {{ $booking->status != 'Pending' ? '✅' : '⭕' }}
+                Cleaner Accepted
+            </li>
+
+            <li class="list-group-item">
+                {{ $booking->payment_status == 'Paid' ? '✅' : '⭕' }}
+                Customer Payment Received
+            </li>
+
+            <li class="list-group-item">
+                {{ $booking->status == 'In Progress' || $booking->status == 'Completed' ? '✅' : '⭕' }}
+                Service Started
+            </li>
+
+            <li class="list-group-item">
+                {{ $booking->status == 'Completed' ? '✅' : '⭕' }}
+                Service Completed
+            </li>
+
+            <li class="list-group-item">
+                {{ $booking->payout_status == 'Paid' ? '✅' : '⭕' }}
+                Cleaner Payout Completed
+            </li>
+
+        </ul>
+
+    </div>
+
+    <!-- ADDRESS -->
+    <div class="custom-card p-4 mb-4">
+
+        <h5 class="fw-bold mb-4">
+
+            Service Address & Notes
+
+        </h5>
+
+        <p>
+
+            <strong>Address:</strong>
+
+        </p>
+
+        <p>
+
+            {{ $booking->address }}
+
+        </p>
+
+        <hr>
+
+        <p>
+
+            <strong>Notes:</strong>
+
+        </p>
+
+        <p class="mb-0">
+
+            {{ $booking->notes ?? 'No notes provided' }}
 
         </p>
 
     </div>
 
-    <div class="card border-0 shadow-sm rounded-4">
+    <!-- REFUND -->
+    <div class="custom-card p-4 mb-4">
 
-        <div class="card-body p-4">
+        <h5 class="fw-bold mb-4">
 
-            <h4 class="fw-bold mb-3">
+            Refund & Payout Records
 
-                Booking Information
+        </h5>
 
-            </h4>
+        <div class="row">
 
-            <hr>
+            <div class="col-md-6">
 
-            <p>
+                <p>
 
-                <strong>Service:</strong>
+                    <strong>Refund Status:</strong>
 
-                {{ $booking->service->name }}
+                    {{ $booking->refund_status ?? 'None' }}
 
-            </p>
+                </p>
 
-            <p>
+                <p>
 
-                <strong>Price:</strong>
+                    <strong>Refund Reference:</strong>
 
-                RM {{ number_format($booking->service->price, 2) }}
+                    {{ $booking->refund_reference ?? '-' }}
 
-            </p>
+                </p>
 
-            <p>
+            </div>
 
-                <strong>Date:</strong>
+            <div class="col-md-6">
 
-                {{ $booking->booking_date }}
+                <p>
 
-            </p>
+                    <strong>Payout Status:</strong>
 
-            <p>
+                    {{ $booking->payout_status ?? 'Pending' }}
 
-                <strong>Time:</strong>
+                </p>
 
-                {{ $booking->booking_time }}
+                <p>
 
-            </p>
+                    <strong>Payout Reference:</strong>
 
-            <p>
+                    {{ $booking->payout_reference ?? '-' }}
 
-                <strong>Status:</strong>
+                </p>
 
-                {{ $booking->status }}
-
-            </p>
-
-            <p>
-
-                <strong>Payment Status:</strong>
-
-                {{ $booking->payment_status }}
-
-            </p>
+            </div>
 
         </div>
 
     </div>
 
-    <div class="card border-0 shadow-sm rounded-4 mt-4">
+    <a href="/admin/bookings"
+       class="btn btn-outline-secondary rounded-4 px-4">
 
-        <div class="card-body p-4">
+        <i class="bi bi-arrow-left me-1"></i>
 
-            <h4 class="fw-bold mb-4">
+        Back to Bookings
 
-                Booking Timeline
-
-            </h4>
-
-            <ul class="list-group list-group-flush">
-
-                <!-- Created -->
-
-                <li class="list-group-item">
-
-                    <span class="text-success">
-
-                        <i class="bi bi-check-circle-fill"></i>
-
-                    </span>
-
-                    Booking Created
-
-                </li>
-
-                <!-- Accepted -->
-
-                <li class="list-group-item">
-
-                    @if($booking->status != 'Pending')
-
-                        <span class="text-success">
-
-                            <i class="bi bi-check-circle-fill"></i>
-
-                        </span>
-
-                    @else
-
-                        <span class="text-secondary">
-
-                            <i class="bi bi-circle"></i>
-
-                        </span>
-
-                    @endif
-
-                    Cleaner Accepted
-
-                </li>
-
-                <!-- Paid -->
-
-                <li class="list-group-item">
-
-                    @if($booking->payment_status == 'Paid')
-
-                        <span class="text-success">
-
-                            <i class="bi bi-check-circle-fill"></i>
-
-                        </span>
-
-                    @else
-
-                        <span class="text-secondary">
-
-                            <i class="bi bi-circle"></i>
-
-                        </span>
-
-                    @endif
-
-                    Customer Payment Received
-
-                </li>
-
-                <!-- Completed -->
-
-                <li class="list-group-item">
-
-                    @if($booking->status == 'Completed')
-
-                        <span class="text-success">
-
-                            <i class="bi bi-check-circle-fill"></i>
-
-                        </span>
-
-                    @else
-
-                        <span class="text-secondary">
-
-                            <i class="bi bi-circle"></i>
-
-                        </span>
-
-                    @endif
-
-                    Service Completed
-
-                </li>
-
-                <!-- Payout -->
-
-                <li class="list-group-item">
-
-                    @if($booking->payout_status == 'Paid')
-
-                        <span class="text-success">
-
-                            <i class="bi bi-check-circle-fill"></i>
-
-                        </span>
-
-                    @else
-
-                        <span class="text-secondary">
-
-                            <i class="bi bi-circle"></i>
-
-                        </span>
-
-                    @endif
-
-                    Cleaner Payout Completed
-
-                </li>
-
-                <!-- Refund -->
-
-                @if($booking->refund_status)
-
-                <li class="list-group-item">
-
-                    @if($booking->refund_status == 'Refunded')
-
-                        <span class="text-info">
-
-                            <i class="bi bi-arrow-counterclockwise"></i>
-
-                        </span>
-
-                    @else
-
-                        <span class="text-warning">
-
-                            <i class="bi bi-hourglass-split"></i>
-
-                        </span>
-
-                    @endif
-
-                    Refund {{ $booking->refund_status }}
-
-                </li>
-
-                @endif
-
-            </ul>
-
-        </div>
-
-    </div>
-
-    <div class="card border-0 shadow-sm rounded-4 mt-4">
-
-        <div class="card-body p-4">
-
-            <h4 class="fw-bold mb-4">
-
-                Financial Summary
-
-            </h4>
-
-            <hr>
-
-            <p>
-
-                <strong>Service Price:</strong>
-
-                RM {{ number_format($booking->service->price, 2) }}
-
-            </p>
-
-            <p>
-
-                <strong>Cleaner Earning:</strong>
-
-                RM {{ number_format($booking->cleaner_earning ?? 0, 2) }}
-
-            </p>
-
-            <p>
-
-                <strong>Company Commission:</strong>
-
-                RM {{ number_format($booking->company_commission ?? 0, 2) }}
-
-            </p>
-
-            <p>
-
-                <strong>Payment Status:</strong>
-
-                {{ $booking->payment_status }}
-
-            </p>
-
-            <p>
-
-                <strong>Payout Status:</strong>
-
-                {{ $booking->payout_status ?? 'Pending' }}
-
-            </p>
-
-            <p>
-
-                <strong>Refund Status:</strong>
-
-                {{ $booking->refund_status ?? 'None' }}
-
-            </p>
-
-        </div>
-
-    </div>
-
-    <div class="card border-0 shadow-sm rounded-4 mt-4">
-
-        <div class="card-body p-4">
-
-            <h4 class="fw-bold mb-3">
-
-                Customer Information
-
-            </h4>
-
-            <hr>
-
-            <p>
-
-                <strong>Name:</strong>
-
-                {{ $booking->user->name }}
-
-            </p>
-
-            <p>
-
-                <strong>Email:</strong>
-
-                {{ $booking->user->email }}
-
-            </p>
-
-            <p>
-
-                <strong>Phone:</strong>
-
-                {{ $booking->user->phone ?? '-' }}
-
-            </p>
-
-        </div>
-
-    </div>
-
-    @if($booking->cleaner)
-
-    <div class="card border-0 shadow-sm rounded-4 mt-4">
-
-        <div class="card-body p-4">
-
-            <h4 class="fw-bold mb-3">
-
-                Cleaner Information
-
-            </h4>
-
-            <hr>
-
-            <p>
-
-                <strong>Name:</strong>
-
-                {{ $booking->cleaner->name }}
-
-            </p>
-
-            <p>
-
-                <strong>Email:</strong>
-
-                {{ $booking->cleaner->email }}
-
-            </p>
-
-            <p>
-
-                <strong>Bank:</strong>
-
-                {{ $booking->cleaner->bank_name }}
-
-            </p>
-
-            <p>
-
-                <strong>Account Holder:</strong>
-
-                {{ $booking->cleaner->bank_account_name }}
-
-            </p>
-
-            <p>
-
-                <strong>Account Number:</strong>
-
-                {{ $booking->cleaner->bank_account_number }}
-
-            </p>
-
-        </div>
-
-    </div>
-
-    @endif
-
-    <div class="card border-0 shadow-sm rounded-4 mt-4">
-
-        <div class="card-body p-4">
-
-            <h4 class="fw-bold mb-3">
-
-                Service Address
-
-            </h4>
-
-            <hr>
-
-            <p>
-
-                {{ $booking->address }}
-
-            </p>
-
-            <p>
-
-                <strong>Notes:</strong>
-
-            </p>
-
-            <p>
-
-                {{ $booking->notes ?? 'No notes provided' }}
-
-            </p>
-
-        </div>
-
-    </div>
-
-    <div class="card border-0 shadow-sm rounded-4 mt-4">
-
-        <div class="card-body p-4">
-
-            <h4 class="fw-bold mb-3">
-
-                Refund & Payout
-
-            </h4>
-
-            <hr>
-
-            <p>
-
-                <strong>Refund Status:</strong>
-
-                {{ $booking->refund_status ?? 'None' }}
-
-            </p>
-
-            <p>
-
-                <strong>Refund Ref:</strong>
-
-                {{ $booking->refund_reference ?? '-' }}
-
-            </p>
-
-            <p>
-
-                <strong>Payout Status:</strong>
-
-                {{ $booking->payout_status ?? 'Pending' }}
-
-            </p>
-
-            <p>
-
-                <strong>Payout Ref:</strong>
-
-                {{ $booking->payout_reference ?? '-' }}
-
-            </p>
-
-        </div>
-
-    </div>
-
-    <div class="mt-4">
-
-        <a href="/admin/bookings"
-           class="btn btn-outline-dark">
-
-            Back
-
-        </a>
-
-    </div>
+    </a>
 
 </div>
 

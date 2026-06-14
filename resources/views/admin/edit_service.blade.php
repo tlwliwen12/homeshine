@@ -2,110 +2,130 @@
 
 @section('content')
 
-<style>
+<div class="container px-lg-4 px-3">
 
-    .form-card{
-        border-radius: 18px;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.06);
-        border: none;
-    }
+    <!-- Page Header -->
+    <div class="page-header">
 
-    .form-header{
-        padding-bottom: 15px;
-        border-bottom: 1px solid #eee;
-        margin-bottom: 20px;
-    }
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
 
-    .form-control, .form-select{
-        border-radius: 12px;
-        padding: 10px 14px;
-    }
+            <div>
 
-    .form-control:focus, .form-select:focus{
-        box-shadow: none;
-        border-color: #000;
-    }
+                <h1 class="page-title">
+                    Edit Service
+                </h1>
 
-    .btn{
-        border-radius: 12px;
-        padding: 10px 18px;
-    }
+                <p class="page-subtitle mb-0">
+                    Update service information and pricing.
+                </p>
 
-    .hint-text{
-        font-size: 13px;
-        color: #888;
-    }
+            </div>
 
-    .image-preview{
-        max-width: 260px;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    }
+            <a href="/admin/services"
+               class="btn btn-outline-secondary rounded-pill">
 
-</style>
+                <i class="bi bi-arrow-left me-2"></i>
+                Back to Services
 
-<div class="container-fluid">
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- Validation Errors -->
+    @if($errors->any())
+
+        <div class="alert alert-danger rounded-4 border-0 shadow-sm mb-4">
+
+            <ul class="mb-0">
+
+                @foreach($errors->all() as $error)
+
+                    <li>{{ $error }}</li>
+
+                @endforeach
+
+            </ul>
+
+        </div>
+
+    @endif
 
     <div class="row justify-content-center">
 
-        <div class="col-lg-8">
+        <div class="col-xl-8">
 
-            <div class="card form-card">
+            <div class="section-card">
 
-                <div class="card-body p-4">
+                <div class="card-body p-4 p-lg-5">
 
-                    {{-- Header --}}
-                    <div class="form-header">
-
-                        <h2 class="fw-bold mb-1">Edit Service</h2>
-
-                        <p class="text-muted mb-0">
-                            Update service information
-                        </p>
-
-                    </div>
-
-                    {{-- Form --}}
                     <form method="POST"
                           action="/admin/services/{{ $service->id }}/update"
                           enctype="multipart/form-data">
 
                         @csrf
 
-                        {{-- Service Name --}}
-                        <div class="mb-3">
+                        <!-- Current Image -->
+                        @if($service->image)
 
-                            <label class="form-label fw-semibold">Service Name</label>
+                            <div class="mb-4 text-center">
+
+                                <img src="{{ asset('images/services/' . $service->image) }}"
+                                     class="rounded-4 shadow-sm"
+                                     style="
+                                        width:100%;
+                                        max-height:320px;
+                                        object-fit:cover;
+                                     "
+                                     alt="{{ $service->name }}">
+
+                            </div>
+
+                        @endif
+
+                        <!-- Service Name -->
+                        <div class="mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                Service Name
+
+                            </label>
 
                             <input type="text"
                                    name="name"
-                                   value="{{ $service->name }}"
-                                   class="form-control"
+                                   class="form-control rounded-4"
+                                   value="{{ old('name',$service->name) }}"
                                    required>
 
                         </div>
 
-                        {{-- Category --}}
-                        <div class="mb-3">
+                        <!-- Category -->
+                        <div class="mb-4">
 
-                            <label class="form-label fw-semibold">Category</label>
+                            <label class="form-label fw-semibold">
+
+                                Category
+
+                            </label>
 
                             <select name="category"
-                                    class="form-select">
+                                    class="form-select rounded-4">
 
                                 <option value="Residential Cleaning"
                                     {{ $service->category == 'Residential Cleaning' ? 'selected' : '' }}>
                                     Residential Cleaning
                                 </option>
 
-                                <option value="Specialized Cleaning"
-                                    {{ $service->category == 'Specialized Cleaning' ? 'selected' : '' }}>
-                                    Specialized Cleaning
-                                </option>
-
                                 <option value="Commercial Cleaning"
                                     {{ $service->category == 'Commercial Cleaning' ? 'selected' : '' }}>
                                     Commercial Cleaning
+                                </option>
+
+                                <option value="Specialized Cleaning"
+                                    {{ $service->category == 'Specialized Cleaning' ? 'selected' : '' }}>
+                                    Specialized Cleaning
                                 </option>
 
                                 <option value="Premium Services"
@@ -117,100 +137,98 @@
 
                         </div>
 
-                        {{-- Description --}}
-                        <div class="mb-3">
-
-                            <label class="form-label fw-semibold">Service Description</label>
-
-                            <textarea name="description"
-                                      rows="5"
-                                      class="form-control"
-                                      required>{{ $service->description }}</textarea>
-
-                        </div>
-
-                        {{-- Price --}}
-                        <div class="mb-3">
-
-                            <label class="form-label fw-semibold">Price (RM)</label>
-
-                            <input type="number"
-                                   name="price"
-                                   value="{{ $service->price }}"
-                                   class="form-control"
-                                   step="0.01"
-                                   min="0.01"
-                                   required>
-
-                            <div class="hint-text mt-1">
-                                Example: 80 (without RM)
-                            </div>
-
-                        </div>
-
-                        {{-- Duration --}}
-                        <div class="mb-3">
-
-                            <label class="form-label fw-semibold">Service Duration</label>
-
-                            <input type="text"
-                                   name="duration"
-                                   value="{{ $service->duration }}"
-                                   class="form-control"
-                                   required>
-
-                            <div class="hint-text mt-1">
-                                Example: 2 Hours
-                            </div>
-
-                        </div>
-
-                        {{-- Current Image --}}
-                        @if($service->image)
-
-                            <div class="mb-3">
-
-                                <label class="form-label fw-semibold">Current Image</label>
-
-                                <div class="mt-2">
-
-                                    <img src="{{ asset('images/services/' . $service->image) }}"
-                                         class="image-preview">
-
-                                </div>
-
-                            </div>
-
-                        @endif
-
-                        {{-- Upload New Image --}}
+                        <!-- Description -->
                         <div class="mb-4">
 
-                            <label class="form-label fw-semibold">Change Image</label>
+                            <label class="form-label fw-semibold">
+
+                                Service Description
+
+                            </label>
+
+                            <textarea name="description"
+                                      rows="6"
+                                      class="form-control rounded-4"
+                                      required>{{ old('description',$service->description) }}</textarea>
+
+                        </div>
+
+                        <div class="row">
+
+                            <!-- Price -->
+                            <div class="col-md-6 mb-4">
+
+                                <label class="form-label fw-semibold">
+
+                                    Price (RM)
+
+                                </label>
+
+                                <input type="number"
+                                       name="price"
+                                       class="form-control rounded-4"
+                                       step="0.01"
+                                       min="0.01"
+                                       value="{{ old('price',$service->price) }}"
+                                       required>
+
+                            </div>
+
+                            <!-- Duration -->
+                            <div class="col-md-6 mb-4">
+
+                                <label class="form-label fw-semibold">
+
+                                    Duration
+
+                                </label>
+
+                                <input type="text"
+                                       name="duration"
+                                       class="form-control rounded-4"
+                                       value="{{ old('duration',$service->duration) }}"
+                                       required>
+
+                            </div>
+
+                        </div>
+
+                        <!-- New Image -->
+                        <div class="mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                Replace Service Image
+
+                            </label>
 
                             <input type="file"
                                    name="image"
-                                   class="form-control">
+                                   class="form-control rounded-4">
 
-                            <div class="hint-text mt-1">
-                                Upload only if you want to replace the current image.
-                            </div>
+                            <small class="text-secondary">
+
+                                Leave empty to keep the current image.
+
+                            </small>
 
                         </div>
 
-                        {{-- Buttons --}}
-                        <div class="d-flex gap-2">
+                        <hr class="my-4">
+
+                        <!-- Actions -->
+                        <div class="d-flex flex-wrap gap-3">
 
                             <button type="submit"
-                                    class="btn btn-primary">
+                                    class="btn btn-primary rounded-pill px-4">
 
-                                <i class="bi bi-save me-1"></i>
+                                <i class="bi bi-save me-2"></i>
                                 Update Service
 
                             </button>
 
                             <a href="/admin/services"
-                               class="btn btn-outline-secondary">
+                               class="btn btn-outline-secondary rounded-pill px-4">
 
                                 Cancel
 

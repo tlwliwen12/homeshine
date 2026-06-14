@@ -2,204 +2,217 @@
 
 @section('content')
 
-<style>
+<div class="container px-lg-4 px-3">
 
-    .form-card{
-        border-radius: 18px;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.06);
-        border: none;
-    }
+    <!-- PAGE HEADER -->
+    <div class="page-header">
 
-    .form-header{
-        padding-bottom: 15px;
-        border-bottom: 1px solid #eee;
-        margin-bottom: 20px;
-    }
+        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3">
 
-    .form-control, .form-select{
-        border-radius: 12px;
-        padding: 10px 14px;
-    }
+            <div>
 
-    .form-control:focus, .form-select:focus{
-        box-shadow: none;
-        border-color: #000;
-    }
+                <h1 class="page-title">
+                    Add New Service
+                </h1>
 
-    .btn-dark{
-        border-radius: 12px;
-        padding: 10px 18px;
-    }
+                <p class="page-subtitle mb-0">
+                    Create a new cleaning service for HomeShine.
+                </p>
 
-    .btn-outline-secondary{
-        border-radius: 12px;
-        padding: 10px 18px;
-    }
+            </div>
 
-    .hint-text{
-        font-size: 13px;
-        color: #888;
-    }
+            <a href="/admin/services"
+               class="btn btn-outline-primary rounded-pill px-4">
 
-</style>
+                <i class="bi bi-arrow-left me-2"></i>
+                Back to Services
 
-<div class="container-fluid">
+            </a>
 
-    <div class="row justify-content-center">
+        </div>
 
-        <div class="col-lg-8">
+    </div>
 
-            <div class="card form-card">
+    <!-- VALIDATION ERRORS -->
+    @if ($errors->any())
 
-                <div class="card-body p-4">
+        <div class="alert alert-danger rounded-4 border-0 shadow-sm mb-4">
 
-                    {{-- Header --}}
-                    <div class="form-header">
+            <ul class="mb-0">
 
-                        <h2 class="fw-bold mb-1">Add New Service</h2>
+                @foreach ($errors->all() as $error)
 
-                        <p class="text-muted mb-0">
-                            Create a new cleaning service for HomeShine
-                        </p>
+                    <li>{{ $error }}</li>
+
+                @endforeach
+
+            </ul>
+
+        </div>
+
+    @endif
+
+    <!-- FORM -->
+    <div class="section-card">
+
+        <div class="p-4 p-lg-5">
+
+            <form method="POST"
+                  action="/admin/services"
+                  enctype="multipart/form-data">
+
+                @csrf
+
+                <div class="row g-4">
+
+                    <!-- Service Name -->
+                    <div class="col-12">
+
+                        <label class="form-label fw-semibold">
+
+                            Service Name
+
+                        </label>
+
+                        <input type="text"
+                               name="name"
+                               class="form-control"
+                               placeholder="Enter service name"
+                               required>
 
                     </div>
 
-                    {{-- Form --}}
-                    <form method="POST"
-                          action="/admin/services"
-                          enctype="multipart/form-data">
+                    <!-- Category -->
+                    <div class="col-md-6">
 
-                        @csrf
+                        <label class="form-label fw-semibold">
 
-                        {{-- Service Name --}}
-                        <div class="mb-3">
+                            Category
 
-                            <label class="form-label fw-semibold">Service Name</label>
+                        </label>
 
-                            <input type="text"
-                                   name="name"
-                                   class="form-control"
-                                   placeholder="Enter service name"
-                                   required>
+                        <select name="category"
+                                class="form-select">
 
-                        </div>
+                            <option value="Residential Cleaning">
+                                Residential Cleaning
+                            </option>
 
-                        {{-- Category --}}
-                        <div class="mb-3">
+                            <option value="Commercial Cleaning">
+                                Commercial Cleaning
+                            </option>
 
-                            <label class="form-label fw-semibold">Category</label>
+                            <option value="Specialized Cleaning">
+                                Specialized Cleaning
+                            </option>
 
-                            <select name="category"
-                                    class="form-select">
+                            <option value="Premium Services">
+                                Premium Services
+                            </option>
 
-                                <option value="Residential Cleaning">Residential Cleaning</option>
-                                <option value="Specialized Cleaning">Specialized Cleaning</option>
-                                <option value="Commercial Cleaning">Commercial Cleaning</option>
-                                <option value="Premium Services">Premium Services</option>
+                        </select>
 
-                            </select>
+                    </div>
 
-                            <div class="hint-text mt-1">
-                                Choose the most suitable category for this service.
-                            </div>
+                    <!-- Price -->
+                    <div class="col-md-6">
 
-                        </div>
+                        <label class="form-label fw-semibold">
 
-                        {{-- Description --}}
-                        <div class="mb-3">
+                            Price (RM)
 
-                            <label class="form-label fw-semibold">Detailed Service Description</label>
+                        </label>
 
-                            <textarea name="description"
-                                      rows="5"
-                                      class="form-control"
-                                      placeholder="Enter service description"
-                                      required></textarea>
+                        <input type="number"
+                               name="price"
+                               step="0.01"
+                               min="0.01"
+                               class="form-control"
+                               placeholder="80.00"
+                               required>
 
-                            <div class="hint-text mt-1">
-                                Provide clear details so customers understand the service.
-                            </div>
+                    </div>
 
-                        </div>
+                    <!-- Duration -->
+                    <div class="col-12">
 
-                        {{-- Price --}}
-                        <div class="mb-3">
+                        <label class="form-label fw-semibold">
 
-                            <label class="form-label fw-semibold">Price (RM)</label>
+                            Duration
 
-                            <input type="number"
-                                   name="price"
-                                   class="form-control"
-                                   step="0.01"
-                                   min="0.01"
-                                   placeholder="Enter service price"
-                                   required>
+                        </label>
 
-                            <div class="hint-text mt-1">
-                                Example: 80 (do not include RM symbol)
-                            </div>
+                        <input type="text"
+                               name="duration"
+                               class="form-control"
+                               placeholder="Example: 2 Hours"
+                               required>
 
-                        </div>
+                    </div>
 
-                        {{-- Duration --}}
-                        <div class="mb-3">
+                    <!-- Description -->
+                    <div class="col-12">
 
-                            <label class="form-label fw-semibold">Service Duration</label>
+                        <label class="form-label fw-semibold">
 
-                            <input type="text"
-                                   name="duration"
-                                   class="form-control"
-                                   placeholder="Example: 2 Hours"
-                                   step="0.01"
-                                   min="0.01"
-                                   required>
+                            Description
 
-                            <div class="hint-text mt-1">
-                                Example: 1 Hour, 2 Hours, Half Day
-                            </div>
+                        </label>
 
-                        </div>
+                        <textarea name="description"
+                                  rows="6"
+                                  class="form-control"
+                                  placeholder="Describe the service..."
+                                  required></textarea>
 
-                        {{-- Image Upload --}}
-                        <div class="mb-4">
+                    </div>
 
-                            <label class="form-label fw-semibold">Service Image</label>
+                    <!-- Image -->
+                    <div class="col-12">
 
-                            <input type="file"
-                                   name="image"
-                                   class="form-control">
+                        <label class="form-label fw-semibold">
 
-                            <div class="hint-text mt-1">
-                                Upload a clear image to represent this service.
-                            </div>
+                            Service Image
 
-                        </div>
+                        </label>
 
-                        {{-- Buttons --}}
-                        <div class="d-flex gap-2 pt-2">
+                        <input type="file"
+                               name="image"
+                               class="form-control">
 
-                            <button type="submit"
-                                    class="btn btn-dark">
+                        <small class="text-secondary">
 
-                                <i class="bi bi-check-circle me-1"></i>
-                                Save Service
+                            Recommended: high quality image for better presentation.
 
-                            </button>
+                        </small>
 
-                            <a href="/admin/services"
-                               class="btn btn-outline-secondary">
-
-                                Cancel
-
-                            </a>
-
-                        </div>
-
-                    </form>
+                    </div>
 
                 </div>
 
-            </div>
+                <hr class="my-4">
+
+                <!-- ACTIONS -->
+                <div class="d-flex flex-wrap gap-3">
+
+                    <button type="submit"
+                            class="btn btn-primary rounded-pill px-4">
+
+                        <i class="bi bi-check-circle me-2"></i>
+                        Save Service
+
+                    </button>
+
+                    <a href="/admin/services"
+                       class="btn btn-outline-secondary rounded-pill px-4">
+
+                        Cancel
+
+                    </a>
+
+                </div>
+
+            </form>
 
         </div>
 

@@ -10,6 +10,8 @@
 
     <title>Admin Panel - HomeShine</title>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
           rel="stylesheet">
@@ -104,6 +106,109 @@
     .custom-card:hover{
         transform:translateY(-4px);
         box-shadow:0 10px 30px rgba(0,0,0,.08);
+    }
+
+    /* ========================================
+       GLOBAL DESIGN SYSTEM
+    ======================================== */
+
+    .page-header{
+        margin-bottom:2rem;
+    }
+
+    .page-title{
+        font-size:2rem;
+        font-weight:700;
+        color:#111827;
+    }
+
+    .page-subtitle{
+        color:#6B7280;
+        font-size:.95rem;
+    }
+
+    /* Reusable Section Card */
+    .section-card{
+        background:#fff;
+        border:none;
+        border-radius:20px;
+        box-shadow:0 4px 20px rgba(0,0,0,.06);
+        transition:.3s;
+    }
+
+    .section-card:hover{
+        transform:translateY(-3px);
+        box-shadow:0 10px 30px rgba(0,0,0,.08);
+    }
+
+    /* Status Badges */
+    .status-badge{
+        padding:.55rem .9rem;
+        border-radius:999px;
+        font-size:.75rem;
+        font-weight:600;
+    }
+
+    .status-pending{
+        background:#FEF3C7;
+        color:#92400E;
+    }
+
+    .status-approved{
+        background:#DBEAFE;
+        color:#1E40AF;
+    }
+
+    .status-completed{
+        background:#DCFCE7;
+        color:#166534;
+    }
+
+    .status-cancelled{
+        background:#FEE2E2;
+        color:#991B1B;
+    }
+
+    /* Action Cards */
+    .action-card{
+        background:white;
+        border-radius:20px;
+        padding:1.25rem;
+        text-decoration:none;
+        color:#111827;
+        display:block;
+        transition:.3s;
+        box-shadow:0 4px 20px rgba(0,0,0,.05);
+    }
+
+    .action-card:hover{
+        transform:translateY(-4px);
+        color:#2563EB;
+    }
+
+    .action-icon{
+        width:55px;
+        height:55px;
+        border-radius:15px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        font-size:22px;
+    }
+
+    /* Tables */
+    .table-responsive{
+        border-radius:16px;
+    }
+
+    .table thead th{
+        border-bottom:2px solid #E5E7EB;
+        font-weight:600;
+        color:#374151;
+    }
+
+    .table td{
+        vertical-align:middle;
     }
 
     /* Buttons */
@@ -236,17 +341,18 @@
 
     @if(session('success'))
 
-    <div class="container mt-3">
+    <script>
 
-        <div class="alert alert-success rounded-4 border-0 shadow-sm">
+    Swal.fire({
+        title:'Success',
+        text:'{{ session('success') }}',
+        icon:'success',
+        confirmButtonColor:'#2563EB'
+    });
 
-            <i class="bi bi-check-circle-fill me-2"></i>
+    </script>
 
-            {{ session('success') }}
-
-        </div>
-
-    </div>
+    @endif
 
     <script>
 
@@ -267,8 +373,6 @@
     },3000);
 
 </script>
-
-    @endif
 
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg py-3">

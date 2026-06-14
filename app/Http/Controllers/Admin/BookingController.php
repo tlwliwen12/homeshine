@@ -86,9 +86,14 @@ class BookingController extends Controller
             'Pending'
         )->count();
 
-        $approvedBookings = Booking::where(
+        $acceptedBookings = Booking::where(
             'status',
-            'Approved'
+            'Accepted'
+        )->count();
+
+        $inProgressBookings = Booking::where(
+            'status',
+            'In Progress'
         )->count();
 
         $completedBookings = Booking::where(
@@ -107,7 +112,8 @@ class BookingController extends Controller
                 'bookings',
                 'totalBookings',
                 'pendingBookings',
-                'approvedBookings',
+                'acceptedBookings',
+                'inProgressBookings',
                 'completedBookings',
                 'cancelledBookings'
             )

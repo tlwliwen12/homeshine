@@ -2,427 +2,387 @@
 
 @section('content')
 
-<div class="container-fluid">
+<div class="container px-lg-4 px-3">
 
-    <!-- Header -->
-    <div class="mb-4">
+    <!-- PAGE HEADER -->
+    <div class="page-header custom-card p-4 mb-4">
 
-        <h2 class="fw-bold">
-            Manage Bookings
-        </h2>
+        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3">
 
-        <p class="text-secondary">
-            Manage customer bookings & refunds
-        </p>
+            <div>
 
-    </div>
+                <h1 class="fw-bold mb-2">
+                    Booking Management
+                </h1>
 
-    <!-- Statistics -->
-    <div class="row g-3 mb-4">
-
-        <div class="col-md">
-
-            <div class="card border-0 shadow-sm rounded-4">
-
-                <div class="card-body text-center">
-
-                    <h3 class="fw-bold">
-                        {{ $totalBookings }}
-                    </h3>
-
-                    <small>Total Bookings</small>
-
-                </div>
+                <p class="text-secondary mb-0">
+                    Monitor bookings, payments, refunds and cleaner payouts.
+                </p>
 
             </div>
 
-        </div>
+            <span class="badge bg-success-subtle text-success px-4 py-3 rounded-pill">
 
-        <div class="col-md">
+                {{ $totalBookings }} Total Bookings
 
-            <div class="card border-0 shadow-sm rounded-4">
-
-                <div class="card-body text-center">
-
-                    <h3 class="fw-bold text-warning">
-                        {{ $pendingBookings }}
-                    </h3>
-
-                    <small>Pending</small>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-md">
-
-            <div class="card border-0 shadow-sm rounded-4">
-
-                <div class="card-body text-center">
-
-                    <h3 class="fw-bold text-primary">
-                        {{ $approvedBookings }}
-                    </h3>
-
-                    <small>Approved</small>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-md">
-
-            <div class="card border-0 shadow-sm rounded-4">
-
-                <div class="card-body text-center">
-
-                    <h3 class="fw-bold text-success">
-                        {{ $completedBookings }}
-                    </h3>
-
-                    <small>Completed</small>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-md">
-
-            <div class="card border-0 shadow-sm rounded-4">
-
-                <div class="card-body text-center">
-
-                    <h3 class="fw-bold text-danger">
-                        {{ $cancelledBookings }}
-                    </h3>
-
-                    <small>Cancelled</small>
-
-                </div>
-
-            </div>
+            </span>
 
         </div>
 
     </div>
 
-    <!-- Success Message -->
-    @if(session('success'))
+    <!-- STATISTICS -->
+    <div class="row g-4 mb-4">
 
-        <div class="alert alert-success rounded-4">
+        <div class="col-md-6 col-xl-2">
 
-            {{ session('success') }}
+            <div class="custom-card p-4 h-100">
+
+                <small class="text-secondary">
+                    Pending
+                </small>
+
+                <h3 class="fw-bold text-warning mt-2 mb-0">
+                    {{ $pendingBookings }}
+                </h3>
+
+            </div>
 
         </div>
 
-    @endif
+        <div class="col-md-6 col-xl-2">
 
-    <!-- Filters -->
-    <div class="card border-0 shadow-sm rounded-4 mb-4">
+            <div class="custom-card p-4 h-100">
 
-        <div class="card-body">
+                <small class="text-secondary">
+                    Accepted
+                </small>
 
-            <form method="GET">
+                <h3 class="fw-bold text-primary mt-2 mb-0">
+                    {{ $acceptedBookings }}
+                </h3>
 
-                <div class="row g-3">
+            </div>
 
-                    <!-- Search -->
-                    <div class="col-md-4">
+        </div>
 
-                        <input type="text"
-                               name="search"
-                               class="form-control"
-                               placeholder="Search customer or service..."
-                               value="{{ request('search') }}">
+        <div class="col-md-6 col-xl-2">
 
-                    </div>
+            <div class="custom-card p-4 h-100">
 
-                    <!-- Status -->
-                    <div class="col-md-3">
+                <small class="text-secondary">
+                    In Progress
+                </small>
 
-                        <select name="status"
-                                class="form-select">
+                <h3 class="fw-bold text-info mt-2 mb-0">
+                    {{ $inProgressBookings }}
+                </h3>
 
-                            <option value="">
-                                All Status
-                            </option>
+            </div>
 
-                            <option value="Pending"
-                                {{ request('status') == 'Pending' ? 'selected' : '' }}>
-                                Pending
-                            </option>
+        </div>
 
-                            <option value="Approved"
-                                {{ request('status') == 'Approved' ? 'selected' : '' }}>
-                                Approved
-                            </option>
+        <div class="col-md-6 col-xl-2">
 
-                            <option value="Completed"
-                                {{ request('status') == 'Completed' ? 'selected' : '' }}>
-                                Completed
-                            </option>
+            <div class="custom-card p-4 h-100">
 
-                            <option value="Cancelled"
-                                {{ request('status') == 'Cancelled' ? 'selected' : '' }}>
-                                Cancelled
-                            </option>
+                <small class="text-secondary">
+                    Completed
+                </small>
 
-                        </select>
+                <h3 class="fw-bold text-success mt-2 mb-0">
+                    {{ $completedBookings }}
+                </h3>
 
-                    </div>
+            </div>
 
-                    <!-- Payment -->
-                    <div class="col-md-2">
+        </div>
 
-                        <select name="payment"
-                                class="form-select">
+        <div class="col-md-6 col-xl-2">
 
-                            <option value="">
-                                All Payments
-                            </option>
+            <div class="custom-card p-4 h-100">
 
-                            <option value="Paid"
-                                {{ request('payment') == 'Paid' ? 'selected' : '' }}>
-                                Paid
-                            </option>
+                <small class="text-secondary">
+                    Cancelled
+                </small>
 
-                            <option value="Unpaid"
-                                {{ request('payment') == 'Unpaid' ? 'selected' : '' }}>
-                                Unpaid
-                            </option>
+                <h3 class="fw-bold text-danger mt-2 mb-0">
+                    {{ $cancelledBookings }}
+                </h3>
 
-                        </select>
+            </div>
 
-                    </div>
+        </div>
 
-                    <!-- Filter -->
-                    <div class="col-md-1">
+        <div class="col-md-6 col-xl-2">
 
-                        <button class="btn btn-dark w-100">
+            <div class="custom-card p-4 h-100">
 
-                            Filter
+                <small class="text-secondary">
+                    Total
+                </small>
 
-                        </button>
+                <h3 class="fw-bold mt-2 mb-0">
+                    {{ $totalBookings }}
+                </h3>
 
-                    </div>
-
-                    <!-- Reset -->
-                    <div class="col-md-2">
-
-                        <a href="/admin/bookings"
-                           class="btn btn-outline-secondary w-100">
-
-                            Reset
-
-                        </a>
-
-                    </div>
-
-                </div>
-
-            </form>
+            </div>
 
         </div>
 
     </div>
 
-    <!-- Booking Cards -->
+    <!-- FILTER CARD -->
+    <div class="custom-card p-4 mb-4">
+
+        <form method="GET">
+
+            <div class="row g-3">
+
+                <div class="col-lg-4">
+
+                    <input type="text"
+                           name="search"
+                           class="form-control rounded-4"
+                           placeholder="Search customer or service..."
+                           value="{{ request('search') }}">
+
+                </div>
+
+                <div class="col-lg-3">
+
+                    <select name="status"
+                            class="form-select rounded-4">
+
+                        <option value="">
+                            All Status
+                        </option>
+
+                        <option value="Pending"
+                            {{ request('status') == 'Pending' ? 'selected' : '' }}>
+                            Pending
+                        </option>
+
+                        <option value="Accepted"
+                            {{ request('status') == 'Accepted' ? 'selected' : '' }}>
+                            Accepted
+                        </option>
+
+                        <option value="In Progress"
+                            {{ request('status') == 'In Progress' ? 'selected' : '' }}>
+                            In Progress
+                        </option>
+
+                        <option value="Completed"
+                            {{ request('status') == 'Completed' ? 'selected' : '' }}>
+                            Completed
+                        </option>
+
+                        <option value="Cancelled"
+                            {{ request('status') == 'Cancelled' ? 'selected' : '' }}>
+                            Cancelled
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="col-lg-3">
+
+                    <select name="payment"
+                            class="form-select rounded-4">
+
+                        <option value="">
+                            All Payments
+                        </option>
+
+                        <option value="Paid"
+                            {{ request('payment') == 'Paid' ? 'selected' : '' }}>
+                            Paid
+                        </option>
+
+                        <option value="Unpaid"
+                            {{ request('payment') == 'Unpaid' ? 'selected' : '' }}>
+                            Unpaid
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="col-lg-1">
+
+                    <button class="btn btn-primary w-100 rounded-4">
+                        Filter
+                    </button>
+
+                </div>
+
+                <div class="col-lg-1">
+
+                    <a href="/admin/bookings"
+                       class="btn btn-outline-secondary w-100 rounded-4">
+
+                        Reset
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+    <!-- BOOKING CARDS -->
     <div class="row g-4">
 
         @forelse($bookings as $booking)
-        @php
-            $isCancelled = $booking->status === 'Cancelled';
-        @endphp
 
-        <div class="col-md-6 col-lg-4">
+        <div class="col-md-6 col-xl-4">
 
-            <div class="card border-0 shadow-sm rounded-4 h-100">
+            <div class="custom-card p-4 h-100">
 
-                <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-start mb-3">
 
-                    <div class="d-flex align-items-center mb-3">
+                    <div>
 
-                        <div class="icon-box bg-primary bg-opacity-10 text-primary me-3">
+                        <h5 class="fw-bold mb-1">
 
-                            <i class="bi bi-house-check-fill"></i>
+                            {{ $booking->service->name }}
 
-                        </div>
+                        </h5>
 
-                        <div>
+                        <small class="text-secondary">
 
-                            <h5 class="fw-bold mb-1">
+                            Booking #{{ $booking->id }}
 
-                                {{ $booking->service->name }}
-
-                            </h5>
-
-                            <small class="text-secondary">
-
-                                Booking #{{ $booking->id }}
-
-                            </small>
-
-                        </div>
+                        </small>
 
                     </div>
 
-                    <hr>
+                    <div class="icon-box bg-primary bg-opacity-10">
 
-                    <p class="mb-2">
+                        <i class="bi bi-calendar-check text-primary"></i>
 
+                    </div>
+
+                </div>
+
+                <hr>
+
+                <div class="small">
+
+                    <p>
                         <strong>Customer:</strong>
-
                         {{ $booking->user->name }}
-
                     </p>
 
-                    <p class="mb-2">
-
+                    <p>
                         <strong>Cleaner:</strong>
-
                         {{ $booking->cleaner->name ?? 'Not Assigned' }}
-
                     </p>
 
-                    <p class="mb-2">
-
+                    <p>
                         <strong>Date:</strong>
-
                         {{ $booking->booking_date }}
-
                     </p>
 
-                    <p class="mb-2">
-
+                    <p>
                         <strong>Time:</strong>
-
                         {{ $booking->booking_time }}
-
                     </p>
 
-                    <p class="mb-2">
-
+                    <p>
                         <strong>Amount:</strong>
-
-                        RM {{ number_format($booking->service->price, 2) }}
-
+                        RM {{ number_format($booking->service->price,2) }}
                     </p>
 
-                    <p class="mb-2">
+                </div>
 
-                        <strong>Status:</strong>
+                <div class="d-flex flex-wrap gap-2 mb-4">
 
-                        @if($booking->status == 'Pending')
+                    <span class="badge bg-light text-dark">
 
-                            <span class="badge bg-warning text-dark">
-                                Pending
-                            </span>
+                        {{ $booking->status }}
 
-                        @elseif($booking->status == 'Approved')
+                    </span>
 
-                            <span class="badge bg-primary">
-                                Approved
-                            </span>
+                    <span class="badge
+                        {{ $booking->payment_status == 'Paid'
+                            ? 'bg-success'
+                            : 'bg-danger' }}">
 
-                        @elseif($booking->status == 'Completed')
+                        {{ $booking->payment_status }}
 
-                            <span class="badge bg-success">
-                                Completed
-                            </span>
+                    </span>
 
-                        @else
+                    @if($booking->status == 'Cancelled')
 
-                            <span class="badge bg-danger">
-                                Cancelled
-                            </span>
+                        <span class="badge bg-danger">
 
-                        @endif
+                            Refund Required
 
-                    </p>
+                        </span>
 
-                    <p class="mb-3">
+                    @elseif($booking->payout_status == 'Paid')
 
-                        <strong>Payment:</strong>
+                        <span class="badge bg-success">
 
-                        @if($booking->payment_status == 'Paid')
+                            Cleaner Paid
 
-                            <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill">
+                        </span>
 
-                                <i class="bi bi-check-circle-fill me-1"></i>
+                    @else
 
-                                Paid
+                        <span class="badge bg-warning text-dark">
 
-                            </span>
+                            Payout Pending
 
-                        @else
+                        </span>
 
-                            <span class="badge bg-danger-subtle text-danger px-3 py-2 rounded-pill">
+                    @endif
 
-                                <i class="bi bi-x-circle-fill me-1"></i>
+                </div>
 
-                                Unpaid
+                <div class="mt-auto">
 
-                            </span>
-
-                        @endif
-
-                    </p>
-
-                    <p class="mb-3">
-
-                        <strong>Payout:</strong>
-
-                        @if($isCancelled)
-                            <span class="badge bg-danger">
-                                Refund Required
-                            </span>
-                        @else
-                            @if($booking->payout_status == 'Paid')
-                                <span class="badge bg-success">
-                                    Paid to Cleaner
-                                </span>
-                            @else
-                                <span class="badge bg-warning text-dark">
-                                    Pending
-                                </span>
-                            @endif
-                        @endif
-
-                    </p>
-
-                    <!-- View Details -->
                     <a href="/admin/bookings/{{ $booking->id }}"
-                       class="btn btn-dark w-100 mb-2">
+                       class="btn btn-primary w-100 rounded-4 mb-2">
 
-                        <i class="bi bi-eye"></i>
+                        <i class="bi bi-eye me-1"></i>
                         View Details
 
                     </a>
 
-                    <!-- Pay Cleaner -->
-                    @if(!$isCancelled &&
-                        $booking->status == 'Completed' &&
-                        $booking->payment_status == 'Paid' &&
-                        $booking->payout_status == 'Pending'
+                    @if(
+                        $booking->status == 'Completed'
+                        && $booking->payment_status == 'Paid'
+                        && $booking->payout_status == 'Pending'
                     )
+
                         <a href="/admin/payouts/{{ $booking->id }}/pay"
-                           class="btn btn-success w-100 mb-2">
+                           class="btn btn-success w-100 rounded-4 mb-2">
+
                             Pay Cleaner
+
                         </a>
+
                     @endif
 
-                    <!-- Refund -->
-                    @if($isCancelled && $booking->refund_status == 'Pending')
+                    @if(
+                        $booking->status == 'Cancelled'
+                        && $booking->refund_status == 'Pending'
+                    )
+
                         <a href="/admin/refunds/{{ $booking->id }}/pay"
-                           class="btn btn-warning w-100">
+                           class="btn btn-warning w-100 rounded-4">
+
                             Process Refund
+
                         </a>
+
                     @endif
 
                 </div>
@@ -435,17 +395,17 @@
 
         <div class="col-12">
 
-            <div class="card border-0 shadow-sm rounded-4">
+            <div class="custom-card p-5 text-center">
 
-                <div class="card-body text-center py-5">
+                <i class="bi bi-calendar-x fs-1 text-secondary"></i>
 
-                    <h4 class="fw-bold">
+                <h4 class="fw-bold mt-3">
+                    No Bookings Found
+                </h4>
 
-                        No Bookings Found
-
-                    </h4>
-
-                </div>
+                <p class="text-secondary mb-0">
+                    No bookings match your current filters.
+                </p>
 
             </div>
 
@@ -455,7 +415,6 @@
 
     </div>
 
-    <!-- Pagination -->
     <div class="mt-4">
 
         {{ $bookings->links() }}
