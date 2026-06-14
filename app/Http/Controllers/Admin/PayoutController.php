@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use App\Services\ToyyibPayService;
 use Illuminate\Support\Facades\Auth;
 use App\Models\FinanceTransaction;
+use App\Notifications\CleanerPayoutNotification;
+
 class PayoutController extends Controller
 {
     protected $toyyib;
@@ -102,6 +104,10 @@ class PayoutController extends Controller
             'amount' => $booking->service->price * 0.8,
             'status' => 'Completed'
         ]);
+
+        $booking->user->notify(
+            new CleanerPayoutNotification($booking)
+        );
 
         return redirect('/admin/bookings')
             ->with(

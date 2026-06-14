@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\FinanceTransaction;
+use App\Notifications\RefundApprovedNotification;
 use App\Services\ToyyibPayService;
 use Illuminate\Support\Facades\Auth;
 
@@ -122,6 +123,10 @@ class RefundController extends Controller
             'amount' => $booking->service->price,
             'status' => 'Completed'
         ]);
+
+        $booking->user->notify(
+            new RefundApprovedNotification($booking)
+        );
 
         return redirect('/admin/bookings')
             ->with(

@@ -251,7 +251,7 @@
                         @if($booking->status == 'Pending')
                         status-pending
 
-                        @elseif($booking->status == 'Approved')
+                        @elseif($booking->status == 'Assigned')
                         status-accepted
 
                         @elseif($booking->status == 'Completed')

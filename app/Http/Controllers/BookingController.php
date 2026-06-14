@@ -63,7 +63,7 @@ class BookingController extends Controller
         // Check existing booking at same date + time
         $existingBooking = Booking::where('booking_date', $request->booking_date)
             ->where('booking_time', $request->booking_time)
-            ->whereIn('status', ['Pending', 'Approved'])
+            ->whereIn('status', ['Pending', 'Assigned'])
             ->exists();
 
         if ($existingBooking) {

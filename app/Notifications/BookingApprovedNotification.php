@@ -49,7 +49,7 @@ class BookingApprovedNotification extends Notification
         'title' => 'Booking Approved',
         'message' => 'Your booking #' . $this->booking->id . ' has been approved.',
         'booking_id' => $this->booking->id,
-        'status' => 'Approved',
+        'status' => 'Assigned',
     ];
 }
 }

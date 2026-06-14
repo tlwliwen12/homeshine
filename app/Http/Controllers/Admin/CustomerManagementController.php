@@ -205,7 +205,7 @@ class CustomerManagementController extends Controller
 
     $bookingStatuses = [
         Booking::where('status', 'Pending')->count(),
-        Booking::where('status', 'Approved')->count(),
+        Booking::where('status', 'Assigned')->count(),
         Booking::where('status', 'Completed')->count(),
         Booking::where('status', 'Cancelled')->count(),
     ];

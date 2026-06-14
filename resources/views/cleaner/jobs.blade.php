@@ -248,7 +248,7 @@
                             Job Status
                         </strong>
 
-                        @if($booking->status == 'Approved')
+                        @if($booking->status == 'Assigned')
 
                             <span class="status-badge status-accepted">
                                 Upcoming
@@ -273,7 +273,7 @@
                     <!-- Actions -->
                     @if($booking->payment_status == 'Paid')
 
-                        @if(in_array($booking->status,['Approved','In Progress']))
+                        @if(in_array($booking->status,['Assigned','In Progress']))
 
                             <form method="POST"
                                   action="/cleaner/jobs/{{ $booking->id }}/status">

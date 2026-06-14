@@ -18,7 +18,7 @@ class DashboardController extends Controller
             'cleaner_id',
             $cleaner->id
         )
-        ->where('status', 'Approved')
+        ->where('status', 'Assigned')
         ->count();
 
         $completedBookings = Booking::where(

@@ -26,7 +26,7 @@ class JobController extends Controller
         // STATUS FILTER
         if ($request->filter === 'upcoming') {
 
-            $query->whereIn('status', ['Approved', 'In Progress']);
+            $query->whereIn('status', ['Assigned', 'In Progress']);
 
         } elseif ($request->filter === 'completed') {
 
@@ -73,7 +73,7 @@ class JobController extends Controller
         }
 
         $request->validate([
-            'status' => 'required|in:Approved,In Progress,Completed'
+            'status' => 'required|in:Assigned,In Progress,Completed'
         ]);
 
         $booking->update([

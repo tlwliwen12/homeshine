@@ -70,8 +70,8 @@
                         Pending
                     </option>
 
-                    <option value="Approved" {{ request('status')=='Approved' ? 'selected' : '' }}>
-                        Approved
+                    <option value="Assigned" {{ request('status')=='Assigned' ? 'selected' : '' }}>
+                        Assigned
                     </option>
 
                     <option value="In Progress" {{ request('status')=='In Progress' ? 'selected' : '' }}>
@@ -162,10 +162,10 @@
                                     Pending
                                 </span>
 
-                            @elseif($booking->status == 'Approved')
+                            @elseif($booking->status == 'Assigned')
 
                                 <span class="status-badge status-confirmed">
-                                    Approved
+                                    Assigned
                                 </span>
 
                             @elseif($booking->status == 'In Progress')
@@ -360,9 +360,9 @@
 
                         </div>
 
-                    @elseif($booking->status == 'Approved')
+                    @elseif($booking->status == 'Assigned')
 
-                        <button class="btn btn-danger"
+                        <button class="btn btn-danger rounded-pill w-100 mt-3"
                                 data-bs-toggle="modal"
                                 data-bs-target="#cancelModal{{ $booking->id }}">
 
@@ -411,7 +411,7 @@
 
                     <!-- Payment Button -->
                     @if(
-                        $booking->status == 'Approved'
+                        $booking->status == 'Assigned'
                         &&
                         $booking->payment_status != 'Paid'
                     )
