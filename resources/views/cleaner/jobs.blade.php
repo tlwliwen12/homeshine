@@ -241,6 +241,37 @@
 
                     </div>
 
+                    <!-- Payout -->
+                    <div class="mb-3">
+
+                        <strong class="d-block mb-2">
+                            Cleaner Payout
+                        </strong>
+
+                        @if($booking->payout_status == 'Paid')
+
+                            <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill">
+
+                                <i class="bi bi-wallet2 me-1"></i>
+
+                                Paid Out
+
+                            </span>
+
+                        @else
+
+                            <span class="badge bg-warning-subtle text-warning px-3 py-2 rounded-pill">
+
+                                <i class="bi bi-hourglass-split me-1"></i>
+
+                                Pending
+
+                            </span>
+
+                        @endif
+
+                    </div>
+
                     <!-- Status -->
                     <div class="mb-3">
 

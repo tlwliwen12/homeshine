@@ -104,4 +104,27 @@ class CleanerController extends Controller
 
         return back()->with('success', 'Cleaner rejected successfully.');
     }
+
+    public function destroy($id)
+    {
+        $cleaner = User::findOrFail($id);
+
+        if ($cleaner->role !== 'cleaner') {
+            abort(404);
+        }
+
+        if ($cleaner->bookings()->exists()) {
+            return back()->with(
+                'error',
+                'Cannot delete cleaner with existing bookings.'
+            );
+        }
+
+        $cleaner->delete();
+
+        return back()->with(
+            'success',
+            'Cleaner account deleted successfully.'
+        );
+    }
 }

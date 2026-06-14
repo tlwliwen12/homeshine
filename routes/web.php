@@ -218,6 +218,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/cleaners', [CleanerController::class, 'index']);
     Route::post('/admin/cleaners/{id}/approve', [CleanerController::class, 'approve']);
     Route::post('/admin/cleaners/{id}/reject', [CleanerController::class, 'reject']);
+    Route::delete('/admin/cleaners/{id}',[CleanerController::class, 'destroy']);
 
     Route::get('/admin/services', [ServiceController::class, 'index']);
     Route::post('/admin/services', [ServiceController::class, 'store']);

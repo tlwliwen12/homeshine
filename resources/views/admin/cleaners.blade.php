@@ -315,49 +315,196 @@
 
                         </div>
 
-                        @if($cleaner->approval_status == 'pending')
+                        <div class="d-grid gap-2">
 
-                            <div class="d-flex gap-2">
+                            @if($cleaner->approval_status == 'pending')
 
-                                <form method="POST"
-                                      action="/admin/cleaners/{{ $cleaner->id }}/approve"
-                                      class="w-100">
+                                <div class="d-flex gap-2">
 
-                                    @csrf
+                                    <form method="POST"
+                                          action="/admin/cleaners/{{ $cleaner->id }}/approve"
+                                          class="w-100">
 
-                                    <button class="btn btn-success rounded-pill w-100">
+                                       @csrf
 
-                                        <i class="bi bi-check-lg me-1"></i>
-                                        Approve
+                                        <button class="btn btn-success rounded-pill w-100">
 
-                                    </button>
+                                            <i class="bi bi-check-lg me-1"></i>
+                                            Approve
 
-                                </form>
+                                        </button>
 
-                                <form method="POST"
-                                      action="/admin/cleaners/{{ $cleaner->id }}/reject"
-                                      class="w-100">
+                                    </form>
 
-                                    @csrf
+                                    <form method="POST"
+                                          action="/admin/cleaners/{{ $cleaner->id }}/reject"
+                                          class="w-100">
 
-                                    <button class="btn btn-danger rounded-pill w-100">
+                                        @csrf
 
-                                        <i class="bi bi-x-lg me-1"></i>
-                                        Reject
+                                        <button class="btn btn-danger rounded-pill w-100">
 
-                                    </button>
+                                            <i class="bi bi-x-lg me-1"></i>
+                                            Reject
 
-                                </form>
+                                        </button>
 
-                            </div>
+                                    </form>
 
-                        @endif
+                                </div>
+
+                            @endif
+
+                            <!-- View -->
+                            <button class="btn btn-outline-primary rounded-pill"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#viewCleaner{{ $cleaner->id }}">
+
+                                <i class="bi bi-eye me-1"></i>
+                                View Details
+
+                            </button>
+
+                            <!-- Delete -->
+                            <button class="btn btn-outline-danger rounded-pill"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#deleteCleaner{{ $cleaner->id }}">
+
+                                <i class="bi bi-trash me-1"></i>
+                                Delete Account
+
+                            </button>
+
+                        </div>
 
                     </div>
 
                 </div>
 
             </div>
+
+             <!-- VIEW CLEANER -->
+<div class="modal fade"
+     id="viewCleaner{{ $cleaner->id }}"
+     tabindex="-1">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content rounded-4 border-0">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title">
+
+                    Cleaner Details
+
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"></button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <p>
+                    <strong>Name:</strong>
+                    {{ $cleaner->name }}
+                </p>
+
+                <p>
+                    <strong>Email:</strong>
+                    {{ $cleaner->email }}
+                </p>
+
+                <p>
+                    <strong>Phone:</strong>
+                    {{ $cleaner->phone ?? '-' }}
+                </p>
+
+                <p>
+                    <strong>Gender:</strong>
+                    {{ $cleaner->gender ?? '-' }}
+                </p>
+
+                <p>
+                    <strong>Status:</strong>
+                    {{ ucfirst($cleaner->approval_status) }}
+                </p>
+
+                <p>
+                    <strong>Joined:</strong>
+                    {{ $cleaner->created_at->format('d M Y') }}
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- DELETE CLEANER -->
+<div class="modal fade"
+     id="deleteCleaner{{ $cleaner->id }}"
+     tabindex="-1">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content rounded-4 border-0">
+
+            <div class="modal-body text-center p-4">
+
+                <i class="bi bi-trash fs-1 text-danger"></i>
+
+                <h4 class="fw-bold mt-3">
+
+                    Delete Cleaner?
+
+                </h4>
+
+                <p class="text-secondary">
+
+                    This action cannot be undone.
+
+                </p>
+
+                <div class="d-flex gap-2">
+
+                    <button type="button"
+                            class="btn btn-light rounded-pill w-100"
+                            data-bs-dismiss="modal">
+
+                        Cancel
+
+                    </button>
+
+                    <form method="POST"
+                          action="/admin/cleaners/{{ $cleaner->id }}"
+                          class="w-100">
+
+                        @csrf
+                        @method('DELETE')
+
+                        <button class="btn btn-danger rounded-pill w-100">
+
+                            Delete
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
         @empty
 
