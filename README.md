@@ -1,59 +1,411 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Homeshine - Laravel Application
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A modern web application built with **Laravel 12** and **Tailwind CSS** for managing home services and maintenance.
 
-## About Laravel
+## Table of Contents
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- [Project Overview](#project-overview)
+- [System Requirements](#system-requirements)
+- [Installation Guide](#installation-guide)
+- [Running the Application](#running-the-application)
+- [Testing](#testing)
+- [Project Structure](#project-structure)
+- [Technologies Used](#technologies-used)
+- [Troubleshooting](#troubleshooting)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Project Overview
 
-## Learning Laravel
+Homeshine is a full-stack Laravel application that integrates:
+- **Backend**: Laravel 12 framework with PHP 8.2+
+- **Frontend**: Blade templates styled with Tailwind CSS v4
+- **Build Tool**: Vite for asset bundling and development
+- **PDF Generation**: DomPDF for document creation
+- **Database**: SQLite (development) with Laravel migrations
+- **Testing**: PHPUnit for automated testing
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## System Requirements
 
-## Laravel Sponsors
+### Required Software
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+| Component | Version | Download |
+|-----------|---------|----------|
+| PHP | 8.2 or higher | [php.net](https://www.php.net/downloads) |
+| Composer | Latest | [getcomposer.org](https://getcomposer.org/download/) |
+| Node.js | 18+ | [nodejs.org](https://nodejs.org/) |
+| npm | 9+ (comes with Node.js) | Included with Node.js |
+| Git | Latest | [git-scm.com](https://git-scm.com/) |
 
-### Premium Partners
+### Verify Installation
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Open a terminal/command prompt and run:
 
-## Contributing
+```bash
+php --version          # Should show PHP 8.2+
+composer --version     # Should show Composer version
+node --version        # Should show Node.js 18+
+npm --version         # Should show npm 9+
+git --version         # Should show Git version
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+---
 
-## Code of Conduct
+## Installation Guide
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Step 1: Clone the Repository
 
-## Security Vulnerabilities
+```bash
+git clone https://github.com/tlwliwen12/homeshine.git
+cd homeshine
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Step 2: Install PHP Dependencies
+
+```bash
+composer install
+```
+
+This installs:
+- Laravel framework and components
+- DomPDF for PDF generation
+- Laravel Tinker for interactive console
+- Testing and development tools
+
+### Step 3: Install Node.js Dependencies
+
+```bash
+npm install
+```
+
+This installs:
+- Vite (build tool)
+- Tailwind CSS v4
+- Laravel Vite Plugin
+- Axios for HTTP requests
+
+### Step 4: Configure Environment
+
+```bash
+# Create .env file from example
+cp .env.example .env
+
+# Generate application key (required for encryption)
+php artisan key:generate
+```
+
+Your `.env` file should look similar to this. The key values are:
+
+```env
+APP_NAME=Homeshine
+APP_ENV=local
+APP_KEY=base64:XXXXXXXXXX  # Generated by key:generate command
+APP_DEBUG=true
+APP_URL=http://localhost:8000
+
+# Database configuration
+DB_CONNECTION=sqlite
+DB_DATABASE=database/database.sqlite
+```
+
+### Step 5: Set Up Database
+
+```bash
+# Create SQLite database file
+touch database/database.sqlite
+
+# Run migrations to create tables
+php artisan migrate
+```
+
+### Step 6: Build Frontend Assets
+
+```bash
+npm run build
+```
+
+This compiles Tailwind CSS and JavaScript using Vite.
+
+---
+
+## Running the Application
+
+### Option A: Quick Setup & Run (Automated)
+
+```bash
+composer run setup
+```
+
+This single command runs the complete setup:
+- Installs Composer dependencies
+- Sets up `.env` file
+- Generates application key
+- Runs database migrations
+- Installs npm dependencies
+- Builds frontend assets
+
+Then start the application:
+
+```bash
+composer run dev
+```
+
+### Option B: Manual Server Start
+
+#### Terminal 1 - Start Laravel Development Server
+
+```bash
+php artisan serve
+```
+
+Output:
+```
+   INFO  Server running on [http://127.0.0.1:8000].
+```
+
+#### Terminal 2 - Start Frontend Development Build
+
+```bash
+npm run dev
+```
+
+Output:
+```
+  VITE v7.0.7  ready in XXX ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  press h to show help
+```
+
+#### Terminal 3 - Start Queue Worker (Optional)
+
+```bash
+php artisan queue:listen --tries=1 --timeout=0
+```
+
+#### Terminal 4 - View Application Logs (Optional)
+
+```bash
+php artisan pail
+```
+
+### Accessing the Application
+
+Open your browser and navigate to:
+```
+http://127.0.0.1:8000
+```
+
+You should see the Homeshine application home page.
+
+---
+
+## Development Workflow
+
+### For CSS/JavaScript Changes
+
+When editing `.css` or `.js` files:
+
+1. **Automatic Reload**: Vite watches files during `npm run dev` - changes appear automatically in browser
+2. **Production Build**: Before deployment, run `npm run build` to optimize assets
+
+### Adding PHP Code
+
+1. Edit your PHP files in `app/`, `routes/`, etc.
+2. Laravel auto-loads changes via Composer
+3. No server restart needed for most changes
+4. Clear cache if needed: `php artisan cache:clear`
+
+### Creating Database Tables
+
+```bash
+# Create migration
+php artisan make:migration create_table_name
+
+# Run migrations
+php artisan migrate
+
+# Rollback last migration
+php artisan migrate:rollback
+```
+
+---
+
+## Testing
+
+### Run Test Suite
+
+```bash
+# Run all tests
+composer run test
+
+# Or run tests directly
+php artisan test
+
+# Run with coverage
+php artisan test --coverage
+```
+
+### Create a Test
+
+```bash
+php artisan make:test TestName
+```
+
+Test files are located in `tests/` directory.
+
+---
+
+## Project Structure
+
+```
+homeshine/
+├── app/                      # Application code
+│   ├── Http/Controllers/     # Route controllers
+│   ├── Models/               # Database models
+│   └── Services/             # Business logic
+├── routes/                   # Route definitions
+│   └── web.php               # Web routes
+├── resources/                # Frontend files
+│   ├── views/                # Blade templates
+│   ├── css/                  # Tailwind CSS
+│   └── js/                   # JavaScript
+├── database/
+│   ├── migrations/           # Database schemas
+│   ├── seeders/              # Seed data
+│   └── database.sqlite       # SQLite database
+├── tests/                    # Unit & Feature tests
+├── storage/                  # Logs, cache, uploads
+├── composer.json             # PHP dependencies
+├── package.json              # Node dependencies
+├── vite.config.js            # Vite configuration
+├── tailwind.config.js        # Tailwind configuration
+├── .env                      # Environment variables
+└── artisan                   # Laravel CLI
+```
+
+---
+
+## Technologies Used
+
+| Technology | Purpose | Version |
+|-----------|---------|---------|
+| **Laravel** | PHP Web Framework | 12.0 |
+| **PHP** | Backend Language | 8.2+ |
+| **Tailwind CSS** | Utility-First CSS Framework | 4.0 |
+| **Vite** | Frontend Build Tool | 7.0+ |
+| **SQLite** | Database | Default |
+| **DomPDF** | PDF Generation | 3.1 |
+| **Blade** | Template Engine | Built-in |
+| **PHPUnit** | Testing Framework | 11.5+ |
+| **Axios** | HTTP Client | 1.11+ |
+
+---
+
+## Useful Artisan Commands
+
+```bash
+# Development
+php artisan serve                    # Start development server
+php artisan tinker                   # Interactive shell
+php artisan make:controller Name     # Create a controller
+php artisan make:model Name -m       # Create model with migration
+
+# Database
+php artisan migrate                  # Run migrations
+php artisan migrate:rollback         # Revert last migration
+php artisan db:seed                  # Seed database
+
+# Cache & Config
+php artisan cache:clear              # Clear application cache
+php artisan config:clear             # Clear configuration cache
+php artisan route:clear              # Clear route cache
+
+# Maintenance
+php artisan optimize:clear           # Clear optimizations
+php artisan storage:link             # Link storage directory
+```
+
+---
+
+## Troubleshooting
+
+### Issue: "PHP version too low"
+
+**Solution**: Ensure PHP 8.2+ is installed.
+```bash
+php --version
+```
+
+### Issue: "composer: command not found"
+
+**Solution**: Install Composer from [getcomposer.org](https://getcomposer.org/download/)
+
+### Issue: "npm ERR! code ENOENT"
+
+**Solution**: Reinstall npm packages.
+```bash
+rm -rf node_modules package-lock.json
+npm install
+```
+
+### Issue: "No such file or directory database/database.sqlite"
+
+**Solution**: Create the SQLite database file.
+```bash
+touch database/database.sqlite
+php artisan migrate
+```
+
+### Issue: "Application key missing"
+
+**Solution**: Generate application key.
+```bash
+php artisan key:generate
+```
+
+### Issue: "CORS or 419 Token Mismatch Error"
+
+**Solution**: Clear Laravel cache.
+```bash
+php artisan cache:clear
+php artisan config:clear
+php artisan route:clear
+```
+
+### Issue: Port 8000 Already in Use
+
+**Solution**: Use a different port.
+```bash
+php artisan serve --port=8001
+```
+
+### Issue: Vite Hot Module Reload Not Working
+
+**Solution**: Rebuild frontend assets.
+```bash
+npm run build
+# or restart npm run dev
+```
+
+---
+
+## Getting Help
+
+- **Laravel Documentation**: https://laravel.com/docs
+- **Tailwind CSS Docs**: https://tailwindcss.com/docs
+- **PHP Documentation**: https://www.php.net/manual
+- **Repository Issues**: [GitHub Issues](https://github.com/tlwliwen12/homeshine/issues)
+
+---
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is licensed under the MIT License. See LICENSE file for details.
+
+---
+
+**Last Updated**: June 2026
+**Created by**: tlwliwen12
